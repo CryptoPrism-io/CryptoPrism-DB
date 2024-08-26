@@ -35,7 +35,7 @@ jobs:
       # Install Python packages
       - name: Install Python packages
         run: |
-          pip install pandas numpy matplotlib seaborn mysql-connector-python
+          pip install pandas numpy matplotlib seaborn mysql-connector-python sqlalchemy
           
       # Run the Python script
       - name: Run dmv.py
