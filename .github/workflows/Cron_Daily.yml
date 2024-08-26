@@ -2,35 +2,22 @@ name: Update data
 
 on:
   schedule:
-    - cron: "10 0 * * *"  # Runs daily at midnight UTC. Adjust as needed.
+    - cron: "10 0 * * *"  # Daily at midnight UTC
   workflow_dispatch: {}
   push:
     branches:
       - main
 
 jobs:
-  scheduled:
+  update:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up R
-        uses: r-lib/actions/setup-r@v2
+      - uses: actions/checkout@v2
+      - uses: r-lib/actions/setup-r@v2
         with:
-          use-public-rspm: true  # Use public RStudio Package Manager for faster package installation
-          install-r: true  # Install the latest version of R available
-
-      - name: Install R packages
-        run: |
-          Rscript -e 'install.packages(c("RMySQL" "crypto2"))'
-
-      - name: List files in directory (optional for debugging)
-        run: |
-          ls  # List files in the current directory
-
-      - name: Run R script
-        run: |
+          use-public-rspm: true
+          install-r: true
+      - run: |
+          Rscript -e 'install.packages(c("RMySQL", "crypto2"))'
           Rscript top_1k_coins.R
-
