@@ -1,7 +1,6 @@
 library(RMySQL)
 library(crypto2)
 
-
 crypto.listings.latest <- crypto_listings(
   which = "latest",
   convert = "USD",
@@ -18,11 +17,11 @@ crypto.listings.latest <- crypto_listings(
 )
 
 
-all_coins<-crypto_history(coin_list = crypto.listings.latest,convert = "USD",limit = 1000,start_date = Sys.Date()-1,
-                          end_date = Sys.Date(),sleep = 0)
+all_coins<-crypto_history(coin_list = crypto.listings.latest,convert = "USD",limit = 1000,
+                          start_date = Sys.Date()-1,end_date = Sys.Date(),sleep = 0)
 
-all_coins <- all_coins[, c("id", "slug", "name", "symbol", "timestamp", "open", "high", "low", "close", "volume", "market_cap")]
-
+all_coins <- all_coins[, c("id", "slug", "name", "symbol", "timestamp", "open",
+                           "high", "low", "close", "volume", "market_cap")]
 
 # Database connection details
 host <- "dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com"
@@ -41,11 +40,10 @@ con <- dbConnect(
   dbname = dbname
 )
 
-
-
 dbWriteTable(con, "crypto_listings_latest_1000", as.data.frame(crypto.listings.latest), overwrite = TRUE, row.names = FALSE)
 
+dbWriteTable(con, "1K_coins_ohlcv", as.data.frame(all_coins), append = TRUE, row.names = FALSE)
 
-dbWriteTable(con, "1000_coins_ohlcv", as.data.frame(all_coins), append = TRUE, row.names = FALSE)
 
 dbDisconnect(con)
+
