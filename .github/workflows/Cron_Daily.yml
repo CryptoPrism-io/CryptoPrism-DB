@@ -1,4 +1,4 @@
-name: Update data
+name: Data fetch - DMV - to DB flow
 
 on:
   schedule:
@@ -14,10 +14,29 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      
+      # Set up R
       - uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
           install-r: true
+          
+      # Install R packages and run R script
       - run: |
           Rscript -e 'install.packages(c("RMySQL", "crypto2"))'
           Rscript top_1k_coins.R
+          
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'  # Specify the Python version you need
+          
+      # Install Python packages
+      - name: Install Python packages
+        run: |
+          pip install pandas numpy matplotlib seaborn mysql-connector-python
+          
+      # Run the Python script
+      - name: Run dmv.py
+        run: python dmv.py
