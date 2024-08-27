@@ -12,7 +12,7 @@ crypto.listings.latest <- crypto_listings(
   sort = "cmc_rank",
   sort_dir = "asc",
   sleep = 0,
-  wait = 60,
+  wait = 0,
   finalWait = FALSE
 )
 
