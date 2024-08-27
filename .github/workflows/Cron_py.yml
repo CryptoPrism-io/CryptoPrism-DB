@@ -1,14 +1,31 @@
-# Set up Python
-- name: Set up Python
-  uses: actions/setup-python@v4
-  with:
-    python-version: '3.x'  # Specify the Python version you need
-    
-# Install Python packages
-- name: Install Python packages
-  run: |
-    pip install pandas numpy matplotlib seaborn mysql-connector-python sqlalchemy
-    
-# Run the Python script
-- name: Run dmv.py
-  run: python dmv.py
+name: Data fetch - DMV - to DB flow (Python)
+
+on:
+  schedule:
+    - cron: "10 0 * * *"  # Daily at midnight UTC
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'  # Specify the Python version you need
+          
+      # Install Python packages
+      - name: Install Python packages
+        run: |
+          pip install pandas numpy matplotlib seaborn mysql-connector-python sqlalchemy
+          
+      # Run the Python script
+      - name: Run dmv.py
+        run: python dmv.py
