@@ -21,7 +21,12 @@ jobs:
           use-public-rspm: true
           install-r: true
           
-      # Install R packages and run R script
-      - run: |
+      # Install R packages
+      - name: Install R packages
+        run: |
           Rscript -e 'install.packages(c("RMySQL", "crypto2"))'
+          
+      # Run R script
+      - name: Run R script
+        run: |
           Rscript top_1k_coins.R
