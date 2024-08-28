@@ -3,10 +3,7 @@ name: Data fetch - DMV - to DB flow (R Only)
 on:
   schedule:
     - cron: "10 0 * * *"  # Daily at midnight UTC
-  workflow_dispatch: {}
-  push:
-    branches:
-      - main
+
 
 jobs:
   update:
