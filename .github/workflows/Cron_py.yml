@@ -29,3 +29,7 @@ jobs:
       # Run the Python script
       - name: Run dmv1.py
         run: python dmv_met_pct_tvv.py
+
+      # Run the Python script
+      - name: Run dmv2.py
+        run: python dmv_osc_mom_rat.py
