@@ -4,9 +4,7 @@ on:
   schedule:
     - cron: "10 0 * * *"  # Daily at midnight UTC
   workflow_dispatch: {}
-  push:
-    branches:
-      - main
+
 
 jobs:
   update:
@@ -29,7 +27,26 @@ jobs:
       # Run the Python script
       - name: Run dmv1.py
         run: python dmv_met_pct_tvv.py
+        
+      # Clean up environment (remove all env variables and temp files)
+      - name: Clean up environment
+        run: |
+          # Unset all environment variables except critical ones
+          for var in $(printenv | cut -d= -f1); do
+            if [[ "$var" != "HOME" && "$var" != "PATH" && "$var" != "GITHUB_"* ]]; then
+              unset "$var"
+            fi
+          done
 
+          # Remove any temporary files or directories
+          rm -rf /tmp/*
+          rm -rf /var/tmp/*
+          rm -rf $GITHUB_WORKSPACE/*_temp
       # Run the Python script
       - name: Run dmv2.py
         run: python dmv_osc_mom_rat.py
+
+      # Run the Python script
+      - name: Run dmv3.py
+        run: python dmv_core.py
+
