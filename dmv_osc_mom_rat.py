@@ -47,11 +47,9 @@ engine = create_engine('mysql+mysqlconnector://yogass09:jaimaakamakhya@dbcp.cry6
 # @title SQL Query Connection to AWS for Data Listing
 
 # Executing the query and fetching the results directly into a pandas DataFrame
-query = "SELECT * FROM 1K_coins_ohlcv"
+query = "SELECT * FROM 108_1K_coins_ohlcv"
 all_coins_ohlcv_filtered = pd.read_sql_query(query, con)
 
-query = "SELECT * FROM crypto_listings_latest_1000"
-top_1000_cmc_rank = pd.read_sql_query(query, con)
 
 
 con.close()
@@ -316,6 +314,8 @@ momentum = momentum.replace([np.inf, -np.inf], np.nan) # Replace inf values befo
 momentum.to_sql('FE_MOMENTUM', con=engine, if_exists='replace', index=False)
 
 print("momentum DataFrame uploaded to AWS MySQL database successfully!")
+
+momentum.info()
 
 # @title Momentum Binary Signals
 
@@ -1124,15 +1124,11 @@ ratios_bin.info()
 
 # @title SQLalchemy to push (FE) data to aws db (mysql)
 
-# Create a SQLAlchemy engine to connect to the MySQL database
-#engine = create_engine('mysql+mysqlconnector://yogass09:jaimaakamakhya@dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com:3306/dbcp')
 
 # Write the DataFrame to a new table in the database
 ratios_bin.to_sql('FE_RATIOS_SIGNALS', con=engine, if_exists='replace', index=False)
 
 print("FE_RATIOS_SIGNALS DataFrame uploaded to AWS MySQL database successfully!")
-
-
 
 end_time = time.time()
 elapsed_time_seconds = end_time - start_time
