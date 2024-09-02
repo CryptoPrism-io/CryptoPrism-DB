@@ -1,5 +1,7 @@
 library(RMySQL)
 library(crypto2)
+library(dplyr)
+library(DBI)
 
 crypto.listings.latest <- crypto_listings(
   which = "latest",
