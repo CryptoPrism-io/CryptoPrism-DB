@@ -22,7 +22,7 @@ jobs:
       # Install R packages
       - name: Install R packages
         run: |
-          Rscript -e 'install.packages(c("RMySQL", "crypto2","dplyr"))'
+          Rscript -e 'install.packages(c("RMySQL", "crypto2","dplyr","DBI"))'
 
 
       # Run R script 2
