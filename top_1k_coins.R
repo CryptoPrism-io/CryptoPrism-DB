@@ -5,7 +5,7 @@ crypto.listings.latest <- crypto_listings(
   which = "latest",
   convert = "USD",
   limit = 2000,
-  start_date = Sys.Date()-1,
+  start_date = NULL,
   end_date = Sys.Date(),
   interval = "day",
   quote = TRUE,
@@ -47,7 +47,19 @@ con <- dbConnect(
 
 dbWriteTable(con, "crypto_listings_latest_1000", as.data.frame(crypto.listings.latest), overwrite = TRUE, row.names = FALSE)
 
-dbWriteTable(con, "1K_coins_ohlcv", as.data.frame(all_coins), overwrite = TRUE, row.names = FALSE)
+#dbWriteTable(con, "1K_coins_ohlcv", as.data.frame(all_coins), overwrite = TRUE, row.names = FALSE)
+
+## temp push
+# Define chunk size
+chunk_size <- 10000  # Adjust based on your needs
+
+# Loop through the data in chunks and write to the database
+for (start_row in seq(1, nrow(all_coins), by = chunk_size)) {
+  chunk <- all_coins[start_row:min(start_row + chunk_size - 1, nrow(all_coins)), ]
+  
+  # Write the chunk to the database
+  dbWriteTable(con, "1K_coins_ohlcv", as.data.frame(chunk),  overwrite = (start_row == 1), append = (start_row != 1), row.names = FALSE)
+}
 
 
 dbDisconnect(con)
