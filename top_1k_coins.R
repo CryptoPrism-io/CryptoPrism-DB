@@ -16,9 +16,14 @@ crypto.listings.latest <- crypto_listings(
   finalWait = FALSE
 )
 
+# Filter the data based on cmc_rank
+crypto.listings.latest<- crypto.listings.latest %>%
+  filter(cmc_rank > 1 & cmc_rank < 2000)
+
+
 
 all_coins<-crypto_history(coin_list = crypto.listings.latest,convert = "USD",limit = 2000,
-                          start_date = Sys.Date()-1,end_date = Sys.Date(),sleep = 0)
+                          start_date = NULL,end_date = Sys.Date(),sleep = 0)
 
 #all_coins <- all_coins[, c("id", "slug", "name", "symbol", "timestamp", "open",
                            "high", "low", "close", "volume", "market_cap")]
@@ -42,7 +47,7 @@ con <- dbConnect(
 
 dbWriteTable(con, "crypto_listings_latest_1000", as.data.frame(crypto.listings.latest), overwrite = TRUE, row.names = FALSE)
 
-dbWriteTable(con, "1K_coins_ohlcv", as.data.frame(all_coins), append = TRUE, row.names = FALSE)
+dbWriteTable(con, "1K_coins_ohlcv", as.data.frame(all_coins), overwrite = TRUE, row.names = FALSE)
 
 
 dbDisconnect(con)
