@@ -22,13 +22,16 @@ jobs:
       - name: Install R packages
         run: |
           Rscript -e 'install.packages(c("RMySQL", "crypto2"))'
+
+
+      # Run R script 2
+      - name: Run R script
+        run: |
+          Rscript 108_1K_ohlcv.R
+
           
       # Run R script
       - name: Run R script
         run: |
           Rscript top_1k_coins.R
           
-      # Run R script 2
-      - name: Run R script
-        run: |
-          Rscript 108_1K_ohlcv.R
