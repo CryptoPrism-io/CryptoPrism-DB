@@ -48,7 +48,7 @@ con <- dbConnect(
 
 dbWriteTable(con, "crypto_listings_latest_1000", as.data.frame(crypto.listings.latest), overwrite = TRUE, row.names = FALSE)
 
-dbWriteTable(con, "108_1K_coins_ohlcv", as.data.frame(all_coins), append = TRUE, row.names = FALSE)
+dbWriteTable(con, "108_1K_coins_ohlcv", as.data.frame(all_coins), overwrite = TRUE, row.names = FALSE)
 
 
 dbDisconnect(con)
