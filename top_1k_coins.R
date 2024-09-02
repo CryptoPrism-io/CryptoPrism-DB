@@ -26,7 +26,7 @@ all_coins<-crypto_history(coin_list = crypto.listings.latest,convert = "USD",lim
                           start_date = NULL,end_date = Sys.Date(),sleep = 0)
 
 #all_coins <- all_coins[, c("id", "slug", "name", "symbol", "timestamp", "open",
-                           "high", "low", "close", "volume", "market_cap")]
+                          # "high", "low", "close", "volume", "market_cap")]
 
 # Database connection details
 host <- "dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com"
