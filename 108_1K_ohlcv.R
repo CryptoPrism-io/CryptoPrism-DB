@@ -16,8 +16,12 @@ crypto.listings.latest <- crypto_listings(
   finalWait = FALSE
 )
 
+# Filter the data based on cmc_rank
+crypto.listings.latest<- crypto.listings.latest %>%
+  filter(cmc_rank > 1 & cmc_rank < 1200)
 
-all_coins<-crypto_history(coin_list = crypto.listings.latest,convert = "USD",limit = 1000,
+
+all_coins<-crypto_history(coin_list = crypto.listings.latest,convert = "USD",limit = 1200,
                           start_date = Sys.Date()-108,end_date = Sys.Date(),sleep = 0)
 
 all_coins <- all_coins[, c("id", "slug", "name", "symbol", "timestamp", "open",
