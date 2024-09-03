@@ -224,7 +224,7 @@ metrics['d_met_coin_age_y_signal'] = np.where(
 
 metrics.info()
 
-metrics_signal = metrics.drop(metrics.columns[3:28], axis=1)
+metrics_signal = metrics.drop(metrics.columns[4:28], axis=1)
 
 metrics_signal.info()
 
