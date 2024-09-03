@@ -313,7 +313,7 @@ df_bin.info()
 # @title SQLalchemy to push (FE_SIGNALS) data to aws db (mysql)
 
 # Drop columns by their index positions
-df_bin.drop(df_bin.columns[3:30], axis=1, inplace=True)
+df_bin.drop(df_bin.columns[4:30], axis=1, inplace=True)
 tvv_signals=df_bin
 
 # Get the latest timestamp
