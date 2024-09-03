@@ -25,7 +25,7 @@ crypto.listings.latest<- crypto.listings.latest %>%
 
 
 all_coins<-crypto_history(coin_list = crypto.listings.latest,convert = "USD",limit = 2000,
-                          start_date = NULL,end_date = Sys.Date(),sleep = 0)
+                          start_date = Sys.Date()-1,end_date = Sys.Date(),sleep = 0)
 
 #all_coins <- all_coins[, c("id", "slug", "name", "symbol", "timestamp", "open",
                           # "high", "low", "close", "volume", "market_cap")]
@@ -49,8 +49,9 @@ con <- dbConnect(
 
 dbWriteTable(con, "crypto_listings_latest_1000", as.data.frame(crypto.listings.latest), overwrite = TRUE, row.names = FALSE)
 
-#dbWriteTable(con, "1K_coins_ohlcv", as.data.frame(all_coins), overwrite = TRUE, row.names = FALSE)
+dbWriteTable(con, "1K_coins_ohlcv", as.data.frame(all_coins), append = TRUE, row.names = FALSE)
 
+"""
 ## temp push
 # Define chunk size
 chunk_size <- 10000  # Adjust based on your needs
@@ -62,7 +63,7 @@ for (start_row in seq(1, nrow(all_coins), by = chunk_size)) {
   # Write the chunk to the database
   dbWriteTable(con, "1K_coins_ohlcv", as.data.frame(chunk),  overwrite = (start_row == 1), append = (start_row != 1), row.names = FALSE)
 }
-
+"""
 
 dbDisconnect(con)
 
