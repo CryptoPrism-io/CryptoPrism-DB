@@ -1047,7 +1047,7 @@ df_oscillator_bin.info()
 
 import pandas as pd
 # Merge ratios and df_oscillator_bin on 'slug' to get the latest timestamp
-ratios = pd.merge(ratios, df_oscillator_bin[['slug']], on='slug', how='left')
+ratios = pd.merge(ratios, df_oscillator_bin[['slug', 'id', 'name','timestamp']], on='slug', how='left')
 
 # @title SQLalchemy to push (FE) data to aws db (mysql)
 
