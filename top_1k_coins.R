@@ -20,7 +20,7 @@ crypto.listings.latest <- crypto_listings(
 
 # Filter the data based on cmc_rank
 crypto.listings.latest<- crypto.listings.latest %>%
-  filter(cmc_rank > 1 & cmc_rank < 2000)
+  filter(cmc_rank > 0 & cmc_rank < 2000)
 
 
 
