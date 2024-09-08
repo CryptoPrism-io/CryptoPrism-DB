@@ -1,4 +1,4 @@
-# CryptoPrism ETL Process
+# CryptoPrism ETL Process....
 
 ## Overview
 CryptoPrism performs a daily ETL (Extraction, Transformation, and Loading) process for the top 1000 cryptocurrencies. The data is categorized into Durability, Momentum, and Valuation (DMV) metrics, providing insights into the performance, stability, and potential of these assets.
