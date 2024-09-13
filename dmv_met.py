@@ -41,8 +41,8 @@ con = mysql.connector.connect(
 query = "SELECT * FROM 1K_coins_ohlcv"
 all_coins_ohlcv_filtered = pd.read_sql_query(query, con)
 
-#query = "SELECT * FROM crypto_listings_latest_1000"
-#top_1000_cmc_rank = pd.read_sql_query(query, con)
+query = "SELECT * FROM crypto_listings_latest_1000"
+top_1000_cmc_rank = pd.read_sql_query(query, con)
 
 
 con.close()
