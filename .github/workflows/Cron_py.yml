@@ -39,3 +39,7 @@ jobs:
       # Run the Python script
       - name: Run dmv4.py
         run: python dmv_core.py
+
+      # Run the Python script
+      - name: Run cc_info.py
+        run: python cc_info.py
