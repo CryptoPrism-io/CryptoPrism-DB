@@ -23,12 +23,26 @@ crypto.listings.latest<- crypto.listings.latest %>%
 
 
 all_coins<-crypto_history(coin_list = crypto.listings.latest,convert = "USD",limit = 2000,
-                          start_date = Sys.Date()-108,end_date = Sys.Date()+1,sleep = 0)
+                          start_date = Sys.Date()-1,end_date = Sys.Date()+1,sleep = 0)
 
 all_coins <- all_coins[, c("id", "slug", "name", "symbol", "timestamp", "open","high", "low", "close", "volume", "market_cap")]
 
-# Database connection details
 
+
+crypto_global_quote <- crypto_global_quotes(
+  which = "latest",
+  convert = "USD",
+  start_date = Sys.Date()-1,
+  end_date = Sys.Date(),
+  interval = "daily",
+  quote = TRUE,
+  requestLimit = 1,
+  sleep = 0,
+  wait = 60,
+  finalWait = FALSE
+)
+
+# Database connection details
 
 host <- "dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com"
 port <- 3306
@@ -48,7 +62,9 @@ con <- dbConnect(
 
 dbWriteTable(con, "crypto_listings_latest_1000", as.data.frame(crypto.listings.latest), overwrite = TRUE, row.names = FALSE)
 
-dbWriteTable(con, "108_1K_coins_ohlcv", as.data.frame(all_coins), overwrite = TRUE, row.names = FALSE)
+dbWriteTable(con, "crypto_global_latest", as.data.frame(crypto_global_quote), overwrite = TRUE, row.names = FALSE)
+
+dbWriteTable(con, "108_1K_coins_ohlcv", as.data.frame(all_coins), append = TRUE, row.names = FALSE)
 
 
 dbDisconnect(con)
