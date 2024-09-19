@@ -6,7 +6,7 @@ library(DBI)
 crypto.listings.latest <- crypto_listings(
   which = "latest",
   convert = "USD",
-  limit = 2000,
+  limit = 10000,
   start_date = NULL,
   end_date = Sys.Date(),
   interval = "day",
