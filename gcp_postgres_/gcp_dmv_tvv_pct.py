@@ -268,7 +268,7 @@ tvv.info()
 #engine = create_engine('mysql+mysqlconnector://yogass09:jaimaakamakhya@dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com:3306/dbcp')
 
 # Write the DataFrame to a new table in the database
-tvv.to_sql('FE_TVV', con=engine, if_exists='replace', index=False)
+tvv.to_sql('FE_TVV', con=gcp_engine, if_exists='replace', index=False)
 
 print("pct_change DataFrame uploaded to AWS MySQL database successfully!")
 
@@ -433,7 +433,7 @@ from sqlalchemy import create_engine
 # Write the DataFrame to a new table in the database
 pct_change.to_sql('FE_PCT_CHANGE', con=gcp_engine, if_exists='replace', index=False)
 
-print("pct_change DataFrame uploaded to AWS MySQL database successfully!")
+print("pct_change DataFrame uploaded to GCP postGres database successfully!")
 
 # @title time cal and engine close
 
