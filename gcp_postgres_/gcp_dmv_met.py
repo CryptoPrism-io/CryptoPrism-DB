@@ -250,19 +250,14 @@ elapsed_time_minutes = elapsed_time_seconds / 60
 
 print(f"Cell execution time: {elapsed_time_minutes:.2f} minutes")
 
+
+gcp_engine.dispose()
+
+
 """# end of script
 
 """
 
-# @title time cal and engine close
-
-end_time = time.time()
-elapsed_time_seconds = end_time - start_time
-elapsed_time_minutes = elapsed_time_seconds / 60
-
-print(f"Cell execution time: {elapsed_time_minutes:.2f} minutes")
 
 
 
-engine.dispose()
-con.close()
