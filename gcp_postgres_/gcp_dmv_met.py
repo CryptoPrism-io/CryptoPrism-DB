@@ -42,10 +42,10 @@ gcp_engine = create_engine(f'postgresql+psycopg2://{db_user}:{db_password}@{db_h
 # @title SQL Query Connection to AWS for Data Listing
 
 # Executing the query and fetching the results directly into a pandas DataFrame
-query = "SELECT * FROM 1K_coins_ohlcv"
+query = "SELECT * FROM public.1K_coins_ohlcv"
 all_coins_ohlcv_filtered = pd.read_sql_query(query, gcp_engine )
 
-query = "SELECT * FROM crypto_listings_latest_1000"
+query = "SELECT * FROM public.crypto_listings_latest_1000"
 top_1000_cmc_rank = pd.read_sql_query(query, gcp_engine )
 
 
