@@ -17,41 +17,38 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import warnings
+from sqlalchemy import create_engine
+import pandas as pd
 warnings.filterwarnings('ignore')
-
+import mysql.connector
+import pandas as pd
 import time
 start_time = time.time()
 
 # @title  AWS/Cloud DB connect
-import mysql.connector
-import pandas as pd
 
-# Establishing the connection
-con = mysql.connector.connect(
-    host="dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com",
-    port=3306,
-    user="yogass09",
-    password="jaimaakamakhya",
-    database="dbcp"
-)
 
-from sqlalchemy import create_engine
+# Connection parameters
+db_host = "34.47.215.135"         # Public IP of your PostgreSQL instance on GCP
+db_name = "dbcp"                  # Database name
+db_user = "yogass09"              # Database username
+db_password = "jaimaakamakhya"     # Database password
+db_port = 5432                    # PostgreSQL port
 
-engine = create_engine('mysql+mysqlconnector://yogass09:jaimaakamakhya@dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com:3306/dbcp')
+# Create a SQLAlchemy engine for PostgreSQL
+gcp_engine = create_engine(f'postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}')
+
 
 # @title SQL Query Connection to AWS for Data Listing
 
 # Executing the query and fetching the results directly into a pandas DataFrame
-query = "SELECT * FROM 108_1K_coins_ohlcv"
-all_coins_ohlcv_filtered = pd.read_sql_query(query, con)
+with gcp_engine.connect() as connection:
+    query = 'SELECT * FROM "1K_coins_ohlcv"'  # Enclose only the table name in double quotes
+    all_coins_ohlcv_filtered_gcp = pd.read_sql_query(query, connection)
 
-#query = "SELECT * FROM crypto_listings_latest_1000"
-#top_1000_cmc_rank = pd.read_sql_query(query, con)
+    query = "SELECT * FROM crypto_listings_latest_1000"
+    top_1000_cmc_rank_gcp = pd.read_sql_query(query, connection)
 
-
-con.close()
-
-#
 
 
 
@@ -329,7 +326,7 @@ tvv_signals = tvv_signals.replace([np.inf, -np.inf], np.nan) # Replace inf value
 tvv_signals.info()
 
 # Write the DataFrame to a new table in the database
-tvv_signals.to_sql('FE_TVV_SIGNALS', con=engine, if_exists='replace', index=False)
+tvv_signals.to_sql('FE_TVV_SIGNALS', con=gcp_engine, if_exists='replace', index=False)
 
 print("tvv_signals DataFrame uploaded to AWS MySQL database successfully!")
 
@@ -433,11 +430,8 @@ pct_change.info()
 
 from sqlalchemy import create_engine
 
-# Create a SQLAlchemy engine to connect to the MySQL database
-engine = create_engine('mysql+mysqlconnector://yogass09:jaimaakamakhya@dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com:3306/dbcp')
-
 # Write the DataFrame to a new table in the database
-pct_change.to_sql('FE_PCT_CHANGE', con=engine, if_exists='replace', index=False)
+pct_change.to_sql('FE_PCT_CHANGE', con=gcp_engine, if_exists='replace', index=False)
 
 print("pct_change DataFrame uploaded to AWS MySQL database successfully!")
 
