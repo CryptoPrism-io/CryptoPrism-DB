@@ -1,0 +1,31 @@
+name: Data fetch - DMV - to DB flow (Python)
+
+on:
+  schedule:
+    - cron: "30 0 * * *"  # Daily at 00:30 UTC
+  workflow_dispatch: {}    # Manual trigger
+  push:                     # Trigger on commit
+    branches:
+      - main  
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'  # Specify the Python version you need
+          
+      # Install Python packages
+      - name: Install Python packages
+        run: |
+          pip install pandas
+          
+      # Run the Python script
+      - name: Run gcp_actions_test.py
+        run: python test_actions_yml_cron.py
