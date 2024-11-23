@@ -28,4 +28,4 @@ jobs:
           
       # Run the Python script
       - name: Run gcp_actions_test.py
-        run: python test_actions_yml_cron.py
+        run: python gcp_postgres_/test_actions_yml_cron.py 
