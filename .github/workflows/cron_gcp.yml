@@ -24,7 +24,7 @@ jobs:
       # Install Python packages
       - name: Install Python packages
         run: |
-          pip install pandas
+          pip install pandas numpy matplotlib seaborn mysql-connector-python sqlalchemy requests
           
       # Run the Python script
       - name: Run gcp_actions_test.py
