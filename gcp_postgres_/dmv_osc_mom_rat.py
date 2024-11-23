@@ -19,40 +19,37 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import warnings
+from sqlalchemy import create_engine
+import pandas as pd
 warnings.filterwarnings('ignore')
 
 import time
 start_time = time.time()
 
-# @title  AWS/Cloud DB connect
-import mysql.connector
+# @title  GCP/Cloud DB connect
+from sqlalchemy import create_engine
 import pandas as pd
 
-# Establishing the connection
-con = mysql.connector.connect(
-    host="dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com",
-    port=3306,
-    user="yogass09",
-    password="jaimaakamakhya",
-    database="dbcp"
-)
+# Connection parameters
+db_host = "34.47.215.135"         # Public IP of your PostgreSQL instance on GCP
+db_name = "dbcp"                  # Database name
+db_user = "yogass09"              # Database username
+db_password = "jaimaakamakhya"     # Database password
+db_port = 5432                    # PostgreSQL port
 
-# @title SQLalchemy to push data to aws db (mysql)
-
-from sqlalchemy import create_engine
-
-# Create a SQLAlchemy engine to connect to the MySQL database
-engine = create_engine('mysql+mysqlconnector://yogass09:jaimaakamakhya@dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com:3306/dbcp')
+# Create a SQLAlchemy engine for PostgreSQL
+gcp_engine = create_engine(f'postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}')
 
 # @title SQL Query Connection to AWS for Data Listing
 
 # Executing the query and fetching the results directly into a pandas DataFrame
-query = "SELECT * FROM 108_1K_coins_ohlcv"
-all_coins_ohlcv_filtered = pd.read_sql_query(query, con)
+with gcp_engine.connect() as connection:
+    query = 'SELECT * FROM "1K_coins_ohlcv"'  # Enclose only the table name in double quotes
+    all_coins_ohlcv_filtered_gcp = pd.read_sql_query(query, connection)
 
+    query = "SELECT * FROM crypto_listings_latest_1000"
+    top_1000_cmc_rank_gcp = pd.read_sql_query(query, connection)
 
-
-con.close()
 
 # @title  Enhancing Function Definition Through Grouping and Indexing Techniques
 df=all_coins_ohlcv_filtered
@@ -311,7 +308,7 @@ momentum = momentum.replace([np.inf, -np.inf], np.nan) # Replace inf values befo
 #engine = create_engine('mysql+mysqlconnector://yogass09:jaimaakamakhya@dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com:3306/dbcp')
 
 # Write the DataFrame to a new table in the database
-momentum.to_sql('FE_MOMENTUM', con=engine, if_exists='replace', index=False)
+momentum.to_sql('FE_MOMENTUM', con=gcp_engine, if_exists='replace', index=False)
 
 print("momentum DataFrame uploaded to AWS MySQL database successfully!")
 
@@ -414,7 +411,7 @@ df_momentum = df_momentum.replace([np.inf, -np.inf], np.nan) # Replace inf value
 #engine = create_engine('mysql+mysqlconnector://yogass09:jaimaakamakhya@dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com:3306/dbcp')
 
 # Write the DataFrame to a new table in the database
-df_momentum.to_sql('FE_MOMENTUM_SIGNALS', con=engine, if_exists='replace', index=False)
+df_momentum.to_sql('FE_MOMENTUM_SIGNALS', con=gcp_engine, if_exists='replace', index=False)
 
 print("FE_MOMENTUM_SIGNALS DataFrame uploaded to AWS MySQL database successfully!")
 
@@ -616,7 +613,7 @@ oscillator = df.replace([np.inf, -np.inf], np.nan) # Replace inf values before p
 #engine = create_engine('mysql+mysqlconnector://yogass09:jaimaakamakhya@dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com:3306/dbcp')
 
 # Write the DataFrame to a new table in the database
-oscillator.to_sql('FE_OSCILLATOR', con=engine, if_exists='replace', index=False)
+oscillator.to_sql('FE_OSCILLATOR', con=gcp_engine, if_exists='replace', index=False)
 
 print("oscillator DataFrame uploaded to AWS MySQL database successfully!")
 
@@ -726,7 +723,7 @@ df_oscillator_bin = df_oscillator_bin.replace([np.inf, -np.inf], np.nan) # Repla
 #engine = create_engine('mysql+mysqlconnector://yogass09:jaimaakamakhya@dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com:3306/dbcp')
 
 # Write the DataFrame to a new table in the database
-df_oscillator_bin.to_sql('FE_OSCILLATORS_SIGNALS', con=engine, if_exists='replace', index=False)
+df_oscillator_bin.to_sql('FE_OSCILLATORS_SIGNALS', con=gcp_engine, if_exists='replace', index=False)
 
 print("FE_OSCILLATORS_SIGNALS DataFrame uploaded to AWS MySQL database successfully!")
 
@@ -1059,7 +1056,7 @@ ratios = ratios.replace([np.inf, -np.inf], np.nan) # Replace inf values before p
 #engine = create_engine('mysql+mysqlconnector://yogass09:jaimaakamakhya@dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com:3306/dbcp')
 
 # Write the DataFrame to a new table in the database
-ratios.to_sql('FE_RATIOS', con=engine, if_exists='replace', index=False)
+ratios.to_sql('FE_RATIOS', con=gcp_engine, if_exists='replace', index=False)
 
 print("FE_RATIOS DataFrame uploaded to AWS MySQL database successfully!")
 
@@ -1126,7 +1123,7 @@ ratios_bin.info()
 
 
 # Write the DataFrame to a new table in the database
-ratios_bin.to_sql('FE_RATIOS_SIGNALS', con=engine, if_exists='replace', index=False)
+ratios_bin.to_sql('FE_RATIOS_SIGNALS', con=gcp_engine, if_exists='replace', index=False)
 
 print("FE_RATIOS_SIGNALS DataFrame uploaded to AWS MySQL database successfully!")
 
