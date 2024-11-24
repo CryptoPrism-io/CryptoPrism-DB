@@ -3,10 +3,7 @@ name: Data fetch - DMV - to DB flow (Python)
 on:
   schedule:
     - cron: "30 0 * * *"  # Daily at 00:30 UTC
-  workflow_dispatch: {}    # Manual trigger
-  push:                     # Trigger on commit
-    branches:
-      - main  
+
 
 jobs:
   update:
