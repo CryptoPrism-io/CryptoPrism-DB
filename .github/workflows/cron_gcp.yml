@@ -1,4 +1,4 @@
-name: Data fetch - DMV - to DB flow (Python)
+name: Data fetch - DMV - to DB flow (Python) to GCP
 
 on:
   schedule:
@@ -27,3 +27,11 @@ jobs:
       # Run the Python script
       - name: Run gcp_actions_test.py
         run: python gcp_postgres_/gcp_dmv_met.py
+        
+      # Run the Python script
+      - name: Run gcp_actions_test.py
+        run: python gcp_postgres_/gcp_dmv_tvv_pct.py
+        
+      # Run the Python script
+      - name: Run gcp_actions_test.py
+        run: python gcp_postgres_/gcp_osc_mom_rat.py
