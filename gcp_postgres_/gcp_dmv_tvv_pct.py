@@ -43,7 +43,7 @@ gcp_engine = create_engine(f'postgresql+psycopg2://{db_user}:{db_password}@{db_h
 
 # Executing the query and fetching the results directly into a pandas DataFrame
 with gcp_engine.connect() as connection:
-    query = 'SELECT * FROM "1K_coins_ohlcv"'  # Enclose only the table name in double quotes
+    query = 'SELECT * FROM "108_1K_coins_ohlcv"'  # Enclose only the table name in double quotes
     all_coins_ohlcv_filtered= pd.read_sql_query(query, connection)
 
     query = "SELECT * FROM crypto_listings_latest_1000"
@@ -445,6 +445,5 @@ print(f"Cell execution time: {elapsed_time_minutes:.2f} minutes")
 
 
 
-engine.dispose()
+gcp_engine.dispose()
 con.close()
-
