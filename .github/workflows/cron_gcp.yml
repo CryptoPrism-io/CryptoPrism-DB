@@ -28,13 +28,13 @@ jobs:
         run: python gcp_postgres_/gcp_dmv_met.py
         
       # Run the Python script
-      - name: Run gcp_trend_volume_volatility.py
-        run: python gcp_postgres_/gcp_dmv_tvv_pct.py
-        
-      # Run the Python script
       - name: Run gcp_osc_mom_rat.py
         run: python gcp_postgres_/gcp_dmv_osc_mom_rat.py
 
       # Run the Python script
       - name: Run gcp_dmv_core.py
-        run: python gcp_postgres_/gcp_dmv_core.py                
+        run: python gcp_postgres_/gcp_dmv_core.py          
+
+      # Run the Python script
+      - name: Run gcp_trend_volume_volatility.py
+        run: python gcp_postgres_/gcp_dmv_tvv_pct.py
