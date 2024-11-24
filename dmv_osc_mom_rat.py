@@ -1055,8 +1055,9 @@ ratios = pd.merge(ratios, df_oscillator_bin[['slug', 'id', 'name','timestamp']],
 # Replace infinite values with NaN
 ratios = ratios.replace([np.inf, -np.inf], np.nan) # Replace inf values before pushing to SQL
 
+engine.dispose()
 # Create a SQLAlchemy engine to connect to the MySQL database
-#engine = create_engine('mysql+mysqlconnector://yogass09:jaimaakamakhya@dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com:3306/dbcp')
+engine = create_engine('mysql+mysqlconnector://yogass09:jaimaakamakhya@dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com:3306/dbcp')
 
 # Write the DataFrame to a new table in the database
 ratios.to_sql('FE_RATIOS', con=engine, if_exists='replace', index=False)
@@ -1135,6 +1136,7 @@ elapsed_time_seconds = end_time - start_time
 elapsed_time_minutes = elapsed_time_seconds / 60
 
 print(f"Cell execution time: {elapsed_time_minutes:.2f} minutes")
+
 
 engine.dispose()
 con.close()
