@@ -26,6 +26,12 @@ jobs:
   #requests pandas numpy matplotlib seaborn (for faster runtime)
 
       # Run each Python script with error handling
-      - name: Run gcp_metrics.py
+      - name: Run Python script
+        env:
+          SANDBOX_GCP_DB_HOST: ${{ secrets.SANDBOX_GCP_DB_HOST }}
+          SANDBOX_GCP_NAME: ${{ secrets.SANDBOX_GCP_NAME }}
+          SANDBOX_GCP_DB_USER: ${{ secrets.SANDBOX_GCP_DB_USER }}
+          SANDBOX_GCP_DB_PASSWORD: ${{ secrets.SANDBOX_GCP_DB_PASSWORD }}
+          SANDBOX_GCP_DB_PORT: ${{ secrets.SANDBOX_GCP_DB_PORT }}
         run: python gcp_sandbox_psql/test.py
         continue-on-error: true
