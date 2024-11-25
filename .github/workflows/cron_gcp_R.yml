@@ -25,14 +25,12 @@ jobs:
           Rscript -e 'install.packages(c("RMySQL", "crypto2","dplyr","DBI"))'
 
 
-      # Run R script 2
+      # Run R script 108
       - name: Run R script
-        run: |
-          Rscript gcp_postgres_/gcp_108_1K_ohlcv.R
+        run: Rscript gcp_postgres_/gcp_108_1K_ohlcv.R
 
           
-      # Run R script
+      # Run R script 1k all -1d
       - name: Run R script
-        run: |
-          Rscript gcp_postgres_/top_1k_coins.R
+        run: Rscript gcp_postgres_/top_1k_coins.R
           
