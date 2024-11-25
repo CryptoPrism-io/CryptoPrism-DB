@@ -28,11 +28,11 @@ jobs:
       # Run R script 2
       - name: Run R script
         run: |
-          Rscript gcp_postgres_/108_1K_ohlcv.R
+          Rscript gcp_postgres_/gcp_108_1K_ohlcv.R
 
           
       # Run R script
       - name: Run R script
         run: |
-          Rscript gcp_postgres_/top_1k_coins.R
+          Rscript gcp_postgres_/gcp_top_1k_coins.R
           
