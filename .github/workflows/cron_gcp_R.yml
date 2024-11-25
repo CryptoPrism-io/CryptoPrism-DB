@@ -27,7 +27,7 @@ jobs:
 
       # Run R script 108
       - name: Run R script
-        run: Rscript gcp_postgres_/gcp_108_1K_ohlcv.R
+        run: Rscript gcp_postgres_/gcp_108k_coins.R
 
           
       # Run R script 1k all -1d
