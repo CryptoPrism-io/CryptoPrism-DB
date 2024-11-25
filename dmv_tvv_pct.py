@@ -451,5 +451,6 @@ print(f"Cell execution time: {elapsed_time_minutes:.2f} minutes")
 
 
 
-gcp_engine.dispose()
+engine.dispose()
+con.close()
 
