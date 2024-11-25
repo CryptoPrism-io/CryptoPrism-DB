@@ -1,0 +1,38 @@
+name: Data fetch - DMV - to DB flow (R Only)
+
+on:
+  schedule:
+    - cron: "01 0 * * *"  # Daily at midnight UTC 
+  workflow_dispatch: {}
+
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      # Set up R
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+          install-r: true
+          
+      # Install R packages
+      - name: Install R packages
+        run: |
+          Rscript -e 'install.packages(c("RMySQL", "crypto2","dplyr","DBI"))'
+
+
+      # Run R script 2
+      - name: Run R script
+        run: |
+          Rscript gcp_postgres_/108_1K_ohlcv.R
+
+          
+      # Run R script
+      - name: Run R script
+        run: |
+          Rscript gcp_postgres_/top_1k_coins.R
+          
