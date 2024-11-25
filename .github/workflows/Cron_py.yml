@@ -5,7 +5,6 @@ on:
     - cron: "30 0 * * *"  # Daily at midnight UTC
   workflow_dispatch: {}
 
-
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -23,35 +22,36 @@ jobs:
       - name: Install Python packages
         run: |
           pip install pandas numpy matplotlib seaborn mysql-connector-python sqlalchemy requests
-          
-      # Run the Python script
+
+      # Run each Python script with error handling
       - name: Run dmv_tvv_pct.py
         run: python dmv_tvv_pct.py
+        continue-on-error: true
 
-      # Run the Python refresh sql con #
       - name: Run sql_refresh.py
-        run: python refresh_aws_sql.py    
+        run: python refresh_aws_sql.py
+        continue-on-error: true    
 
-      # Run the Python script
       - name: Run dmv_osc_mom_rat.py
         run: python dmv_osc_mom_rat.py
+        continue-on-error: true
         
-      # Run the Python refresh sql con #
-      - name: Run sql_refresh.py
-        run: python refresh_aws_sql.py    
+      - name: Run sql_refresh.py (2nd time)
+        run: python refresh_aws_sql.py
+        continue-on-error: true    
 
-      # Run the Python script
       - name: Run dmv_met.py
         run: python dmv_met.py
+        continue-on-error: true
         
-      # Run the Python refresh sql con #
-      - name: Run sql_refresh.py
-        run: python refresh_aws_sql.py    
-  
-      # Run the Python script
+      - name: Run sql_refresh.py (3rd time)
+        run: python refresh_aws_sql.py
+        continue-on-error: true    
+
       - name: Run dmv_core.py
         run: python dmv_core.py
+        continue-on-error: true
 
-      # Run the Python script
       - name: Run cc_info.py
         run: python cc_info.py
+        continue-on-error: true
