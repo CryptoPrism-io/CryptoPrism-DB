@@ -1,17 +1,7 @@
 # Import necessary libraries
-import os
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-import warnings
+
 from sqlalchemy import create_engine
-import time
 
-warnings.filterwarnings('ignore')
-
-# Start time tracking
-start_time = time.time()
 
 # Retrieve database credentials from environment variables
 db_host = os.getenv("SANDBOX_GCP_DB_HOST")
