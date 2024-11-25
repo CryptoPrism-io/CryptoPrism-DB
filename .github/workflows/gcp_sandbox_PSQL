@@ -1,0 +1,31 @@
+name: SANDBOX_PSQL_DMV-DB (.py) test
+
+on:
+  schedule:
+    - cron: "30 0 * * *"  # Daily at 00:30 UTC
+  workflow_dispatch: {}
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'  # Specify the Python version you need
+
+      # Install Python packages
+      - name: Install Python packages
+        run: |
+          pip install  mysql-connector-python sqlalchemy  psycopg2-binary
+  
+  #requests pandas numpy matplotlib seaborn (for faster runtime)
+
+      # Run each Python script with error handling
+      - name: Run gcp_metrics.py
+        run: python sandbox_gcp_postgres/test.py
+        continue-on-error: true
