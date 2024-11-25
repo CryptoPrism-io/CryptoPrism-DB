@@ -39,3 +39,7 @@ jobs:
       - name: Run gcp_trend_volume_volatility.py
         run: python gcp_postgres_/gcp_dmv_tvv_pct.py
         continue-on-error: true
+        
+      - name: Run gcp_dmv_core.py
+        run: python gcp_postgres_/gcp_dmv_core.py
+        continue-on-error: true
