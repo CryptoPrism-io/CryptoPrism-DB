@@ -27,5 +27,5 @@ jobs:
 
       # Run each Python script with error handling
       - name: Run gcp_metrics.py
-        run: python sandbox_gcp_postgres/test.py
+        run: python gcp_sandbox_psql/test.py
         continue-on-error: true
