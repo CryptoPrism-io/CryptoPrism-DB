@@ -34,5 +34,5 @@ jobs:
       # Run R script
       - name: Run R script
         run: |
-          Rscript gcp_postgres_/gcp_top_1k_coins.R
+          Rscript gcp_postgres_/top_1k_coins.R
           
