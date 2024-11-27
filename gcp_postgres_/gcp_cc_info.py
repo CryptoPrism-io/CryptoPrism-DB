@@ -1,5 +1,6 @@
 import mysql.connector
 import pandas as pd
+import psycopg2
 
 # Establishing the connection
 
@@ -144,13 +145,29 @@ final_df = final_df.drop(columns=['index'])
 
 final_df.info()
 
-from sqlalchemy import create_engine
+"""from sqlalchemy import create_engine
 
 
 # Create a SQLAlchemy engine to connect to the MySQL database
 engine = create_engine('mysql+mysqlconnector://yogass09:jaimaakamakhya@dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com:3306/dbcp')
 
+"""
+
+
+# Connection parameters
+db_host = "34.47.215.135"         # Public IP of your PostgreSQL instance on GCP
+db_name = "dbcp"                  # Database name
+db_user = "yogass09"              # Database username
+db_password = "jaimaakamakhya"     # Database password
+db_port = 5432                    # PostgreSQL port
+
+# Create a SQLAlchemy engine for PostgreSQL
+gcp_engine = create_engine(f'postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}')
 
 
 # Write the DataFrame to a new table in the database
-final_df.to_sql('FE_CC_INFO_URL', con=engine, if_exists='replace', index=False)
+final_df.to_sql('FE_CC_INFO_URL', con=gcp_engine, if_exists='replace', index=False)
+
+
+gcp_engine.dispose()
+
