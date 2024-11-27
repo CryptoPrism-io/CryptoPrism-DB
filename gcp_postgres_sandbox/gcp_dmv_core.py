@@ -18,7 +18,7 @@ warnings.filterwarnings('ignore')
 start_time = time.time()
 
 # GCP Database Connection Parameters
-db_host = "34.47.215.135"         # Public IP of your PostgreSQL instance on GCP
+db_host = "34.93.253.148"         # Public IP of your PostgreSQL instance on GCP
 db_name = "dbcp"                  # Database name
 db_user = "yogass09"              # Database username
 db_password = "jaimaakamakhya"     # Database password
