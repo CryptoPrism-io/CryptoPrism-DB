@@ -108,7 +108,10 @@ df['atl_date'] = pd.to_datetime(df['atl_date'])
 df.head()
 
 # Step 3: Calculate the number of days since ATH and ATL
-current_date = pd.Timestamp.now()
+current_date = pd.Timestamp.now().tz_localize(None)  # Ensure current_date is tz-naive
+df['ath_date'] = df['ath_date'].dt.tz_localize(None)  # Ensure ath_date is tz-naive
+df['atl_date'] = df['atl_date'].dt.tz_localize(None)  # Ensure atl_date is tz-naive
+
 df['d_met_ath_days'] = (current_date - df['ath_date']).dt.days
 df['d_met_atl_days'] = (current_date - df['atl_date']).dt.days
 
