@@ -26,19 +26,21 @@ jobs:
       # Run each Python script with error handling
       - name: Run gcp_metrics.py
         run: python gcp_postgres_sandbox/gcp_dmv_met.py
-        continue-on-error: true
+        continue-on-error: false
+        
+      - name: Run gcp_trend_volume_volatility.py
+        run: python gcp_postgres_sandbox/gcp_dmv_tvv_pct.py
+        continue-on-error: false
 
       - name: Run gcp_osc_mom_rat.py
         run: python gcp_postgres_sandbox/gcp_dmv_osc_mom_rat.py
-        continue-on-error: true
+        continue-on-error: false
 
       - name: Run gcp_dmv_core.py
         run: python gcp_postgres_sandbox/gcp_dmv_core.py
-        continue-on-error: true
+        continue-on-error: false
 
-      - name: Run gcp_trend_volume_volatility.py
-        run: python gcp_postgres_sandbox/gcp_dmv_tvv_pct.py
-        continue-on-error: true
+
         
       - name: Run gcp_dmv_core.py
         run: python gcp_postgres_sandbox/gcp_dmv_core.py
