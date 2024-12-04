@@ -82,7 +82,7 @@ df.sort_values(by=['slug', 'timestamp'], inplace=True)
 # Perform time-series calculations within each group (each cryptocurrency)
 grouped = df.groupby('slug')
 
-df = df.drop(df.columns[12:20], axis=1)
+#df = df.drop(df.columns[12:20], axis=1)
 
 df.info()
 
@@ -446,7 +446,7 @@ print(f"Cell execution time: {elapsed_time_minutes:.2f} minutes")
 
 
 gcp_engine.dispose()
-con.close()
+#con.close()
 
 
 """# end of script
