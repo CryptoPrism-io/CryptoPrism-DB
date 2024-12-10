@@ -5,7 +5,7 @@ import psycopg2
 # Establishing the connection
 
 con = psycopg2.connect(
-        host="34.93.253.148",
+        host="34.55.195.199",
         database="dbcp",
         user="yogass09",
         password="jaimaakamakhya",
@@ -155,7 +155,7 @@ engine = create_engine('mysql+mysqlconnector://yogass09:jaimaakamakhya@dbcp.cry6
 
 
 # Connection parameters
-db_host = "34.93.253.148"         # Public IP of your PostgreSQL instance on GCP
+db_host = "34.55.195.199"         # Public IP of your PostgreSQL instance on GCP
 db_name = "dbcp"                  # Database name
 db_user = "yogass09"              # Database username
 db_password = "jaimaakamakhya"     # Database password
