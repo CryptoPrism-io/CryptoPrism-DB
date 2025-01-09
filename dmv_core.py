@@ -127,6 +127,8 @@ for index, row in df.iloc[:, 4:].iterrows():  # Start from the 5th column (index
             
 DMV_sorted=df
 
+DMV_sorted.head()
+
 # @title SQLalchemy to push (DMV_ALL) data to aws db (mysql)
 
 # Create a SQLAlchemy engine to connect to the MySQL database
