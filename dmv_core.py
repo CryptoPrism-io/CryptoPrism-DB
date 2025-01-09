@@ -106,6 +106,27 @@ DMV_sorted = pd.concat([first_four_cols, remaining_cols_sorted], axis=1)
 
 DMV_sorted.info()
 
+## bullish and bearish counts
+
+
+df=DMV_sorted
+# Create new columns 'bullish', 'bearish', and 'neutral' initialized to 0
+df['bullish'] = 0
+df['bearish'] = 0
+df['neutral'] = 0
+
+# Iterate through rows and columns (excluding first four columns: 'id', 'slug', 'name', 'timestamp')
+for index, row in df.iloc[:, 4:].iterrows():  # Start from the 5th column (index 4)
+    for col_name, value in row.items():
+        if value == 1:
+            df.loc[index, 'bullish'] += value
+        elif value == -1:
+            df.loc[index, 'bearish'] += value
+        elif value == 0:
+            df.loc[index, 'neutral'] += value
+            
+DMV_sorted=df
+
 # @title SQLalchemy to push (DMV_ALL) data to aws db (mysql)
 
 # Create a SQLAlchemy engine to connect to the MySQL database
