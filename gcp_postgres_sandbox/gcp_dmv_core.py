@@ -80,6 +80,31 @@ remaining_cols = DMV.drop(['id', 'slug', 'name', 'timestamp'], axis=1)
 remaining_cols_sorted = remaining_cols.sort_index(axis=1)
 DMV_sorted = pd.concat([first_four_cols, remaining_cols_sorted], axis=1)
 
+
+
+## bullish and bearish counts
+
+
+df=DMV_sorted
+# Create new columns 'bullish', 'bearish', and 'neutral' initialized to 0
+df['bullish'] = 0
+df['bearish'] = 0
+df['neutral'] = 0
+
+# Iterate through rows and columns (excluding first four columns: 'id', 'slug', 'name', 'timestamp')
+for index, row in df.iloc[:, 4:].iterrows():  # Start from the 5th column (index 4)
+    for col_name, value in row.items():
+        if value == 1:
+            df.loc[index, 'bullish'] += value
+        elif value == -1:
+            df.loc[index, 'bearish'] += value
+        elif value == 0:
+            df.loc[index, 'neutral'] += value
+            
+DMV_sorted=df
+DMV_sorted.head()
+DMV_sorted.info()
+
 # Upload the DMV_sorted DataFrame to GCP
 DMV_sorted.to_sql('FE_DMV_ALL', con=gcp_engine, if_exists='replace', index=False)
 print("DMV_sorted DataFrame uploaded to GCP PostgreSQL database successfully!")
