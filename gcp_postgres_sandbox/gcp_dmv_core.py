@@ -55,12 +55,6 @@ metrics_signal = data_frames["metrics_signal"]
 tvv_signals = data_frames["tvv_signals"]
 
 
-
-
-
-
-
-
 # DMV DATA PREPARATION
 # List of DataFrames to join
 dfs_to_join = [ratios_bin, df_oscillator_bin, df_momentum, tvv_signals, metrics_signal]
