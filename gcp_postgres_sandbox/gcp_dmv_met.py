@@ -195,7 +195,7 @@ from sqlalchemy import create_engine
 gcp_engine = create_engine(f'postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}')
 
 # Write the DataFrame to a new table in the database
-metrics.to_sql('FE_METRICS', con=gcp_engine, if_exists='append', index=False)
+metrics.to_sql('FE_METRICS', con=gcp_engine, if_exists='replace', index=False)
 
 print("Metrics DataFrame uploaded to AWS MySQL database successfully!")
 
@@ -243,7 +243,7 @@ from sqlalchemy import create_engine
 #engine = create_engine('mysql+mysqlconnector://yogass09:jaimaakamakhya@dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com:3306/dbcp')
 
 # Write the DataFrame to a new table in the database
-metrics_signal.to_sql('FE_METRICS_SIGNAL', con=gcp_engine, if_exists='append', index=False)
+metrics_signal.to_sql('FE_METRICS_SIGNAL', con=gcp_engine, if_exists='replace', index=False)
 
 print("FE_METRICS_SIGNAL DataFrame uploaded to AWS MySQL database successfully!")
 
