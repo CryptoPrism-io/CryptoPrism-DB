@@ -469,12 +469,12 @@ db_port = 5432                    # PostgreSQL port
 gcp_engine = create_engine(f'postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}')
 
 # Write the DataFrame to a new table in the database
-tvv.to_sql('FE_OSCILLATORS', con=gcp_engine, if_exists='append', index=False)
+tvv.to_sql('FE_TVV', con=gcp_engine, if_exists='append', index=False)
 # Write the DataFrame to a new table in the database
-tvv_signals.to_sql('FE_OSCILLATORS_SIGNALS', con=gcp_engine, if_exists='append', index=False)
+tvv_signals.to_sql('FE_TVV_SIGNALS', con=gcp_engine, if_exists='append', index=False)
 
 # Write the DataFrame to a new table in the database
-pct_change.to_sql('FE_MOMENTUM', con=gcp_engine, if_exists='append', index=False)
+pct_change.to_sql('FE_PCT_CHANGE', con=gcp_engine, if_exists='append', index=False)
 
 
 print("table name to db name append done")
