@@ -1161,14 +1161,16 @@ oscillator.to_sql('FE_OSCILLATORS', con=gcp_engine, if_exists='append', index=Fa
 df_oscillator_bin.to_sql('FE_OSCILLATORS_SIGNALS', con=gcp_engine, if_exists='append', index=False)
 
 # Write the DataFrame to a new table in the database
+ratios.to_sql('FE_RATIOS', con=gcp_engine, if_exists='append', index=False)
+# Write the DataFrame to a new table in the database
+ratios_bin.to_sql('FE_RATIOS_SIGNALS', con=gcp_engine, if_exists='append', index=False)
+
+
+# Write the DataFrame to a new table in the database
 momentum.to_sql('FE_MOMENTUM', con=gcp_engine, if_exists='append', index=False)
 # Write the DataFrame to a new table in the database
 df_momentum.to_sql('FE_MOMENTUM_SIGNALS', con=gcp_engine, if_exists='append', index=False)
 
-# Write the DataFrame to a new table in the database
-ratios.to_sql('FE_RATIOS', con=gcp_engine, if_exists='append', index=False)
-# Write the DataFrame to a new table in the database
-ratios_bin.to_sql('FE_RATIOS_SIGNALS', con=gcp_engine, if_exists='append', index=False)
 
 print("table name to db name append done")
 
