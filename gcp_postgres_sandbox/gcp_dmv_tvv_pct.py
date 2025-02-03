@@ -449,6 +449,36 @@ gcp_engine.dispose()
 #con.close()
 
 
-"""# end of script
+"""# end of proccess 1 
 
 """
+
+# start of process 2 
+
+
+
+
+ # Connection parameters
+db_host = "34.55.195.199"         # Public IP of your PostgreSQL instance on GCP
+db_name = "cp_backtest"                  # Database name
+db_user = "yogass09"              # Database username
+db_password = "jaimaakamakhya"     # Database password
+db_port = 5432                    # PostgreSQL port
+
+# Create a SQLAlchemy engine for PostgreSQL
+gcp_engine = create_engine(f'postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}')
+
+# Write the DataFrame to a new table in the database
+tvv.to_sql('FE_OSCILLATORS', con=gcp_engine, if_exists='append', index=False)
+# Write the DataFrame to a new table in the database
+tvv_signals.to_sql('FE_OSCILLATORS_SIGNALS', con=gcp_engine, if_exists='append', index=False)
+
+# Write the DataFrame to a new table in the database
+pct_change.to_sql('FE_MOMENTUM', con=gcp_engine, if_exists='append', index=False)
+
+
+print("table name to db name append done")
+
+gcp_engine.dispose()
+
+
