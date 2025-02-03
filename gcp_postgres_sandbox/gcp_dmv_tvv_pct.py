@@ -255,6 +255,14 @@ a.info()
 
 # @title SQLalchemy to push (FE) data to aws db (mysql)
 
+
+# @title TVV Binary Signals
+columns_to_drop = [ 'ref_cur_id', 'ref_cur_name', 'time_open',
+                   'time_close', 'time_high', 'time_low']
+
+# Drop the specified columns
+df = df.drop(columns=columns_to_drop, errors='ignore')
+
 tvv=df
 
 # @title Keeping Only Latest Date for Each Slug
