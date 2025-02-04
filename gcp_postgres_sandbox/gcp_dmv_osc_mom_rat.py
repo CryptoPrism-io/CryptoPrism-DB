@@ -13,7 +13,7 @@ Original file is located at
 
 # pip install mysql-connector-python
 
-# @title LIBRARY
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -313,6 +313,8 @@ momentum.to_sql('FE_MOMENTUM', con=gcp_engine, if_exists='replace', index=False)
 print("momentum DataFrame uploaded to AWS MySQL database successfully!")
 
 momentum.info()
+
+momentum_df=momentum
 
 # @title Momentum Binary Signals
 
@@ -1051,7 +1053,7 @@ ratios = pd.merge(ratios, df_oscillator_bin[['slug', 'id', 'name','timestamp']],
 
 # Replace infinite values with NaN
 ratios = ratios.replace([np.inf, -np.inf], np.nan) # Replace inf values before pushing to SQL
-
+ratios_df=ratios
 # Create a SQLAlchemy engine to connect to the MySQL database
 #engine = create_engine('mysql+mysqlconnector://yogass09:jaimaakamakhya@dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com:3306/dbcp')
 
@@ -1061,6 +1063,8 @@ ratios.to_sql('FE_RATIOS', con=gcp_engine, if_exists='replace', index=False)
 print("FE_RATIOS DataFrame uploaded to AWS MySQL database successfully!")
 
 ratios.info()
+
+
 
 # @title Ratios Binanry Signals
 # Create a new column 'alpha_signal' and initialize it with 0
@@ -1136,12 +1140,12 @@ print(f"Cell execution time: {elapsed_time_minutes:.2f} minutes")
 gcp_engine.dispose()
 
 
-"""# end of proccess 1 
+"""# end of proccess 1
 
 """
 
 
-# start of process 2 
+# start of process 2
 
 
 
@@ -1161,13 +1165,15 @@ oscillator.to_sql('FE_OSCILLATORS', con=gcp_engine, if_exists='append', index=Fa
 df_oscillator_bin.to_sql('FE_OSCILLATORS_SIGNALS', con=gcp_engine, if_exists='append', index=False)
 
 # Write the DataFrame to a new table in the database
-ratios.to_sql('FE_RATIOS', con=gcp_engine, if_exists='append', index=False)
+ratios_df.drop(ratios_df.columns[16:27], axis=1, inplace=True)
+ratios_df.info()
+ratios_df.to_sql('FE_RATIOS', con=gcp_engine, if_exists='append', index=False)
 # Write the DataFrame to a new table in the database
 ratios_bin.to_sql('FE_RATIOS_SIGNALS', con=gcp_engine, if_exists='append', index=False)
 
 
 # Write the DataFrame to a new table in the database
-momentum.to_sql('FE_MOMENTUM', con=gcp_engine, if_exists='append', index=False)
+momentum_df.to_sql('FE_MOMENTUM', con=gcp_engine, if_exists='append', index=False)
 # Write the DataFrame to a new table in the database
 df_momentum.to_sql('FE_MOMENTUM_SIGNALS', con=gcp_engine, if_exists='append', index=False)
 
