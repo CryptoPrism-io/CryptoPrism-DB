@@ -1148,6 +1148,8 @@ gcp_engine.dispose()
 # start of process 2
 
 
+from datetime import datetime
+import pytz
 
  # Connection parameters
 db_host = "34.55.195.199"         # Public IP of your PostgreSQL instance on GCP
@@ -1167,12 +1169,19 @@ df_oscillator_bin.to_sql('FE_OSCILLATORS_SIGNALS', con=gcp_engine, if_exists='ap
 # Write the DataFrame to a new table in the database
 ratios_df.drop(ratios_df.columns[16:27], axis=1, inplace=True)
 ratios_df.info()
+
+
+ratios_df["timestamp"] = ratios_df["timestamp"].fillna(datetime.now(pytz.UTC))
+
 ratios_df.to_sql('FE_RATIOS', con=gcp_engine, if_exists='append', index=False)
 # Write the DataFrame to a new table in the database
 ratios_bin.to_sql('FE_RATIOS_SIGNALS', con=gcp_engine, if_exists='append', index=False)
 
 
 # Write the DataFrame to a new table in the database
+
+momentum_df["timestamp"] = momentum_df["timestamp"].fillna(datetime.now(pytz.UTC))
+
 momentum_df.to_sql('FE_MOMENTUM', con=gcp_engine, if_exists='append', index=False)
 # Write the DataFrame to a new table in the database
 df_momentum.to_sql('FE_MOMENTUM_SIGNALS', con=gcp_engine, if_exists='append', index=False)
