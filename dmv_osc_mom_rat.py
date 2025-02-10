@@ -396,10 +396,13 @@ df_momentum = df
 df_momentum.info()
 
 # @title SQLalchemy to push (FE_SIGNALS) data to aws db (mysql)
+COLOUMS_TO_KEEP= ['id', 'slug', 'name', 'timestamp', 
+    'm_mom_roc_bin', 'm_mom_williams_%_bin', 'm_mom_smi_bin', 
+    'm_mom_cmo_bin', 'm_mom_mom_bin']
 
-# Drop columns by their index positions
-df_momentum.drop(df_momentum.columns[4:18], axis=1, inplace=True)
-momentum=df
+
+df_momentum=df_momentum[COLOUMS_TO_KEEP]
+
 
 # Get the latest timestamp
 latest_timestamp = df_momentum['timestamp'].max()
