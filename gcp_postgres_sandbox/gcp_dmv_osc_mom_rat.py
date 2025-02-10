@@ -599,11 +599,18 @@ df = df.groupby('slug').apply(calculate_trix).reset_index(level=0, drop=True)
 
 df.info(0)
 
-# @title SQLalchemy to push (FE) data to aws db (mysql)
+COLUMNS_TO_KEEP = [
+    'id', 'slug', 'name', 'symbol', 'timestamp', 
+    'open', 'high', 'low', 'close', 'volume', 'market_cap', 
+    'm_pct_1d', 'd_pct_cum_ret', 'EMA_12', 'EMA_26', 'MACD', 'Signal', 
+    'TP', 'SMA_TP', 'MAD', 'CCI', 'TR', '+DM', '-DM', 'Smoothed_TR', 
+    'Smoothed_+DM', 'Smoothed_-DM', '+DI', '-DI', 'DX', 'ADX', 'prev_close', 
+    'BP', 'Avg_BP_short', 'Avg_TR_short', 'Avg_BP_intermediate', 
+    'Avg_TR_intermediate', 'Avg_BP_long', 'Avg_TR_long', 'UO', 'MP', 
+    'SMA_5', 'SMA_34', 'AO', 'EMA1', 'EMA2', 'EMA3', 'TRIX'
+]
 
-# Drop columns by their index positions
-df.drop(df.columns[4:10], axis=1, inplace=True)
-oscillator=df
+oscillator=df[COLUMNS_TO_KEEP]
 
 # Get the latest timestamp
 latest_timestamp = df['timestamp'].max()
@@ -711,10 +718,14 @@ df_oscillator_bin.head()
 
 # @title SQLalchemy to push (FE_SIGNALS) data to aws db (mysql)
 
-# Drop columns by their index positions
-df_oscillator_bin.drop(df_oscillator_bin.columns[4:46], axis=1, inplace=True)
+COLUMNS_TO_KEEP = [
+    'id', 'slug', 'name', 'timestamp', 
+    'm_osc_macd_crossover_bin', 'm_osc_cci_bin', 
+    'm_osc_adx_bin', 'm_osc_uo_bin', 'm_osc_ao_bin', 'm_osc_trix_bin'
+]
 
 
+df_oscillator_bin=df_oscillator_bin[COLUMNS_TO_KEEP]
 # Get the latest timestamp
 latest_timestamp = df_oscillator_bin['timestamp'].max()
 
