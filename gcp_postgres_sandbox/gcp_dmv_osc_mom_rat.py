@@ -600,7 +600,7 @@ df = df.groupby('slug').apply(calculate_trix).reset_index(level=0, drop=True)
 df.info(0)
 
 COLUMNS_TO_KEEP = [
-    'id', 'slug', 'name', 'symbol', 'timestamp', 
+    'id', 'slug', 'name',  'timestamp', 
     'open', 'high', 'low', 'close', 'volume', 'market_cap', 
     'm_pct_1d', 'd_pct_cum_ret', 'EMA_12', 'EMA_26', 'MACD', 'Signal', 
     'TP', 'SMA_TP', 'MAD', 'CCI', 'TR', '+DM', '-DM', 'Smoothed_TR', 
