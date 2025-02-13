@@ -610,7 +610,7 @@ COLUMNS_TO_KEEP = [
     'SMA_5', 'SMA_34', 'AO', 'EMA1', 'EMA2', 'EMA3', 'TRIX'
 ]
 
-oscillator=df[COLUMNS_TO_KEEP]
+
 
 # Get the latest timestamp
 latest_timestamp = df['timestamp'].max()
@@ -620,6 +620,8 @@ df = df[df['timestamp'] == latest_timestamp]
 
 # Replace infinite values with NaN
 oscillator = df.replace([np.inf, -np.inf], np.nan) # Replace inf values before pushing to SQL
+
+oscillator=df[COLUMNS_TO_KEEP]
 
 # Create a SQLAlchemy engine to connect to the MySQL database
 #engine = create_engine('mysql+mysqlconnector://yogass09:jaimaakamakhya@dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com:3306/dbcp')
