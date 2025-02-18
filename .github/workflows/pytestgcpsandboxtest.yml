@@ -28,5 +28,5 @@ jobs:
 
         
       - name: Run gcp_osc_mom_rat.py
-        run: python gcp_postgres_sandbox/gcp_dmv_osc_mom_rat.py
+        run: python gcp_postgres_sandbox/gcp_dmv_tvv_pct.py
         continue-on-error: false
