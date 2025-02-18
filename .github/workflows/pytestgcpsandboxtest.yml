@@ -1,7 +1,6 @@
 name: TEST_PY_GCP.env
 
 on:
-  schedule:
   workflow_dispatch: {}
 
 jobs:
