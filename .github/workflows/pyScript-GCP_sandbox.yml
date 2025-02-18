@@ -2,7 +2,7 @@ name: pyScript-GCP_sandbox.env
 
 on:
   schedule:
-    - cron: "30 0 * * *"  # Daily at 00:30 UTC
+    - cron: "30 19 * * *"  # Daily at 00:30 UTC
   workflow_dispatch: {}
 
 jobs:
