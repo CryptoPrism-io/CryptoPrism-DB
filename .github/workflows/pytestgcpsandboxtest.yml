@@ -1,4 +1,4 @@
-name: [TEST]pyScript-GCP_sandbox.env
+name: TEST_PY_GCP.env
 
 on:
   schedule:
