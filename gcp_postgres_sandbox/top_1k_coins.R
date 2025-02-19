@@ -27,7 +27,7 @@ crypto.listings.latest<- crypto.listings.latest %>%
 all_coins<-crypto_history(coin_list = crypto.listings.latest,convert = "USD",limit = 2000,
                           start_date = Sys.Date()-1,end_date = Sys.Date(),sleep = 0)
 
-#all_coins <- all_coins[, c("id", "slug", "name", "symbol", "timestamp", "open",
+all_coins <- all_coins[, c("id", "slug", "name", "symbol", "timestamp", "open",
                           # "high", "low", "close", "volume", "market_cap")]
 
 # Load necessary libraries
