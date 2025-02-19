@@ -1164,6 +1164,19 @@ gcp_engine.dispose()
 """# end of proccess 1
 
 """
+COLUMNS_TO_KEEP = [
+    'id', 'slug', 'name',  'timestamp', 
+    'open', 'high', 'low', 'close', 'volume', 'market_cap', 
+    'm_pct_1d', 'd_pct_cum_ret', 'EMA_12', 'EMA_26', 'MACD', 'Signal', 
+    'TP', 'SMA_TP', 'MAD', 'CCI', 'TR', '+DM', '-DM', 'Smoothed_TR', 
+    'Smoothed_+DM', 'Smoothed_-DM', '+DI', '-DI', 'DX', 'ADX', 'prev_close', 
+    'BP', 'Avg_BP_short', 'Avg_TR_short', 'Avg_BP_intermediate', 
+    'Avg_TR_intermediate', 'Avg_BP_long', 'Avg_TR_long', 'UO', 'MP', 
+    'SMA_5', 'SMA_34', 'AO', 'EMA1', 'EMA2', 'EMA3', 'TRIX'
+]
+
+oscillator_df_push_backtest=oscillator[COLUMNS_TO_KEEP]
+
 
 
 # start of process 2
@@ -1183,7 +1196,7 @@ db_port = 5432                    # PostgreSQL port
 gcp_engine = create_engine(f'postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}')
 
 # Write the DataFrame to a new table in the database
-oscillator.to_sql('FE_OSCILLATOR', con=gcp_engine, if_exists='append', index=False)
+oscillator_df_push_backtest.to_sql('FE_OSCILLATOR', con=gcp_engine, if_exists='append', index=False)
 # Write the DataFrame to a new table in the database
 df_oscillator_bin.to_sql('FE_OSCILLATORS_SIGNALS', con=gcp_engine, if_exists='append', index=False)
 
