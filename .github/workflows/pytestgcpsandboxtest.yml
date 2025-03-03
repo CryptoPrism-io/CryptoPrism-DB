@@ -24,9 +24,13 @@ jobs:
         run: |
           pip install pandas numpy python-telegram-bot==13.15 seaborn mysql-connector-python sqlalchemy requests psycopg2-binary python-dotenv
           
-
-      # Run each Python script with error handling
       - name: Run db_test.py
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          DB_PORT: ${{ secrets.DB_PORT }}  # Add this if port is a secret
         run: python gcp_postgres_sandbox/prod_qa_cp_ai.py
-        continue-on-error: false
+        
         
