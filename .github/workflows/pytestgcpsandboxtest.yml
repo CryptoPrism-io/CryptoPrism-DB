@@ -14,17 +14,14 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'  # Specify the Python version you need
+          python-version: '3.9'
 
       # Install Python packages
       - name: Install Python packages
         run: |
-          pip install pandas numpy sqlalchemy python-telegram-bot==13.15 mysql-connector-python sqlalchemy requests psycopg2-binary python-dotenv
-          
+          pip install pandas numpy sqlalchemy python-telegram-bot==13.15 mysql-connector-python sqlalchemy requests psycopg2-binary python-dotenv jupyter papermill
 
-      # Run each Python script with error handling
-
-        
-      - name: Run gcp_osc_mom_rat.py
-        run: python PROD_QA_CP_AI.ipynb
-        continue-on-error: false
+      # Convert and Run Jupyter Notebook
+      - name: Execute Jupyter Notebook
+        run: |
+          jupyter nbconvert --to notebook --execute prod_qa_cp_ai.ipynb --output output.ipynb
