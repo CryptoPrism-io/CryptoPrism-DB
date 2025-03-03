@@ -2,7 +2,7 @@ name: OHLCV
 
 on:
   schedule:
-    - cron: "01 19 * * *"  # Daily at midnight UTC 
+    - cron: "01 00 * * *"  # Daily at midnight UTC 
   workflow_dispatch: {}
 
 
