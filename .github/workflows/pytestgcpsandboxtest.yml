@@ -19,12 +19,12 @@ jobs:
       # Install Python packages
       - name: Install Python packages
         run: |
-          pip install pandas numpy matplotlib seaborn mysql-connector-python sqlalchemy requests psycopg2-binary
+          pip install pandas numpy sqlalchemy python-telegram-bot==13.15 mysql-connector-python sqlalchemy requests psycopg2-binary python-dotenv
           
 
       # Run each Python script with error handling
 
         
       - name: Run gcp_osc_mom_rat.py
-        run: python gcp_postgres_sandbox/gcp_dmv_tvv_pct.py
+        run: python PROD_QA_CP_AI.ipynb
         continue-on-error: false
