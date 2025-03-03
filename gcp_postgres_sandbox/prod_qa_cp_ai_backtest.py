@@ -7,28 +7,6 @@ Original file is located at
     https://colab.research.google.com/drive/1klYsa3oyHvcSiFNo8ePeTD8OyJSuzIpL
 """
 
-#@title pip
-
-required_packages = [
-    "pandas",
-    "numpy",
-    "sqlalchemy",
-    "psycopg2-binary",
-    "python-dotenv",
-    "mysql-connector-python",
-    "python-telegram-bot==13.15"
-]
-
-# Write to requirements.txt
-with open("requirements.txt", "w") as f:
-    f.write("\n".join(required_packages))
-
-try:
-    import google.colab  # Checks if running in Colab
-    print("Running in Colab: Installing dependencies...")
-    !pip install -r requirements.txt
-except ImportError:
-    print("Running outside Colab (e.g., GitHub Actions), skipping installation.")
 
 #@title .env
 # Create the .env file and write the variables to it
