@@ -1,0 +1,37 @@
+name: QA_Telegram
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: python_sql_gemini_figma_gcp 
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      # Install Python packages
+      - name: Install Python packages
+        run: |
+          pip install google-generativeai pandas numpy python-telegram-bot==13.15 seaborn mysql-connector-python sqlalchemy requests psycopg2-binary python-dotenv
+          
+      # Run QA Python scripts
+      - name: Run all scripts
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          DB_PORT: ${{ secrets.DB_PORT }}  # Include if port is a secret
+        run: |
+          python gcp_postgres_sandbox/prod_qa_cp_ai.py
+          python gcp_postgres_sandbox/prod_qa_dbcp.py
+          python gcp_postgres_sandbox/prod_qa_cp_ai_backtest.py
+          python gcp_postgres_sandbox/prod_qa_dbcp_backtest.py
