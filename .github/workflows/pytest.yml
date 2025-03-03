@@ -1,8 +1,6 @@
 name: pytest
 
 on:
-  #schedule:
-  # - cron: "30 19 * * *"  # Daily at 00:30 UTC
   workflow_dispatch: {}
 
 jobs:
@@ -24,13 +22,16 @@ jobs:
         run: |
           pip install google-generativeai pandas numpy python-telegram-bot==13.15 seaborn mysql-connector-python sqlalchemy requests psycopg2-binary python-dotenv
           
-      - name: Run db_test.py
+      # Run QA Python scripts
+      - name: Run all scripts
         env:
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          DB_PORT: ${{ secrets.DB_PORT }}  # Add this if port is a secret
-        run: python gcp_postgres_sandbox/prod_qa_cp_ai.py
-        
-        
+          DB_PORT: ${{ secrets.DB_PORT }}  # Include if port is a secret
+        run: |
+          python gcp_postgres_sandbox/prod_qa_cp_ai.py
+          python gcp_postgres_sandbox/prod_qa_dbcp.py
+          python gcp_postgres_sandbox/prod_qa_cp_ai_backtest.py
+          python gcp_postgres_sandbox/prod_qa_dbcp_backtest.py
