@@ -1,9 +1,11 @@
 name: DMV
 
 on:
-  schedule:
-    - cron: "30 19 * * *"  # Daily at 00:30 UTC
-  workflow_dispatch: {}
+  workflow_run:
+    workflows: ["OHLCV"]  # Run DMV only after OHLCV completes
+    types:
+      - completed
+  workflow_dispatch: {}  # Allow manual execution if needed
 
 jobs:
   update:
@@ -23,7 +25,6 @@ jobs:
         run: |
           pip install pandas numpy matplotlib seaborn mysql-connector-python sqlalchemy requests psycopg2-binary
           
-
       # Run each Python script with error handling
       - name: Run gcp_metrics.py
         run: python gcp_postgres_sandbox/gcp_dmv_met.py
