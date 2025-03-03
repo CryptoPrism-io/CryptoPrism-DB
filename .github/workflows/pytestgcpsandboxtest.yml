@@ -6,24 +6,19 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  run-script:
+  build:
     runs-on: ubuntu-latest
-    env:
-      DB_HOST: ${{ secrets.DB_HOST }}
-      DB_USER: ${{ secrets.DB_USER }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      DB_PORT: ${{ secrets.DB_PORT }}
-      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+    environment: python_sql_gemini_figma_gcp 
 
-      # Set up Python
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'  # Specify the Python version you need
-
+          python-version: '3.9'
+          
       # Install Python packages
       - name: Install Python packages
         run: |
