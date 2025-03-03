@@ -22,7 +22,7 @@ jobs:
       # Install Python packages
       - name: Install Python packages
         run: |
-          pip install pandas numpy python-telegram-bot==13.15 seaborn mysql-connector-python sqlalchemy requests psycopg2-binary python-dotenv
+          pip install google-generativeai pandas numpy python-telegram-bot==13.15 seaborn mysql-connector-python sqlalchemy requests psycopg2-binary python-dotenv
           
       - name: Run db_test.py
         env:
