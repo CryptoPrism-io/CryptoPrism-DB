@@ -1,4 +1,4 @@
-name: TEST_PY_GCP.env
+name: TEST_PY_GCP
 
 on:
   workflow_dispatch: {}
@@ -19,9 +19,25 @@ jobs:
       # Install Python packages
       - name: Install Python packages
         run: |
-          pip install pandas numpy sqlalchemy python-telegram-bot==13.15 mysql-connector-python sqlalchemy requests psycopg2-binary python-dotenv jupyter papermill
+          pip install pandas numpy sqlalchemy python-telegram-bot==13.15 \
+                      mysql-connector-python sqlalchemy requests psycopg2-binary \
+                      python-dotenv jupyter papermill
 
-      # Convert and Run Jupyter Notebook
+      # ✅ Set Environment Variables (from GitHub Secrets)
+      - name: Export Environment Variables
+        run: |
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
+          echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+          echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> $GITHUB_ENV
+
+
+      # ✅ Run Jupyter Notebook with Environment Variables
       - name: Execute Jupyter Notebook
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           jupyter nbconvert --to notebook --execute prod_qa_cp_ai.ipynb --output output.ipynb
