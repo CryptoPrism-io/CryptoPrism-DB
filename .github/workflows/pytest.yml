@@ -20,18 +20,13 @@ jobs:
       # Install Python packages
       - name: Install Python packages
         run: |
-          pip install google-generativeai pandas numpy python-telegram-bot==13.15 seaborn mysql-connector-python sqlalchemy requests psycopg2-binary python-dotenv
+          pip install pandas numpy matplotlib seaborn mysql-connector-python sqlalchemy requests psycopg2-binary
           
-      # Run QA Python scripts
-      - name: Run all scripts
-        env:
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          DB_PORT: ${{ secrets.DB_PORT }}  # Include if port is a secret
-        run: |
-          python gcp_postgres_sandbox/prod_qa_cp_ai.py
-          python gcp_postgres_sandbox/prod_qa_dbcp.py
-          python gcp_postgres_sandbox/prod_qa_cp_ai_backtest.py
-          python gcp_postgres_sandbox/prod_qa_dbcp_backtest.py
+      # Run each Python script with error handling
+      - name: Run gcp_metrics.py
+        run: python gcp_postgres_sandbox/gcp_dmv_met.py
+        continue-on-error: false
+        
+      - name: Run gcp_trend_volume.py
+        run: python gcp_postgres_sandbox/gcp_dmv_tvv.py
+        continue-on-error: false
