@@ -30,10 +30,14 @@ jobs:
         run: python gcp_postgres_sandbox/gcp_dmv_met.py
         continue-on-error: false
         
-      - name: Run gcp_trend_volume_volatility.py
-        run: python gcp_postgres_sandbox/gcp_dmv_tvv_pct.py
+      - name: Run gcp_trend_volume.py
+        run: python gcp_postgres_sandbox/gcp_dmv_tvv.py
         continue-on-error: false
-        
+      
+      - name: Run gcp_volatility.py
+        run: python gcp_postgres_sandbox/gcp_dmv_pct.py
+        continue-on-error: false
+
       - name: Run gcp_osc_mom_rat.py
         run: python gcp_postgres_sandbox/gcp_dmv_osc_mom_rat.py
         continue-on-error: false
