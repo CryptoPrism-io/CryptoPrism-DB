@@ -55,7 +55,7 @@ def calculate_obv(df):
         obv[1:] = np.cumsum(volume_changes[:-1])  
         return obv
 
-    df["obv"] = df.groupby("slug", group_keys=False).apply(lambda g: pd.Series(obv_calc(g), index=g.index))
+    df["obv"] = df.groupby("slug", group_keys=False,include_groups=False).apply(lambda g: pd.Series(obv_calc(g), index=g.index))
     df["m_tvv_obv_1d"] = df.groupby("slug")["obv"].pct_change()
 
     return df
