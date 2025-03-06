@@ -21,7 +21,7 @@ jobs:
       # Install R packages
       - name: Install R packages
         run: |
-          Rscript -e 'install.packages(c("RMySQL", "crypto2","dplyr","DBI","RPostgres"))'
+          Rscript -e 'install.packages(c("log4r","RMySQL", "crypto2","dplyr","DBI","RPostgres"))'
 
 
       # Run R script 108
@@ -31,5 +31,5 @@ jobs:
           
       # Run R script 1k all -1d
       - name: Run R script
-        run: Rscript gcp_postgres_sandbox/top_1k_coins.R
+        run: Rscript gcp_postgres_sandbox/gcp_108k_1kcoins.R
           
