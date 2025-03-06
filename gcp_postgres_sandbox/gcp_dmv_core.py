@@ -123,6 +123,23 @@ except Exception as e:
     logger.error(f"Error calculating scores: {e}")
     exit(1)
 
+# Find the latest timestamp
+latest_timestamp = DMV_sorted['timestamp'].max()
+
+# Keep only rows with the latest timestamp
+DMV_sorted = DMV_sorted[DMV_sorted['timestamp'] == latest_timestamp]
+
+# Check if filtering worked
+unique_timestamps = DMV_sorted['timestamp'].nunique()
+
+if unique_timestamps == 1:
+    print("✅ Successfully retained only the latest timestamp.")
+else:
+    print(f"⚠️ There are still {unique_timestamps} unique timestamps after filtering!")
+
+# Confirming latest timestamp count
+latest_timestamp_count = DMV_sorted.shape[0]
+logger.info(f"Rows remaining after filtering: {latest_timestamp_count}")
 
 # Upload scores to database using batch insert
 logger.info("Uploading DMV Scores to database...")
