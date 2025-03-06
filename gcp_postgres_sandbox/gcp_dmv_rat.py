@@ -318,7 +318,7 @@ if __name__ == "__main__":
     # --- Push to Database ---
     push_to_db(latest_ratios_df, "FE_RATIOS", engine)
     push_to_db(latest_ratios_signals_df, "FE_RATIOS_SIGNALS", engine)
-    
+
         # --- Push to Backtest Database ---
     engine_bt = create_db_engine_backtest()
     push_to_db(latest_ratios_df, "FE_RATIOS", engine_bt, if_exists="append")
