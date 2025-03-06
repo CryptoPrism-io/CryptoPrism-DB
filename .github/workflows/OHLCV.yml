@@ -27,6 +27,4 @@ jobs:
 
       # Run R script 108
       - name: Run R script
-        run: Rscript gcp_postgres_sandbox/gcp_108k_1Kcoins.R
-
-          
+        run: Rscript gcp_postgres_sandbox/gcp_108k_1kcoins.R
