@@ -24,5 +24,9 @@ jobs:
           
         
       - name: Run gcp_trend_volume.py
-        run: python gcp_postgres_sandbox/gcp_dmv_tvv.py
+        run: python gcp_postgres_sandbox/gcp_dmv_mom.py
+        continue-on-error: false
+
+      - name: Run gcp_trend_volume.py
+        run: python gcp_postgres_sandbox/gcp_dmv_mosc.py
         continue-on-error: false
