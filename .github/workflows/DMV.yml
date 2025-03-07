@@ -26,6 +26,10 @@ jobs:
           pip install pandas numpy matplotlib seaborn mysql-connector-python sqlalchemy requests psycopg2-binary
           
       # Run each Python script with error handling
+      - name: Run fetch fear and greed.py
+        run: python gcp_postgres_sandbox/gcp_fear_greed_cmc.py
+        continue-on-error: false
+
       - name: Run gcp_metrics.py
         run: python gcp_postgres_sandbox/gcp_dmv_met.py
         continue-on-error: false
