@@ -144,7 +144,7 @@ logger.info(f"Rows remaining after filtering: {latest_timestamp_count}")
 # Upload scores to database using batch insert
 logger.info("Uploading DMV Scores to database...")
 try:
-    dmv_scores.to_sql('FE_DMV_SCORES', con=gcp_engine, if_exists='append', index=False, method='multi', chunksize=BATCH_SIZE)
+    dmv_scores.to_sql('FE_DMV_SCORES', con=gcp_engine, if_exists='replace', index=False, method='multi', chunksize=BATCH_SIZE)
     logger.info("DMV scores uploaded successfully!")
 except SQLAlchemyError as e:
     logger.error(f"Error uploading DMV scores: {e}")
