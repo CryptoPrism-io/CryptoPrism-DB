@@ -78,7 +78,7 @@ def calculate_moving_averages(df):
     return df
 
 # 🔹 ATR Calculation
-def calculate_atr(df, window=14):
+def calculate_atr(df, window=21):
     logging.info("Calculating ATR...")
 
     df["prev_close"] = df.groupby("slug")["close"].shift(1)
