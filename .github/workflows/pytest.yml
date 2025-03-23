@@ -23,6 +23,6 @@ jobs:
           pip install pandas numpy matplotlib seaborn mysql-connector-python sqlalchemy requests psycopg2-binary
           
 
-      - name: Run gcp_trend_volume.py
-        run: python gcp_postgres_sandbox/gcp_fear_greed_cmc.py
+      - name: Run test of osc
+        run: python gcp_postgres_sandbox/gcp_dmv_osc.py
         continue-on-error: false
