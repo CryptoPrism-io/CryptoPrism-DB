@@ -201,7 +201,13 @@ gcp_engine = create_engine(f'postgresql+psycopg2://{db_user}:{db_password}@{db_h
 # Write the DataFrame to a new table in the database
 metrics.to_sql('FE_METRICS', con=gcp_engine, if_exists='replace', index=False)
 
-print("Metrics DataFrame uploaded to AWS MySQL database successfully!")
+print("Metrics DataFrame uploaded to dbcp database successfully!")
+
+# Write the DataFrame to a new table in the database
+metrics.to_sql('FE_METRICS', con=gcp_engine_bt, if_exists='replace', index=False)
+
+print("Metrics DataFrame uploaded to cp_backtest database successfully!")
+
 
 # @title Metrics Signals
 # m_pct_1d signal
