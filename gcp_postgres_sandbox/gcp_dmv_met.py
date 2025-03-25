@@ -32,12 +32,16 @@ import pandas as pd
 # Connection parameters
 db_host = "34.55.195.199"         # Public IP of your PostgreSQL instance on GCP
 db_name = "dbcp"                  # Database name
+db_name_bt = "dbcp"                  # Database name
 db_user = "yogass09"              # Database username
 db_password = "jaimaakamakhya"     # Database password
 db_port = 5432                    # PostgreSQL port
 
 # Create a SQLAlchemy engine for PostgreSQL
 gcp_engine = create_engine(f'postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}')
+
+# Create a SQLAlchemy engine for PostgreSQL
+gcp_engine_bt = create_engine(f'postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name_bt}')
 
 # @title SQL Query Connection to AWS for Data Listing
 
@@ -245,7 +249,10 @@ from sqlalchemy import create_engine
 # Write the DataFrame to a new table in the database
 metrics_signal.to_sql('FE_METRICS_SIGNAL', con=gcp_engine, if_exists='replace', index=False)
 
-print("FE_METRICS_SIGNAL DataFrame uploaded to AWS MySQL database successfully!")
+print("FE_METRICS_SIGNAL DataFrame uploaded to dbcp database successfully!")
+
+# Write the DataFrame to a new table in the database
+metrics_signal.to_sql('FE_METRICS_SIGNAL', con=gcp_engine_bt, if_exists='replace', index=False)
 
 end_time = time.time()
 elapsed_time_seconds = end_time - start_time
