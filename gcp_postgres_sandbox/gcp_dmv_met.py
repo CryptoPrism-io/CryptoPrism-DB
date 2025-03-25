@@ -32,7 +32,7 @@ import pandas as pd
 # Connection parameters
 db_host = "34.55.195.199"         # Public IP of your PostgreSQL instance on GCP
 db_name = "dbcp"                  # Database name
-db_name_bt = "dbcp"                  # Database name
+db_name_bt = "cp_backtest"                  # Database name
 db_user = "yogass09"              # Database username
 db_password = "jaimaakamakhya"     # Database password
 db_port = 5432                    # PostgreSQL port
