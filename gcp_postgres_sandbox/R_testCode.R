@@ -55,7 +55,7 @@ con_bt <- dbConnect(
 )
 
 # Check if the connection is valid
-if (dbIsValid(con)) {
+if (dbIsValid(con_bt)) {
   print("Connection successful")
 } else {
   print("Connection failed")
