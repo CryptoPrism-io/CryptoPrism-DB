@@ -49,6 +49,7 @@ library(RPostgres)
 # Connection parameters
 db_host <- "34.55.195.199"         # Public IP of your PostgreSQL instance on GCP
 db_name <- "dbcp"                  # Database name
+db_name_bt <- "cp_backtest"                  # Database name for bt
 db_user <- "yogass09"              # Database username
 db_password <- "jaimaakamakhya"    # Database password
 db_port <- 5432                    # PostgreSQL port
@@ -58,6 +59,16 @@ con <- dbConnect(
   RPostgres::Postgres(),
   host = db_host,
   dbname = db_name,
+  user = db_user,
+  password = db_password,
+  port = db_port
+)
+
+# Attempt to establish a connection
+con_bt <- dbConnect(
+  RPostgres::Postgres(),
+  host = db_host,
+  dbname = db_name_bt,
   user = db_user,
   password = db_password,
   port = db_port
@@ -76,6 +87,7 @@ dbWriteTable(con, "crypto_listings_latest_1000", crypto.listings.latest, overwri
 dbWriteTable(con, "crypto_global_latest", crypto_global_quote, overwrite = TRUE, row.names = FALSE)
 dbWriteTable(con, "108_1K_coins_ohlcv", all_coins, append = TRUE, row.names = FALSE)
 dbWriteTable(con, "1K_coins_ohlcv", all_coins, append = TRUE, row.names = FALSE)
+dbWriteTable(con_bt, "1K_coins_ohlcv", all_coins, append = TRUE, row.names = FALSE)
 
 # Close connection
 dbDisconnect(con)
