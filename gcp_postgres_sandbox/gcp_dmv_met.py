@@ -203,6 +203,9 @@ metrics.to_sql('FE_METRICS', con=gcp_engine, if_exists='replace', index=False)
 
 print("Metrics DataFrame uploaded to dbcp database successfully!")
 
+# Create a SQLAlchemy engine for PostgreSQL
+gcp_engine_bt = create_engine(f'postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name_bt}')
+
 # Write the DataFrame to a new table in the database
 metrics.to_sql('FE_METRICS', con=gcp_engine_bt, if_exists='replace', index=False)
 
@@ -256,6 +259,9 @@ from sqlalchemy import create_engine
 metrics_signal.to_sql('FE_METRICS_SIGNAL', con=gcp_engine, if_exists='replace', index=False)
 
 print("FE_METRICS_SIGNAL DataFrame uploaded to dbcp database successfully!")
+
+# Create a SQLAlchemy engine for PostgreSQL
+gcp_engine_bt = create_engine(f'postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name_bt}')
 
 # Write the DataFrame to a new table in the database
 metrics_signal.to_sql('FE_METRICS_SIGNAL', con=gcp_engine_bt, if_exists='replace', index=False)
