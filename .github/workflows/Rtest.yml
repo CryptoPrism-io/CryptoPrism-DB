@@ -31,5 +31,5 @@ jobs:
           
       # Run R script 1k all -1d
       - name: Run R script
-        run: Rscript gcp_postgres_sandbox/gcp_108k_1kcoins.R
+        run: Rscript gcp_postgres_sandbox/R_testCode.R
           
