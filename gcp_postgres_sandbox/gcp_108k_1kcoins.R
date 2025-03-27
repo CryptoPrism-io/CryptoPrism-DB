@@ -92,3 +92,4 @@ dbWriteTable(con_bt, "crypto_listings_latest_1000", crypto.listings.latest, over
 
 # Close connection
 dbDisconnect(con)
+dbDisconnect(con_bt)
