@@ -64,5 +64,5 @@ if (dbIsValid(con)) {
 
 dbWriteTable(con_bt, "1K_coins_ohlcv", all_coins, append = TRUE, row.names = FALSE)
 
-# Close connection
-dbDisconnect(con)
+
+dbDisconnect(con_bt)
