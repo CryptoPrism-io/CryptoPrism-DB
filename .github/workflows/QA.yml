@@ -38,4 +38,4 @@ jobs:
           python gcp_postgres_sandbox/prod_qa_cp_ai.py
           python gcp_postgres_sandbox/prod_qa_dbcp.py
           python gcp_postgres_sandbox/prod_qa_cp_ai_backtest.py
-          python gcp_postgres_sandbox/prod_qa_dbcp_backtest.py
+          #python gcp_postgres_sandbox/prod_qa_dbcp_backtest.py
