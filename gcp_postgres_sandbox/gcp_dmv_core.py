@@ -141,10 +141,20 @@ else:
 latest_timestamp_count = DMV_sorted.shape[0]
 logger.info(f"Rows remaining after filtering: {latest_timestamp_count}")
 
+
 # Upload scores to database using batch insert
 logger.info("Uploading DMV Scores to database...")
 try:
     dmv_scores.to_sql('FE_DMV_SCORES', con=gcp_engine, if_exists='replace', index=False, method='multi', chunksize=BATCH_SIZE)
+    logger.info("DMV scores uploaded successfully!")
+except SQLAlchemyError as e:
+    logger.error(f"Error uploading DMV scores: {e}")
+    exit(1)
+
+# Upload scores to database using batch insert
+logger.info("Uploading DMV Scores to database...")
+try:
+    DMV_sorted.to_sql('FE_DMV_ALL', con=gcp_engine, if_exists='replace', index=False, method='multi', chunksize=BATCH_SIZE)
     logger.info("DMV scores uploaded successfully!")
 except SQLAlchemyError as e:
     logger.error(f"Error uploading DMV scores: {e}")
@@ -159,3 +169,4 @@ logger.info(f"Script execution completed in {elapsed_time_minutes:.2f} minutes."
 # Dispose connection
 gcp_engine.dispose()
 logger.info("Database connection closed.")
+
