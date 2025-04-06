@@ -29,11 +29,18 @@ def create_db_engine():
 def fetch_data(engine):
     logging.info("Fetching data from PostgreSQL...")
 
-    query = """
-        SELECT o.*, r.cmc_rank
-        FROM "108_1K_coins_ohlcv" o
-        LEFT JOIN crypto_listings_latest_1000 r ON o.slug = r.slug
-    """
+    query = """SELECT
+              "public"."1K_coins_ohlcv".*
+            FROM
+              "public"."1K_coins_ohlcv"
+            INNER JOIN
+              "public"."crypto_listings_latest_1000"
+            ON
+              "public"."1K_coins_ohlcv"."slug" = "public"."crypto_listings_latest_1000"."slug"
+            WHERE
+              "public"."crypto_listings_latest_1000"."cmc_rank" <= 1000
+              AND "public"."1K_coins_ohlcv"."timestamp" >= NOW() - INTERVAL '110 days';
+              """
 
     with engine.connect() as connection:
         df = pd.read_sql_query(query, connection)
