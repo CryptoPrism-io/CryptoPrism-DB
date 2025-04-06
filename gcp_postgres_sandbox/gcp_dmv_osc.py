@@ -319,8 +319,8 @@ if __name__ == "__main__":
     oscillator_signals_df = oscillator_signals_df.replace([np.inf, -np.inf], np.nan)
 
     # --- Push to Database ---
-    push_to_db(oscillator_df, "FE_OSCILLATOR", engine)
-    push_to_db(oscillator_signals_df, "FE_OSCILLATORS_SIGNALS", engine)
+    push_to_db(oscillator_df, "FE_OSCILLATOR", engine, if_exists="replace")
+    push_to_db(oscillator_signals_df, "FE_OSCILLATORS_SIGNALS", engine, if_exists="replace")
 
     # --- Push to Backtest Database ---
     push_to_db(oscillator_df, "FE_OSCILLATOR", engine_bt, if_exists="append")
