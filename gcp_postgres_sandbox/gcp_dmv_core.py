@@ -1,4 +1,3 @@
-import os
 import pandas as pd
 import numpy as np
 import time
@@ -25,82 +24,77 @@ db_port = 5432
 
 gcp_engine = create_engine(f'postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}')
 
+
 query = """
 SELECT *
 FROM "FE_OSCILLATORS_SIGNALS" AS o
-NATURAL JOIN "FE_MOMENTUM_SIGNALS" AS m
-NATURAL JOIN "FE_METRICS_SIGNAL" AS me
-NATURAL JOIN "FE_TVV_SIGNALS" AS t
-NATURAL JOIN "FE_RATIOS_SIGNALS" AS r;
+FULL OUTER JOIN "FE_MOMENTUM_SIGNALS" AS m USING (slug, timestamp)
+FULL OUTER JOIN "FE_METRICS_SIGNAL" AS me USING (slug, timestamp)
+FULL OUTER JOIN "FE_TVV_SIGNALS" AS t USING (slug, timestamp)
+FULL OUTER JOIN "FE_RATIOS_SIGNALS" AS r USING (slug, timestamp);
 """
 
-def fetch_data_from_gcp(query, engine):
+def fetch_data(query, engine):
     try:
         return pd.read_sql_query(query, engine)
     except SQLAlchemyError as e:
         logger.error(f"Error fetching data: {e}")
-        return None
+        return pd.DataFrame()
 
-try:
-    df = fetch_data_from_gcp(query, gcp_engine)
-    if df is not None:
-        print(df.info())
-except Exception as e:
-    logger.error(f"Unexpected error: {e}")
+df = fetch_data(query, gcp_engine)
+
+if df.empty:
+    logger.warning("Fetched DataFrame is empty. Exiting.")
+    exit(1)
+df = (
+    df.loc[:, ~df.columns.duplicated()]
+      .pipe(lambda d: d[d['slug'].eq('bitcoin') | d.drop(columns='slug').notna().all(axis=1)])
+      .fillna(0)
+)
 
 for col in ['bullish', 'bearish', 'neutral']:
     df[col] = 0
 
 for index, row in df.iloc[:, 4:].iterrows():
-    df.loc[index, 'bullish'] = (row == 1).sum()
-    df.loc[index, 'bearish'] = (row == -1).sum()
-    df.loc[index, 'neutral'] = (row == 0).sum()
+    df.at[index, 'bullish'] = (row == 1).sum()
+    df.at[index, 'bearish'] = (row == -1).sum()
+    df.at[index, 'neutral'] = (row == 0).sum()
 
-DMV_sorted = df
-DMV_sorted.to_sql('FE_DMV_ALL', con=gcp_engine, if_exists='replace', index=False)
-print("DMV_sorted uploaded successfully!")
+df.to_sql('FE_DMV_ALL', con=gcp_engine, if_exists='replace', index=False)
+logger.info("FE_DMV_ALL uploaded.")
 
-# Score Computation
-try:
-    Durability = df[['slug'] + [c for c in df.columns if c.startswith('d_')]]
-    Momentum = df[['slug'] + [c for c in df.columns if c.startswith('m_')]]
-    Valuation = df[['slug'] + [c for c in df.columns if c.startswith('v_')]]
+Durability = df[['slug'] + [c for c in df.columns if c.startswith('d_')]]
+Momentum = df[['slug'] + [c for c in df.columns if c.startswith('m_')]]
+Valuation = df[['slug'] + [c for c in df.columns if c.startswith('v_')]]
 
-    Durability['Durability_Score'] = Durability.drop('slug', axis=1).mean(axis=1) * 100
-    Momentum['Momentum_Score'] = Momentum.drop('slug', axis=1).mean(axis=1) * 100
-    Valuation['Valuation_Score'] = Valuation.drop('slug', axis=1).mean(axis=1) * 100
+Durability['Durability_Score'] = Durability.drop('slug', axis=1).sum(axis=1) / (Durability.shape[1] - 1) * 100
+Momentum['Momentum_Score'] = Momentum.drop('slug', axis=1).sum(axis=1) / (Momentum.shape[1] - 1) * 100
+Valuation['Valuation_Score'] = Valuation.drop('slug', axis=1).sum(axis=1) / (Valuation.shape[1] - 1) * 100
 
-    dmv_scores = pd.DataFrame({
-        'slug': Durability['slug'],
-        'Durability_Score': Durability['Durability_Score'],
-        'Momentum_Score': Momentum['Momentum_Score'],
-        'Valuation_Score': Valuation['Valuation_Score']
-    })
-    logger.info("Scores calculated successfully.")
-except Exception as e:
-    logger.error(f"Error calculating scores: {e}")
-    exit(1)
+dmv_scores = pd.DataFrame({
+    'slug': df['slug'],
+    'timestamp': df['timestamp'],
+    'Durability_Score': Durability['Durability_Score'],
+    'Momentum_Score': Momentum['Momentum_Score'],
+    'Valuation_Score': Valuation['Valuation_Score']
+})
 
 latest_timestamp = df['timestamp'].max()
-DMV_sorted = df[df['timestamp'] == latest_timestamp]
+df = df[df['timestamp'] == latest_timestamp]
 
-if DMV_sorted['timestamp'].nunique() == 1:
-    print("✅ Latest timestamp retained.")
+if df['timestamp'].nunique() == 1:
+    print("✅ Latest timestamp filtered.")
 else:
-    print("⚠️ Multiple timestamps still present.")
+    print("⚠️ Multiple timestamps still exist.")
 
-logger.info(f"Rows after filtering: {DMV_sorted.shape[0]}")
+logger.info(f"Remaining rows: {df.shape[0]}")
 
 try:
     dmv_scores.to_sql('FE_DMV_SCORES', con=gcp_engine, if_exists='replace', index=False, method='multi', chunksize=BATCH_SIZE)
-    logger.info("DMV scores uploaded.")
+    logger.info("FE_DMV_SCORES uploaded.")
 except SQLAlchemyError as e:
-    logger.error(f"Upload error: {e}")
+    logger.error(f"Error uploading scores: {e}")
     exit(1)
 
-elapsed_time_minutes = (time.time() - start_time) / 60
-print(elapsed_time_minutes)
-logger.info(f"Script completed in {elapsed_time_minutes:.2f} minutes.")
-
+logger.info(f"Done in {(time.time() - start_time) / 60:.2f} mins.")
 gcp_engine.dispose()
-logger.info("DB connection closed.")
