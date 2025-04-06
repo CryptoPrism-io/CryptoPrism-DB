@@ -28,7 +28,19 @@ def create_db_engine_backtest():
 # 🔹 Fetch Data Efficiently
 def fetch_data(engine):
     logging.info("Fetching data from PostgreSQL...")
-    query = 'SELECT * FROM "1K_coins_ohlcv"'
+    query = """    SELECT
+  "public"."1K_coins_ohlcv".*
+FROM
+  "public"."1K_coins_ohlcv"
+INNER JOIN
+  "public"."crypto_listings_latest_1000"
+ON
+  "public"."1K_coins_ohlcv"."slug" = "public"."crypto_listings_latest_1000"."slug"
+WHERE
+  "public"."crypto_listings_latest_1000"."cmc_rank" <= 1000
+  AND "public"."1K_coins_ohlcv"."timestamp" >= NOW() - INTERVAL '110 days';"""
+
+    
     try:
         with engine.connect() as connection:
             df = pd.read_sql_query(query, connection)
