@@ -28,7 +28,20 @@ def create_db_engine_backtest():
 # 🔹 Fetch Data Efficiently
 def fetch_data(engine):
     logging.info("Fetching data from PostgreSQL...")
-    query = 'SELECT * FROM "108_1K_coins_ohlcv"'  # Use consistent table name
+    query = """SELECT
+  "public"."1K_coins_ohlcv".*
+FROM
+  "public"."1K_coins_ohlcv"
+INNER JOIN
+  "public"."crypto_listings_latest_1000"
+ON
+  "public"."1K_coins_ohlcv"."slug" = "public"."crypto_listings_latest_1000"."slug"
+WHERE
+  "public"."crypto_listings_latest_1000"."cmc_rank" <= 1000
+  AND "public"."1K_coins_ohlcv"."timestamp" >= NOW() - INTERVAL '30 days';
+            """
+
+# Use consistent table name
     try:
         with engine.connect() as connection:
             df = pd.read_sql_query(query, connection)
@@ -231,9 +244,9 @@ if __name__ == "__main__":
 
     # --- Filter for last 30 days ---
     end_date = df['timestamp'].max()
-    start_date = end_date - pd.Timedelta(days=42)
+    start_date = end_date - pd.Timedelta(days=28)
     df_filtered = df[(df['timestamp'] >= start_date) & (df['timestamp'] <= end_date)].copy()
-    df_filtered = df_filtered.sort_values(by="timestamp", ascending=False)
+    df_filtered = df_filtered.sort_values(by='timestamp', ascending=False)
 
 
     # --- Calculate Benchmark Returns ---
@@ -316,8 +329,8 @@ if __name__ == "__main__":
     latest_ratios_signals_df = latest_ratios_signals_df.replace([np.inf, -np.inf], np.nan)
 
     # --- Push to Database ---
-    push_to_db(latest_ratios_df, "FE_RATIOS", engine)
-    push_to_db(latest_ratios_signals_df, "FE_RATIOS_SIGNALS", engine)
+    push_to_db(latest_ratios_df, "FE_RATIOS", engine, if_exists="replace")
+    push_to_db(latest_ratios_signals_df, "FE_RATIOS_SIGNALS", engine, if_exists="replace")
 
         # --- Push to Backtest Database ---
     engine_bt = create_db_engine_backtest()
