@@ -17,7 +17,7 @@ CONFIG <- list(
   db_port = as.integer(Sys.getenv("DB_PORT", "5432")),
   
   # Data parameters
-  coin_limit = 5000,
+  coin_limit = 10,
   cmc_rank_min = 1,
   cmc_rank_max = 2000,
   default_lookback_days = 7
