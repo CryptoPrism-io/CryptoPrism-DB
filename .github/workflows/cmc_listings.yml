@@ -1,0 +1,37 @@
+name: Crypto Data Fetcher Cron Job
+
+on:
+  schedule:
+    # Run every hour at minute 0 (customize as needed)
+    - cron: '*/15 * * * *'
+  
+  # Allow manual triggering for testing
+  workflow_dispatch:
+
+jobs:
+  fetch-crypto-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests pandas sqlalchemy psycopg2-binary
+    
+    - name: Run crypto data fetcher
+      env:
+        CMC_API_KEY: ${{ secrets.CMC_API_KEY }}
+        DB_URL: ${{ secrets.DB_URL }}
+        DB_TABLE: ${{ secrets.DB_TABLE }}
+      run: python cmc_listings.py
+    
+    - name: Log completion
+      run: echo "Crypto data fetch completed at $(date)"
