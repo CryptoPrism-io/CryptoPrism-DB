@@ -31,7 +31,7 @@ jobs:
         CMC_API_KEY: ${{ secrets.CMC_API_KEY }}
         DB_URL: ${{ secrets.DB_URL }}
         DB_TABLE: ${{ secrets.DB_TABLE }}
-      run: python cmc_listings.py
+      run: python gcp_postgres_sandbox/cmc_listings.py
     
     - name: Log completion
       run: echo "Crypto data fetch completed at $(date)"
