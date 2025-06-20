@@ -1,9 +1,12 @@
 name: OHLCV
 
+
 on:
-  schedule:
-    - cron: "10 00 * * *"  # Daily at midnight UTC 
-  workflow_dispatch: {}
+  workflow_run:
+    workflows: ["LISTINGS"]  # Run DMV only after OHLCV completes
+    types:
+      - completed
+  workflow_dispatch: {}  # Allow manual execution if needed
 
 
 jobs:
