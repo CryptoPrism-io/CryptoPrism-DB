@@ -1,4 +1,4 @@
-name: Crypto Data Fetcher Cron Job
+name: LISTINGS
 
 on:
   schedule:
