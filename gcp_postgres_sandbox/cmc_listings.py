@@ -5,7 +5,7 @@
 cron_job.py
 Fetches latest CoinMarketCap data, flattens it to a DataFrame matching the specified schema,
 formats dates, ensures unique column names, fills any missing columns with None to maintain 30-field schema,
-and writes to a database.
+filters for top 1000 coins by cmc_rank, and writes to a database.
 """
 
 import os
@@ -88,6 +88,22 @@ def process_data(data: dict) -> pd.DataFrame:
     return df[schema]
 
 
+def filter_top_1000(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Filter DataFrame to keep only top 1000 coins by cmc_rank.
+    """
+    # Ensure cmc_rank is numeric
+    df['cmc_rank'] = pd.to_numeric(df['cmc_rank'], errors='coerce')
+    
+    # Filter for top 1000 (cmc_rank <= 1000)
+    filtered_df = df[df['cmc_rank'] <= 1000].copy()
+    
+    print(f"Original records: {len(df)}")
+    print(f"Filtered to top 1000: {len(filtered_df)}")
+    
+    return filtered_df
+
+
 def upload_to_db(df: pd.DataFrame, db_url: str, table: str):
     """
     Write DataFrame to the specified table in the database.
@@ -106,9 +122,17 @@ def main():
     if not api_key or not db_url:
         raise EnvironmentError("Required environment variables: CMC_API_KEY, DB_URL")
 
+    # Fetch and process data
     data = fetch_listings(api_key)
     df = process_data(data)
-    upload_to_db(df, db_url, table_name)
+    
+    # Filter for top 1000 coins before uploading
+    df_filtered = filter_top_1000(df)
+    
+    # Upload filtered data to database
+    upload_to_db(df_filtered, db_url, table_name)
+    
+    print(f"Successfully uploaded {len(df_filtered)} records to {table_name}")
 
 
 if __name__ == "__main__":
