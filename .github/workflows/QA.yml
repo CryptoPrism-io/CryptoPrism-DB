@@ -1,10 +1,6 @@
 name: QA_Telegram
 
 on:
-  workflow_run:
-    workflows: ["DMV"]  # Run DMV only after OHLCV completes
-    types:
-      - completed
   workflow_dispatch: {}  # Allow manual execution if needed
 
 jobs:
