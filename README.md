@@ -63,6 +63,62 @@ FE_DMV_ALL               # Aggregated signal matrix
 FE_DMV_SCORES            # Durability/Momentum/Valuation scores
 ```
 
+### 🔄 Automated Pipeline System
+
+#### **GitHub Actions Pipeline Chain**
+CryptoPrism-DB features a sophisticated **4-stage automated pipeline** that runs daily:
+
+```
+LISTINGS → OHLCV → DMV → QA
+```
+
+#### **Stage 1: LISTINGS** (Daily 5:00 AM UTC)
+- **Trigger**: `cron: '05 0 * * *'`
+- **Purpose**: Fetch latest cryptocurrency listings from CoinMarketCap API
+- **Module**: `cmc_listings.py` 
+- **Output**: Top 1000 cryptocurrencies with market data
+
+#### **Stage 2: OHLCV** (Sequential after LISTINGS)
+- **Trigger**: `workflow_run: ["LISTINGS"]`
+- **Purpose**: Collect OHLCV (Open, High, Low, Close, Volume) historical data
+- **Module**: `gcp_108k_1kcoins.R` (R Script)
+- **Technology**: R with crypto2 package integration
+
+#### **Stage 3: DMV** (Sequential after OHLCV)
+- **Trigger**: `workflow_run: ["OHLCV"]`
+- **Purpose**: Execute complete technical analysis pipeline
+- **Execution Order**:
+  1. `gcp_fear_greed_cmc.py` - Market sentiment analysis
+  2. `gcp_dmv_met.py` - Fundamental metrics calculation
+  3. `gcp_dmv_tvv.py` - Volume/trend analysis
+  4. `gcp_dmv_pct.py` - Risk/volatility metrics  
+  5. `gcp_dmv_mom.py` - Momentum indicators
+  6. `gcp_dmv_osc.py` - Technical oscillators
+  7. `gcp_dmv_rat.py` - Financial ratios
+  8. **`gcp_dmv_core.py`** - Final signal aggregation
+
+#### **Stage 4: QA** (Manual/On-demand)
+- **Trigger**: Manual execution via `workflow_dispatch`
+- **Purpose**: AI-powered quality assurance with Telegram alerts
+- **Module**: `prod_qa_dbcp.py`
+- **Features**: Google Gemini AI analysis, automated duplicate cleanup
+
+#### **Independent Workflows**
+
+##### **Weekly Backtest Pipeline** (Sunday 2:00 AM UTC)
+- **Purpose**: Historical data processing for strategy validation
+- **Modules**:
+  1. `gcp_dmv_mom_backtest.py` - Historical momentum analysis
+  2. `test_backtest_mom_data.py` - Data validation tests
+- **Output**: Validation reports uploaded as GitHub artifacts
+
+##### **Pipeline Features**
+- **Sequential Dependencies** - Each stage waits for previous completion
+- **Error Handling** - Pipeline stops on any module failure
+- **Multi-language** - Python + R integration
+- **Quality Assurance** - AI-powered monitoring with real-time alerts
+- **Artifact Management** - Automated report generation and storage
+
 ---
 
 ## 🎯 WHY - Business Rationale
