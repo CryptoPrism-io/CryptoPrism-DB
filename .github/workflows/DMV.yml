@@ -27,33 +27,89 @@ jobs:
           
       # Run each Python script with error handling
       - name: Run fetch fear and greed.py
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
         run: python gcp_postgres_sandbox/gcp_fear_greed_cmc.py
         continue-on-error: false
 
       - name: Run gcp_metrics.py
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
         run: python gcp_postgres_sandbox/gcp_dmv_met.py
         continue-on-error: false
         
       - name: Run gcp_trend_volume.py
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
         run: python gcp_postgres_sandbox/gcp_dmv_tvv.py
         continue-on-error: false
       
       - name: Run gcp_volatility.py
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
         run: python gcp_postgres_sandbox/gcp_dmv_pct.py
         continue-on-error: false
 
       - name: Run gcp_mom.py
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
         run: python gcp_postgres_sandbox/gcp_dmv_mom.py
         continue-on-error: false
 
       - name: Run gcp_osc.py
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
         run: python gcp_postgres_sandbox/gcp_dmv_osc.py
         continue-on-error: false
 
       - name: Run gcp_rat.py
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
         run: python gcp_postgres_sandbox/gcp_dmv_rat.py
         continue-on-error: false
 
       - name: Run gcp_dmv_core.py
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
         run: python gcp_postgres_sandbox/gcp_dmv_core.py
         continue-on-error: false

@@ -1,5 +1,8 @@
 # gcp_cc_info.py - Cryptocurrency Information Enrichment Engine
 
+## Disclaimer
+Note: All sensitive configuration values are redacted in this document.
+
 ## Overview
 This script is the **metadata enrichment module** of the CryptoPrism-DB system, responsible for fetching comprehensive cryptocurrency information from CoinMarketCap's `/v2/cryptocurrency/info` endpoint and expanding the dataset with detailed project information, social media links, and technical specifications for the top 1000 cryptocurrencies.
 
@@ -10,10 +13,10 @@ This script is the **metadata enrichment module** of the CryptoPrism-DB system, 
 #### **1. PostgreSQL Connection Setup**
 ```python
 con = psycopg2.connect(
-    host="34.55.195.199",
+    host="<Redacted>",
     database="dbcp",
-    user="yogass09",
-    password="jaimaakamakhya",
+    user="<Redacted>",
+    password="<Redacted>",
     port=5432
 )
 ```
@@ -169,10 +172,10 @@ final_df = final_df.drop(columns=['index'])
 #### **10. PostgreSQL Upload**
 ```python
 # Connection parameters
-db_host = "34.55.195.199"
+db_host = "<Redacted>"
 db_name = "dbcp"
-db_user = "yogass09"
-db_password = "jaimaakamakhya"
+db_user = "<Redacted>"
+db_password = "<Redacted>"
 db_port = 5432
 
 # Create SQLAlchemy engine
@@ -248,10 +251,10 @@ api_key = "your_coinmarketcap_pro_api_key"
 
 # Update database credentials if needed (lines 9-15)
 con = psycopg2.connect(
-    host="your_postgres_host",
+    host="<Redacted>",
     database="your_database",
-    user="your_username", 
-    password="your_password",
+    user="<Redacted>", 
+    password="<Redacted>",
     port=5432
 )
 ```
