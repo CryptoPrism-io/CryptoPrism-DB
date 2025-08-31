@@ -1,4 +1,8 @@
-pandas>=1.5.0
-numpy>=1.21.0
-sqlalchemy>=1.4.0
-psycopg2-binary>=2.9.0 
+pandas>=2.2.2
+numpy>=1.26.4
+sqlalchemy>=2.0.32
+psycopg2-binary>=2.9.9
+requests>=2.32.3
+mysql-connector-python>=9.0.0
+python-dotenv>=1.0.1
+typing-extensions>=4.12.2 
