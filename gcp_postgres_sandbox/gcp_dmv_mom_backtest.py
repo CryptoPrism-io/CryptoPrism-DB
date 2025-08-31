@@ -3,29 +3,48 @@ import numpy as np
 import logging
 from sqlalchemy import create_engine
 import time
+import os
+from dotenv import load_dotenv
 
 # 🔹 Logging setup
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logger = logging.getLogger(__name__)
 
-# 🔹 Database Connection Parameters
-import os
+# Load .env file ONLY if running locally (not in GitHub Actions)
+if not os.getenv("GITHUB_ACTIONS"):
+    env_file = ".env"
+    if os.path.exists(env_file):
+        load_dotenv()
+        logger.info("✅ .env file loaded successfully.")
+    else:
+        logger.error("❌ .env file is missing! Please create one for local testing.")
+else:
+    logger.info("🔹 Running in GitHub Actions: Using GitHub Secrets.")
 
-DB_CONFIG = {
-    "host": os.getenv("DB_HOST", "34.55.195.199"),
-    "user": os.getenv("DB_USER", "yogass09"),
-    "password": os.getenv("DB_PASSWORD", "jaimaakamakhya"),
-    "port": int(os.getenv("DB_PORT", "5432")),
-    "database": os.getenv("DB_NAME", "dbcp"),
-    "database_bt": os.getenv("DB_BT_NAME", "cp_backtest"),
-}
+# Fetch credentials (Works for both local and GitHub Actions)
+DB_HOST = os.getenv("DB_HOST")
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_PORT = os.getenv("DB_PORT", "5432")  # Default to 5432 if not set
+DB_NAME = os.getenv("DB_NAME", "dbcp")  # Default database
+DB_NAME_BT = os.getenv("DB_NAME_BT", "cp_backtest")  # Backtest database
+
+# Validate required environment variables
+missing_vars = [var for var in ["DB_HOST", "DB_USER", "DB_PASSWORD"] if not globals()[var]]
+if missing_vars:
+    logger.error(f"❌ Missing environment variables: {', '.join(missing_vars)}")
+    raise SystemExit("❌ Terminating: Missing required credentials.")
+
+# Log only necessary info (DO NOT log DB_PASSWORD for security)
+logger.info(f"✅ Database Configuration Loaded: DB_HOST={DB_HOST}, DB_PORT={DB_PORT}")
 
 # 🔹 Create SQLAlchemy Engine
 def create_db_engine():
-    return create_engine(f'postgresql+psycopg2://{DB_CONFIG["user"]}:{DB_CONFIG["password"]}@{DB_CONFIG["host"]}:{DB_CONFIG["port"]}/{DB_CONFIG["database"]}')
+    return create_engine(f'postgresql+pg8000://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}')
 
 # 🔹 Create SQLAlchemy Engine
 def create_db_engine_backtest():
-    return create_engine(f'postgresql+psycopg2://{DB_CONFIG["user"]}:{DB_CONFIG["password"]}@{DB_CONFIG["host"]}:{DB_CONFIG["port"]}/{DB_CONFIG["database_bt"]}')
+    return create_engine(f'postgresql+pg8000://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME_BT}')
 
 # 🔹 Fetch Data Efficiently (BACKTEST VERSION - NO TIMESTAMP FILTER)
 def fetch_data_backtest(engine):

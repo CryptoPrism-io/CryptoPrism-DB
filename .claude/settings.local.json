@@ -4,7 +4,15 @@
       "Bash(git checkout:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(python:*)",
+      "Bash(where python)",
+      "Bash(py --version)",
+      "Bash(py \"gcp_postgres_sandbox\\test_scrtipts\\funtional_tests\\env_test.py\")",
+      "Bash(pip install:*)",
+      "Bash(pip uninstall:*)",
+      "Bash(py:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

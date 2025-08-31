@@ -25,9 +25,9 @@ def fetch_data_backtest(engine):
 #### **2. Environment-Based Configuration**
 ```python
 DB_CONFIG = {
-    "host": os.getenv("DB_HOST", "34.55.195.199"),
-    "user": os.getenv("DB_USER", "yogass09"),
-    "password": os.getenv("DB_PASSWORD", "jaimaakamakhya"),
+    "host": os.getenv("DB_HOST", "<REDACTED>"),
+    "user": os.getenv("DB_USER", "<REDACTED>"),
+    "password": os.getenv("DB_PASSWORD", "<REDACTED>"),
     "port": int(os.getenv("DB_PORT", "5432")),
     "database": os.getenv("DB_NAME", "dbcp"),
     "database_bt": os.getenv("DB_BT_NAME", "cp_backtest")
@@ -114,9 +114,9 @@ df.to_sql('FE_MOMENTUM_BACKTEST', con=engine_bt, if_exists='append', index=False
 ### **Environment Setup**
 ```bash
 # Optional environment variables (defaults provided)
-export DB_HOST="your_postgres_host"
-export DB_USER="your_username"
-export DB_PASSWORD="your_password"
+export DB_HOST="<Redacted>"
+export DB_USER="<Redacted>"
+export DB_PASSWORD="<Redacted>"
 export DB_PORT="5432"
 export DB_NAME="dbcp"
 export DB_BT_NAME="cp_backtest"

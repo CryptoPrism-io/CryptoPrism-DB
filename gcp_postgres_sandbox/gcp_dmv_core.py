@@ -22,7 +22,7 @@ db_user = "yogass09"
 db_password = "jaimaakamakhya"
 db_port = 5432
 
-gcp_engine = create_engine(f'postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}')
+gcp_engine = create_engine(f'postgresql+pg8000://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}')
 
 
 query = """
