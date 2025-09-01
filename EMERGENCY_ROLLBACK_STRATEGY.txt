@@ -1,0 +1,140 @@
+🔄 EMERGENCY ROLLBACK STRATEGY - CryptoPrism-DB
+================================================================
+
+Created: 2025-09-01
+Branch: dev_ai_code_branch
+Main Merge Commit: 292abe0
+
+🚨 ROLLBACK OPTIONS AVAILABLE
+============================
+
+Option 1: COMPLETE ROLLBACK (Safest)
+------------------------------------
+Target: Commit 1efbf38 (stable pre-merge state)
+Use Case: If new environment variable system fails completely
+
+Commands:
+git checkout main
+git reset --hard 1efbf38
+git push origin main --force
+
+Risk Level: LOW
+Recovery Time: 2-3 minutes
+Impact: Returns to known working hardcoded credentials
+
+Option 2: SELECTIVE ROLLBACK (Targeted)
+---------------------------------------
+Target: Keep security fixes, revert problematic files only
+Use Case: Environment variables work but specific files have issues
+
+Commands (revert credential changes only):
+git checkout main
+git checkout 1efbf38 -- gcp_postgres_sandbox/gcp_cc_info.py
+git checkout 1efbf38 -- gcp_postgres_sandbox/gcp_dmv_core.py
+git commit -m "Emergency: Revert to hardcoded credentials"
+git push origin main
+
+Commands (revert workflows only):
+git checkout main
+git checkout 1efbf38 -- .github/workflows/
+git commit -m "Revert workflows to stable state"
+git push origin main
+
+Risk Level: MEDIUM
+Recovery Time: 5-10 minutes
+Impact: Partial rollback while keeping some improvements
+
+Option 3: BRANCH SWITCHING (Development)
+----------------------------------------
+Target: Use dev_ai_code_branch as fallback
+Use Case: Need time to debug while maintaining service
+
+Commands:
+# Temporarily point workflows to dev branch
+# Or revert main and re-merge later with fixes
+
+Risk Level: LOW
+Recovery Time: Immediate
+Impact: Preserves all changes for later deployment
+
+🕐 MONITORING SCHEDULE
+=====================
+
+Tomorrow 5:00 AM UTC - LISTINGS Workflow Start
+----------------------------------------------
+✅ Check 1: Environment variable loading in logs
+✅ Check 2: Database connection success
+✅ Check 3: Data fetch from CoinMarketCap API
+✅ Check 4: Database write operations
+✅ Check 5: Workflow completion status
+
+If ANY check fails → Execute rollback immediately
+
+📋 ISSUE SEVERITY & RESPONSE
+============================
+
+🟢 LOW SEVERITY (Fix in place)
+------------------------------
+- Single environment variable missing
+- Minor workflow syntax error
+- Missing dependency in requirements.txt
+
+Action: Quick fix via GitHub Secrets or small commit
+
+🟡 MEDIUM SEVERITY (Selective rollback)
+---------------------------------------
+- Database connection failures
+- Multiple environment variable issues
+- Workflow logic errors
+
+Action: Execute Option 2 (Selective Rollback)
+
+🔴 HIGH SEVERITY (Full rollback)
+--------------------------------
+- Data corruption or loss
+- Complete pipeline failure
+- Security issues with credentials
+- Multiple workflow failures
+
+Action: Execute Option 1 (Complete Rollback)
+
+💡 COMMIT REFERENCE POINTS
+==========================
+
+1efbf38 - Last stable main (before security merge)
+f77a81b - Security fixes only (no TEST_DEV)
+76831e9 - Complete pipeline setup
+292abe0 - Current main (merged state)
+
+🔧 QUICK RECOVERY COMMANDS
+==========================
+
+# Check current status
+git log --oneline -5
+git status
+
+# Fast complete rollback
+git checkout main
+git reset --hard 1efbf38
+git push origin main --force
+
+# Verify rollback success
+git log --oneline -3
+
+📞 POST-ROLLBACK ACTIONS
+========================
+
+1. Update team about rollback
+2. Investigate root cause
+3. Test fixes in dev branch
+4. Plan re-deployment strategy
+5. Update monitoring for next attempt
+
+⚡ EMERGENCY CONTACTS
+====================
+
+This file is stored in dev_ai_code_branch for reference.
+Main branch kept clean for production stability.
+
+Last Updated: 2025-09-01 21:50 UTC
+Status: Ready for emergency use
