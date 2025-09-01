@@ -1,7 +1,7 @@
 name: TEST_DEV
 
 on:
-  workflow_dispatch: {}  # Manual execution only for testing
+  workflow_dispatch:  # Manual execution only for testing
 
 jobs:
   test-dev-environment:
