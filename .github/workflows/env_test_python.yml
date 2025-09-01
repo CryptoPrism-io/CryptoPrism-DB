@@ -17,7 +17,7 @@ on:
 jobs:
   python-env-test:
     runs-on: ubuntu-latest
-    environment: python_sql_gemini_figma_gcp
+    environment: testsecrets
     
     steps:
     - name: Checkout repository
