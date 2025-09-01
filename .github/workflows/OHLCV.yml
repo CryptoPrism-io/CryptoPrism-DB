@@ -12,6 +12,7 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
+    environment: testsecrets
 
     steps:
       - uses: actions/checkout@v2
@@ -25,9 +26,27 @@ jobs:
       # Install R packages
       - name: Install R packages
         run: |
-          Rscript -e 'install.packages(c("RMySQL", "crypto2","dplyr","DBI","RPostgres"))'
+          Rscript -e "options(repos = c(CRAN = 'https://cloud.r-project.org'))"
+          Rscript -e "install.packages(c('dotenv', 'DBI', 'RPostgres', 'RMySQL', 'crypto2', 'dplyr'), dependencies = TRUE)"
 
 
       # Run R script 108
       - name: Run R script
+        env:
+          # Database configuration
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_URL: ${{ secrets.DB_URL }}
+          
+          # API Keys
+          CMC_API_KEY: ${{ secrets.CMC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          
+          # Telegram configuration
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: Rscript gcp_postgres_sandbox/gcp_108k_1kcoins.R
