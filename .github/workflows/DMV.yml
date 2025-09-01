@@ -10,6 +10,7 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
+    environment: testsecrets
 
     steps:
       - uses: actions/checkout@v3
@@ -23,93 +24,174 @@ jobs:
       # Install Python packages
       - name: Install Python packages
         run: |
-          pip install pandas numpy matplotlib seaborn mysql-connector-python sqlalchemy requests psycopg2-binary
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
           
       # Run each Python script with error handling
       - name: Run fetch fear and greed.py
         env:
+          # Database configuration
           DB_HOST: ${{ secrets.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_PORT: ${{ secrets.DB_PORT }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
+          DB_URL: ${{ secrets.DB_URL }}
+          
+          # API Keys
+          CMC_API_KEY: ${{ secrets.CMC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          
+          # Telegram configuration
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python gcp_postgres_sandbox/gcp_fear_greed_cmc.py
         continue-on-error: false
 
       - name: Run gcp_metrics.py
         env:
+          # Database configuration
           DB_HOST: ${{ secrets.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_PORT: ${{ secrets.DB_PORT }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
+          DB_URL: ${{ secrets.DB_URL }}
+          
+          # API Keys
+          CMC_API_KEY: ${{ secrets.CMC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          
+          # Telegram configuration
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python gcp_postgres_sandbox/gcp_dmv_met.py
         continue-on-error: false
         
       - name: Run gcp_trend_volume.py
         env:
+          # Database configuration
           DB_HOST: ${{ secrets.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_PORT: ${{ secrets.DB_PORT }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
+          DB_URL: ${{ secrets.DB_URL }}
+          
+          # API Keys
+          CMC_API_KEY: ${{ secrets.CMC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          
+          # Telegram configuration
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python gcp_postgres_sandbox/gcp_dmv_tvv.py
         continue-on-error: false
       
       - name: Run gcp_volatility.py
         env:
+          # Database configuration
           DB_HOST: ${{ secrets.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_PORT: ${{ secrets.DB_PORT }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
+          DB_URL: ${{ secrets.DB_URL }}
+          
+          # API Keys
+          CMC_API_KEY: ${{ secrets.CMC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          
+          # Telegram configuration
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python gcp_postgres_sandbox/gcp_dmv_pct.py
         continue-on-error: false
 
       - name: Run gcp_mom.py
         env:
+          # Database configuration
           DB_HOST: ${{ secrets.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_PORT: ${{ secrets.DB_PORT }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
+          DB_URL: ${{ secrets.DB_URL }}
+          
+          # API Keys
+          CMC_API_KEY: ${{ secrets.CMC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          
+          # Telegram configuration
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python gcp_postgres_sandbox/gcp_dmv_mom.py
         continue-on-error: false
 
       - name: Run gcp_osc.py
         env:
+          # Database configuration
           DB_HOST: ${{ secrets.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_PORT: ${{ secrets.DB_PORT }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
+          DB_URL: ${{ secrets.DB_URL }}
+          
+          # API Keys
+          CMC_API_KEY: ${{ secrets.CMC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          
+          # Telegram configuration
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python gcp_postgres_sandbox/gcp_dmv_osc.py
         continue-on-error: false
 
       - name: Run gcp_rat.py
         env:
+          # Database configuration
           DB_HOST: ${{ secrets.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_PORT: ${{ secrets.DB_PORT }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
+          DB_URL: ${{ secrets.DB_URL }}
+          
+          # API Keys
+          CMC_API_KEY: ${{ secrets.CMC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          
+          # Telegram configuration
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python gcp_postgres_sandbox/gcp_dmv_rat.py
         continue-on-error: false
 
       - name: Run gcp_dmv_core.py
         env:
+          # Database configuration
           DB_HOST: ${{ secrets.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_PORT: ${{ secrets.DB_PORT }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
+          DB_URL: ${{ secrets.DB_URL }}
+          
+          # API Keys
+          CMC_API_KEY: ${{ secrets.CMC_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          
+          # Telegram configuration
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python gcp_postgres_sandbox/gcp_dmv_core.py
         continue-on-error: false
