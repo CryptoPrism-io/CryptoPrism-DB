@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import time
 import logging
+import os
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -14,15 +16,37 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Load .env file ONLY if running locally (not in GitHub Actions)
+if not os.getenv("GITHUB_ACTIONS"):
+    env_file = ".env"
+    if os.path.exists(env_file):
+        load_dotenv()
+        logger.info("✅ .env file loaded successfully.")
+    else:
+        logger.error("❌ .env file is missing! Please create one for local testing.")
+else:
+    logger.info("🔹 Running in GitHub Actions: Using GitHub Secrets.")
+
+# Fetch credentials (Works for both local and GitHub Actions)
+DB_HOST = os.getenv("DB_HOST")
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_PORT = os.getenv("DB_PORT", "5432")  # Default to 5432 if not set
+DB_NAME = os.getenv("DB_NAME", "dbcp")  # Default database
+
+# Validate required environment variables
+missing_vars = [var for var in ["DB_HOST", "DB_USER", "DB_PASSWORD"] if not globals()[var]]
+if missing_vars:
+    logger.error(f"❌ Missing environment variables: {', '.join(missing_vars)}")
+    raise SystemExit("❌ Terminating: Missing required credentials.")
+
+# Log only necessary info (DO NOT log DB_PASSWORD for security)
+logger.info(f"✅ Database Configuration Loaded: DB_HOST={DB_HOST}, DB_PORT={DB_PORT}")
+
 start_time = time.time()
 
-db_host = "34.55.195.199"
-db_name = "dbcp"
-db_user = "yogass09"
-db_password = "jaimaakamakhya"
-db_port = 5432
-
-gcp_engine = create_engine(f'postgresql+pg8000://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}')
+# Create database engine using environment variables
+gcp_engine = create_engine(f'postgresql+pg8000://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}')
 
 
 query = """
@@ -98,3 +122,4 @@ except SQLAlchemyError as e:
 
 logger.info(f"Done in {(time.time() - start_time) / 60:.2f} mins.")
 gcp_engine.dispose()
+logger.info("✅ Database connection closed successfully.")

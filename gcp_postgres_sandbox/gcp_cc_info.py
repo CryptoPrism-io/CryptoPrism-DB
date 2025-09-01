@@ -2,16 +2,50 @@ import mysql.connector
 import pandas as pd
 import psycopg2
 from sqlalchemy import create_engine
+import os
+from dotenv import load_dotenv
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logger = logging.getLogger(__name__)
+
+# Load .env file ONLY if running locally (not in GitHub Actions)
+if not os.getenv("GITHUB_ACTIONS"):
+    env_file = ".env"
+    if os.path.exists(env_file):
+        load_dotenv()
+        logger.info("✅ .env file loaded successfully.")
+    else:
+        logger.error("❌ .env file is missing! Please create one for local testing.")
+else:
+    logger.info("🔹 Running in GitHub Actions: Using GitHub Secrets.")
+
+# Fetch credentials (Works for both local and GitHub Actions)
+DB_HOST = os.getenv("DB_HOST")
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_PORT = os.getenv("DB_PORT", "5432")  # Default to 5432 if not set
+DB_NAME = os.getenv("DB_NAME", "dbcp")  # Default database
+CMC_API_KEY = os.getenv("CMC_API_KEY")
+
+# Validate required environment variables
+missing_vars = [var for var in ["DB_HOST", "DB_USER", "DB_PASSWORD", "CMC_API_KEY"] if not globals()[var]]
+if missing_vars:
+    logger.error(f"❌ Missing environment variables: {', '.join(missing_vars)}")
+    raise SystemExit("❌ Terminating: Missing required credentials.")
+
+# Log only necessary info (DO NOT log DB_PASSWORD for security)
+logger.info(f"✅ Database Configuration Loaded: DB_HOST={DB_HOST}, DB_PORT={DB_PORT}")
 
 
-# Establishing the connection
-
+# Establishing the connection using environment variables
 con = psycopg2.connect(
-        host="34.55.195.199",
-        database="dbcp",
-        user="yogass09",
-        password="jaimaakamakhya",
-        port=5432
+        host=DB_HOST,
+        database=DB_NAME,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        port=DB_PORT
     )
 # @title SQL Query Connection to AWS for Data Listing
 
@@ -28,9 +62,9 @@ slug_column['slug'] = slug_column['slug'].astype(str)
 import requests
 import pandas as pd
 
-# Define the URL and API key
+# Define the URL and API key from environment variables
 url = "https://pro-api.coinmarketcap.com/v2/cryptocurrency/info"
-api_key = "9d5aff71-7d4b-48f3-9afd-6532c5a1cd69"
+api_key = CMC_API_KEY
 
 
 # Define the query parameters
@@ -40,7 +74,7 @@ params = {
     'aux': "logo,urls,description,tags,platform,date_added,notice"  #
 }
 
-# Set the headers including the API key
+# Set the headers including the API key from environment variables
 headers = {
     'X-CMC_PRO_API_KEY': api_key,
     'Accept': 'application/json'
@@ -156,15 +190,8 @@ engine = create_engine('mysql+mysqlconnector://yogass09:jaimaakamakhya@dbcp.cry6
 """
 
 
-# Connection parameters
-db_host = "34.55.195.199"         # Public IP of your PostgreSQL instance on GCP
-db_name = "dbcp"                  # Database name
-db_user = "yogass09"              # Database username
-db_password = "jaimaakamakhya"     # Database password
-db_port = 5432                    # PostgreSQL port
-
-# Create a SQLAlchemy engine for PostgreSQL
-gcp_engine = create_engine(f'postgresql+pg8000://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}')
+# Create a SQLAlchemy engine for PostgreSQL using environment variables
+gcp_engine = create_engine(f'postgresql+pg8000://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}')
 
 
 # Write the DataFrame to a new table in the database
