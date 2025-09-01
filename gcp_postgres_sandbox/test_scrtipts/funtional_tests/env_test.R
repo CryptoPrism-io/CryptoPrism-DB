@@ -98,18 +98,6 @@ test_environment_variables <- function() {
     "DB_URL" = Sys.getenv("DB_URL")
   )
   
-  # Legacy variables (in .env but unused in R code)
-  legacy_vars <- list(
-    "MYSQL_HOST" = Sys.getenv("MYSQL_HOST"),
-    "MYSQL_USER" = Sys.getenv("MYSQL_USER"),
-    "MYSQL_PASSWORD" = Sys.getenv("MYSQL_PASSWORD"),
-    "MYSQL_DATABASE" = Sys.getenv("MYSQL_DATABASE"),
-    "PG_HOST" = Sys.getenv("PG_HOST"),
-    "PG_DATABASE" = Sys.getenv("PG_DATABASE"),
-    "PG_USER" = Sys.getenv("PG_USER"),
-    "PG_PASSWORD" = Sys.getenv("PG_PASSWORD"),
-    "PG_PORT" = Sys.getenv("PG_PORT")
-  )
   
   # Test critical variables
   print_status("\n🔹 CRITICAL VARIABLES (used in R codebase):", "info")
@@ -143,34 +131,16 @@ test_environment_variables <- function() {
     }
   }
   
-  # Test legacy variables
-  print_status("\n🔹 LEGACY VARIABLES (in .env but unused in R code):", "info")
-  legacy_set <- 0
-  for (name in names(legacy_vars)) {
-    value <- legacy_vars[[name]]
-    if (value != "" && !is.na(value)) {
-      legacy_set <- legacy_set + 1
-      if (grepl("PASSWORD", name)) {
-        print_status(sprintf("📝 %s = [HIDDEN FOR SECURITY]", name), "info")
-      } else {
-        print_status(sprintf("📝 %s = %s", name, value), "info")
-      }
-    } else {
-      print_status(sprintf("⚪ %s = Not set", name), "info")
-    }
-  }
   
   # Summary
   total_critical <- length(critical_vars)
   total_additional <- length(additional_vars)
-  total_legacy <- length(legacy_vars)
-  total_all <- total_critical + total_additional + total_legacy
-  total_all_set <- critical_set + additional_set + legacy_set
+  total_all <- total_critical + total_additional
+  total_all_set <- critical_set + additional_set
   
   print_status("\n📊 SUMMARY:", "info")
   print_status(sprintf("   Critical variables: %d/%d", critical_set, total_critical), "info")
   print_status(sprintf("   Additional variables: %d/%d", additional_set, total_additional), "info")
-  print_status(sprintf("   Legacy variables: %d/%d", legacy_set, total_legacy), "info")
   print_status(sprintf("   Total variables: %d/%d", total_all_set, total_all), "info")
   
   if (critical_set == total_critical) {
@@ -178,12 +148,6 @@ test_environment_variables <- function() {
   } else {
     missing_critical <- names(critical_vars)[sapply(critical_vars, function(x) x == "" || is.na(x))]
     print_status(sprintf("   ⚠️  Missing critical variables: %s", paste(missing_critical, collapse = ", ")), "warning")
-  }
-  
-  # Show unused variables
-  if (legacy_set > 0) {
-    used_legacy <- names(legacy_vars)[sapply(legacy_vars, function(x) x != "" && !is.na(x))]
-    print_status(sprintf("   📝 Legacy variables (unused): %s", paste(used_legacy, collapse = ", ")), "info")
   }
   
   return(critical_set == total_critical)
