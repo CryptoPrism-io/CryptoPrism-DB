@@ -62,9 +62,7 @@ def print_env_vars():
     # Additional variables from .env analysis
     additional_vars = [
         ("CMC_API_KEY", os.getenv("CMC_API_KEY")),
-        ("DB_URL", os.getenv("DB_URL")),
-        ("DB_TABLE", os.getenv("DB_TABLE", "crypto_listings")),
-        ("GITHUB_ACTIONS", os.getenv("GITHUB_ACTIONS", "false"))
+        ("DB_URL", os.getenv("DB_URL"))
     ]
     
     
