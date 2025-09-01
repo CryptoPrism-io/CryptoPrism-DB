@@ -1,0 +1,349 @@
+================================================================================
+DATABASE SCHEMA ANALYSIS REPORT
+Database: cp_backtest
+Generated: 2025-09-01 18:24:32
+================================================================================
+
+SUMMARY
+----------------------------------------
+Total Tables: 13
+Analyzed Tables: 13
+Total Relationships: 0
+Table Groups: 3
+
+TABLE GROUPS (by prefix)
+----------------------------------------
+FE: 11 tables
+  - FE_METRICS
+  - FE_METRICS_SIGNAL
+  - FE_MOMENTUM
+  - FE_MOMENTUM_SIGNALS
+  - FE_OSCILLATOR
+  - FE_OSCILLATORS_SIGNALS
+  - FE_PCT_CHANGE
+  - FE_RATIOS
+  - FE_RATIOS_SIGNALS
+  - FE_TVV
+  - FE_TVV_SIGNALS
+
+1K: 1 tables
+  - 1K_coins_ohlcv
+
+CRYPTO: 1 tables
+  - crypto_listings_latest_1000
+
+FOREIGN KEY RELATIONSHIPS
+----------------------------------------
+
+DETAILED TABLE ANALYSIS
+----------------------------------------
+
+Table: 1K_coins_ohlcv
+---------------------
+Columns:
+  id | BIGINT | NULL
+  slug | TEXT | NULL
+  name | TEXT | NULL
+  symbol | TEXT | NULL
+  timestamp | TIMESTAMP | NULL
+  open | DOUBLE PRECISION | NULL
+  high | DOUBLE PRECISION | NULL
+  low | DOUBLE PRECISION | NULL
+  close | DOUBLE PRECISION | NULL
+  volume | DOUBLE PRECISION | NULL
+  market_cap | DOUBLE PRECISION | NULL
+
+
+Table: FE_METRICS
+-----------------
+Columns:
+  timestamp | TIMESTAMP | NULL
+  id | BIGINT | NULL
+  slug | TEXT | NULL
+  name | TEXT | NULL
+  m_pct_1d | DOUBLE PRECISION | NULL
+  d_pct_cum_ret | DOUBLE PRECISION | NULL
+  v_met_ath | DOUBLE PRECISION | NULL
+  v_met_atl | DOUBLE PRECISION | NULL
+  ath_date | TIMESTAMP | NULL
+  atl_date | TIMESTAMP | NULL
+  d_met_ath_days | BIGINT | NULL
+  d_met_atl_days | BIGINT | NULL
+  d_met_ath_week | BIGINT | NULL
+  d_met_ath_month | BIGINT | NULL
+  d_met_atl_week | BIGINT | NULL
+  d_met_atl_month | BIGINT | NULL
+  date_added | TIMESTAMP | NULL
+  last_updated | TIMESTAMP | NULL
+  d_met_coin_age_d | BIGINT | NULL
+  d_met_coin_age_m | BIGINT | NULL
+  d_met_coin_age_y | BIGINT | NULL
+  m_cap_cat | TEXT | NULL
+
+
+Table: FE_METRICS_SIGNAL
+------------------------
+Columns:
+  timestamp | TIMESTAMP | NULL
+  id | BIGINT | NULL
+  slug | TEXT | NULL
+  m_pct_1d_signal | BIGINT | NULL
+  d_pct_cum_ret_signal | BIGINT | NULL
+  d_met_ath_month_signal | DOUBLE PRECISION | NULL
+  d_market_cap_signal | DOUBLE PRECISION | NULL
+  d_met_coin_age_y_signal | DOUBLE PRECISION | NULL
+
+
+Table: FE_MOMENTUM
+------------------
+Columns:
+  id | BIGINT | NULL
+  slug | TEXT | NULL
+  name | TEXT | NULL
+  timestamp | TIMESTAMP | NULL
+  open | DOUBLE PRECISION | NULL
+  high | DOUBLE PRECISION | NULL
+  low | DOUBLE PRECISION | NULL
+  close | DOUBLE PRECISION | NULL
+  volume | DOUBLE PRECISION | NULL
+  market_cap | DOUBLE PRECISION | NULL
+  m_pct_1d | DOUBLE PRECISION | NULL
+  m_mom_rsi_9 | DOUBLE PRECISION | NULL
+  m_mom_rsi_18 | DOUBLE PRECISION | NULL
+  m_mom_rsi_27 | DOUBLE PRECISION | NULL
+  m_mom_rsi_54 | DOUBLE PRECISION | NULL
+  m_mom_rsi_108 | DOUBLE PRECISION | NULL
+  sma_14 | DOUBLE PRECISION | NULL
+  sma_14_normalized | DOUBLE PRECISION | NULL
+  m_mom_roc | DOUBLE PRECISION | NULL
+  m_mom_williams_% | DOUBLE PRECISION | NULL
+  m_mom_smi | DOUBLE PRECISION | NULL
+  m_mom_cmo | DOUBLE PRECISION | NULL
+  m_mom_mom | DOUBLE PRECISION | NULL
+  m_mom_tsi | DOUBLE PRECISION | NULL
+
+
+Table: FE_MOMENTUM_SIGNALS
+--------------------------
+Columns:
+  id | BIGINT | NULL
+  slug | TEXT | NULL
+  name | TEXT | NULL
+  timestamp | TIMESTAMP | NULL
+  m_mom_roc_bin | BIGINT | NULL
+  m_mom_williams_%_bin | BIGINT | NULL
+  m_mom_smi_bin | BIGINT | NULL
+  m_mom_cmo_bin | BIGINT | NULL
+  m_mom_mom_bin | BIGINT | NULL
+
+
+Table: FE_OSCILLATOR
+--------------------
+Columns:
+  id | BIGINT | NULL
+  slug | TEXT | NULL
+  name | TEXT | NULL
+  timestamp | TIMESTAMP | NULL
+  open | DOUBLE PRECISION | NULL
+  high | DOUBLE PRECISION | NULL
+  low | DOUBLE PRECISION | NULL
+  close | DOUBLE PRECISION | NULL
+  volume | DOUBLE PRECISION | NULL
+  market_cap | DOUBLE PRECISION | NULL
+  m_pct_1d | DOUBLE PRECISION | NULL
+  d_pct_cum_ret | DOUBLE PRECISION | NULL
+  EMA_12 | DOUBLE PRECISION | NULL
+  EMA_26 | DOUBLE PRECISION | NULL
+  MACD | DOUBLE PRECISION | NULL
+  Signal | DOUBLE PRECISION | NULL
+  TP | DOUBLE PRECISION | NULL
+  SMA_TP | DOUBLE PRECISION | NULL
+  MAD | DOUBLE PRECISION | NULL
+  CCI | DOUBLE PRECISION | NULL
+  TR | DOUBLE PRECISION | NULL
+  +DM | NUMERIC | NULL
+  -DM | NUMERIC | NULL
+  Smoothed_TR | DOUBLE PRECISION | NULL
+  Smoothed_+DM | DOUBLE PRECISION | NULL
+  Smoothed_-DM | DOUBLE PRECISION | NULL
+  +DI | DOUBLE PRECISION | NULL
+  -DI | DOUBLE PRECISION | NULL
+  DX | DOUBLE PRECISION | NULL
+  ADX | DOUBLE PRECISION | NULL
+  prev_close | DOUBLE PRECISION | NULL
+  BP | DOUBLE PRECISION | NULL
+  Avg_BP_short | DOUBLE PRECISION | NULL
+  Avg_TR_short | DOUBLE PRECISION | NULL
+  Avg_BP_intermediate | DOUBLE PRECISION | NULL
+  Avg_TR_intermediate | DOUBLE PRECISION | NULL
+  Avg_BP_long | DOUBLE PRECISION | NULL
+  Avg_TR_long | DOUBLE PRECISION | NULL
+  UO | DOUBLE PRECISION | NULL
+  MP | DOUBLE PRECISION | NULL
+  SMA_5 | DOUBLE PRECISION | NULL
+  SMA_34 | DOUBLE PRECISION | NULL
+  AO | DOUBLE PRECISION | NULL
+  EMA1 | DOUBLE PRECISION | NULL
+  EMA2 | DOUBLE PRECISION | NULL
+  EMA3 | DOUBLE PRECISION | NULL
+  TRIX | DOUBLE PRECISION | NULL
+
+
+Table: FE_OSCILLATORS_SIGNALS
+-----------------------------
+Columns:
+  id | BIGINT | NULL
+  slug | TEXT | NULL
+  name | TEXT | NULL
+  timestamp | TIMESTAMP | NULL
+  m_osc_macd_crossover_bin | BIGINT | NULL
+  m_osc_cci_bin | BIGINT | NULL
+  m_osc_adx_bin | BIGINT | NULL
+  m_osc_uo_bin | BIGINT | NULL
+  m_osc_ao_bin | BIGINT | NULL
+  m_osc_trix_bin | BIGINT | NULL
+
+
+Table: FE_PCT_CHANGE
+--------------------
+Columns:
+  id | BIGINT | NULL
+  slug | TEXT | NULL
+  name | TEXT | NULL
+  timestamp | TIMESTAMP | NULL
+  m_pct_1d | DOUBLE PRECISION | NULL
+  d_pct_cum_ret | DOUBLE PRECISION | NULL
+  d_pct_var | DOUBLE PRECISION | NULL
+  d_pct_cvar | DOUBLE PRECISION | NULL
+  d_pct_vol_1d | DOUBLE PRECISION | NULL
+
+
+Table: FE_RATIOS
+----------------
+Columns:
+  slug | TEXT | NULL
+  name | TEXT | NULL
+  timestamp | TIMESTAMP | NULL
+  m_rat_alpha | DOUBLE PRECISION | NULL
+  d_rat_beta | DOUBLE PRECISION | NULL
+  m_rat_omega | DOUBLE PRECISION | NULL
+  v_rat_sharpe | DOUBLE PRECISION | NULL
+  v_rat_sortino | DOUBLE PRECISION | NULL
+  v_rat_teynor | DOUBLE PRECISION | NULL
+  v_rat_common_sense | DOUBLE PRECISION | NULL
+  v_rat_information | DOUBLE PRECISION | NULL
+  v_rat_win_loss | DOUBLE PRECISION | NULL
+  m_rat_win_rate | DOUBLE PRECISION | NULL
+  m_rat_ror | DOUBLE PRECISION | NULL
+  d_rat_pain | DOUBLE PRECISION | NULL
+
+
+Table: FE_RATIOS_SIGNALS
+------------------------
+Columns:
+  slug | TEXT | NULL
+  name | TEXT | NULL
+  timestamp | TIMESTAMP | NULL
+  m_rat_alpha_bin | BIGINT | NULL
+  d_rat_beta_bin | BIGINT | NULL
+  v_rat_sharpe_bin | BIGINT | NULL
+  v_rat_sortino_bin | BIGINT | NULL
+  v_rat_teynor_bin | BIGINT | NULL
+  v_rat_common_sense_bin | BIGINT | NULL
+  v_rat_information_bin | BIGINT | NULL
+  v_rat_win_loss_bin | BIGINT | NULL
+  m_rat_win_rate_bin | BIGINT | NULL
+  m_rat_ror_bin | BIGINT | NULL
+  d_rat_pain_bin | BIGINT | NULL
+
+
+Table: FE_TVV
+-------------
+Columns:
+  id | BIGINT | NULL
+  slug | TEXT | NULL
+  name | TEXT | NULL
+  timestamp | TIMESTAMP | NULL
+  open | DOUBLE PRECISION | NULL
+  high | DOUBLE PRECISION | NULL
+  low | DOUBLE PRECISION | NULL
+  close | DOUBLE PRECISION | NULL
+  volume | DOUBLE PRECISION | NULL
+  market_cap | DOUBLE PRECISION | NULL
+  obv | DOUBLE PRECISION | NULL
+  m_tvv_obv_1d | DOUBLE PRECISION | NULL
+  SMA9 | DOUBLE PRECISION | NULL
+  SMA18 | DOUBLE PRECISION | NULL
+  EMA9 | DOUBLE PRECISION | NULL
+  EMA18 | DOUBLE PRECISION | NULL
+  SMA21 | DOUBLE PRECISION | NULL
+  SMA108 | DOUBLE PRECISION | NULL
+  EMA21 | DOUBLE PRECISION | NULL
+  EMA108 | DOUBLE PRECISION | NULL
+  prev_close | DOUBLE PRECISION | NULL
+  tr1 | DOUBLE PRECISION | NULL
+  tr2 | DOUBLE PRECISION | NULL
+  tr3 | DOUBLE PRECISION | NULL
+  TR | DOUBLE PRECISION | NULL
+  ATR | DOUBLE PRECISION | NULL
+  Keltner_Upper | DOUBLE PRECISION | NULL
+  Keltner_Lower | DOUBLE PRECISION | NULL
+  Donchian_Upper | DOUBLE PRECISION | NULL
+  Donchian_Lower | DOUBLE PRECISION | NULL
+  typical_price | DOUBLE PRECISION | NULL
+  cum_price_volume | DOUBLE PRECISION | NULL
+  cum_volume | DOUBLE PRECISION | NULL
+  VWAP | DOUBLE PRECISION | NULL
+  ADL | DOUBLE PRECISION | NULL
+  cum_adl | DOUBLE PRECISION | NULL
+  CMF | DOUBLE PRECISION | NULL
+
+
+Table: FE_TVV_SIGNALS
+---------------------
+Columns:
+  id | BIGINT | NULL
+  slug | TEXT | NULL
+  timestamp | TIMESTAMP | NULL
+  m_tvv_obv_1d_binary | BIGINT | NULL
+  d_tvv_sma9_18 | BIGINT | NULL
+  d_tvv_ema9_18 | BIGINT | NULL
+  d_tvv_sma21_108 | BIGINT | NULL
+  d_tvv_ema21_108 | BIGINT | NULL
+  m_tvv_cmf | BIGINT | NULL
+
+
+Table: crypto_listings_latest_1000
+----------------------------------
+Columns:
+  id | INTEGER | NULL
+  name | TEXT | NULL
+  symbol | TEXT | NULL
+  slug | TEXT | NULL
+  cmc_rank | INTEGER | NULL
+  market_pair_count | INTEGER | NULL
+  circulating_supply | DOUBLE PRECISION | NULL
+  self_reported_circulating_supply | DOUBLE PRECISION | NULL
+  total_supply | DOUBLE PRECISION | NULL
+  max_supply | DOUBLE PRECISION | NULL
+  is_active | INTEGER | NULL
+  last_updated | DATE | NULL
+  date_added | TEXT | NULL
+  ref_currency | TEXT | NULL
+  price | DOUBLE PRECISION | NULL
+  volume24h | DOUBLE PRECISION | NULL
+  market_cap | DOUBLE PRECISION | NULL
+  percent_change1h | DOUBLE PRECISION | NULL
+  percent_change24h | DOUBLE PRECISION | NULL
+  percent_change7d | DOUBLE PRECISION | NULL
+  percent_change30d | DOUBLE PRECISION | NULL
+  percent_change60d | DOUBLE PRECISION | NULL
+  percent_change90d | DOUBLE PRECISION | NULL
+  fully_dillutted_market_cap | DOUBLE PRECISION | NULL
+  market_cap_by_total_supply | DOUBLE PRECISION | NULL
+  dominance | DOUBLE PRECISION | NULL
+  turnover | DOUBLE PRECISION | NULL
+  ytd_price_change_percentage | DOUBLE PRECISION | NULL
+  percent_change1y | DOUBLE PRECISION | NULL
+  tvl | DOUBLE PRECISION | NULL
+
