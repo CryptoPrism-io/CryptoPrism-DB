@@ -1,34 +1,69 @@
-library(RMySQL)
 library(crypto2)
 library(dplyr)
 library(DBI)
 library(RPostgres)
+library(dotenv)
 
-# Connection parameters
-db_host <- "34.55.195.199"         # Public IP of your PostgreSQL instance on GCP
-db_name <- "dbcp"                  # Database name
-db_name_bt <- "cp_backtest"                  # Database name for bt
-db_user <- "yogass09"              # Database username
-db_password <- "jaimaakamakhya"    # Database password
-db_port <- 5432                    # PostgreSQL port
+# Load environment variables from .env file (only for local development)
+if (!Sys.getenv("GITHUB_ACTIONS") == "true") {
+  # Find the project root by going up from the script's directory
+  script_dir <- dirname(normalizePath(sys.frame(1)$ofile))
+  project_root <- normalizePath(file.path(script_dir, '..'))
+  env_path <- file.path(project_root, '.env')
+  
+  if (file.exists(env_path)) {
+    dotenv::load_dot_env(file = env_path)
+    print(paste("✅ Loaded .env from:", env_path))
+  } else {
+    print(paste("⚠️ .env file not found at:", env_path))
+  }
+} else {
+  print("🔹 Running in GitHub Actions: Using GitHub Secrets.")
+}
+
+# Configuration (use environment variables for production)
+CONFIG <- list(
+  db_host = Sys.getenv("DB_HOST"),
+  db_name = Sys.getenv("DB_NAME"),
+  db_name_bt = Sys.getenv("DB_NAME_BT", "cp_backtest"),
+  db_user = Sys.getenv("DB_USER"),
+  db_password = Sys.getenv("DB_PASSWORD"),
+  db_port = as.integer(Sys.getenv("DB_PORT", "5432"))
+)
+
+# Validate required environment variables
+required_vars <- c("db_host", "db_user", "db_password", "db_name")
+missing_vars <- c()
+
+for (var in required_vars) {
+  if (is.null(CONFIG[[var]]) || CONFIG[[var]] == "" || is.na(CONFIG[[var]])) {
+    missing_vars <- c(missing_vars, var)
+  }
+}
+
+if (length(missing_vars) > 0) {
+  stop(paste("❌ Missing environment variables:", paste(missing_vars, collapse = ", ")))
+}
+
+print(paste("✅ Database Configuration Loaded: DB_HOST =", CONFIG$db_host, "DB_PORT =", CONFIG$db_port))
 
 # Establish database connections
 con <- dbConnect(
   RPostgres::Postgres(),
-  host = db_host,
-  dbname = db_name,
-  user = db_user,
-  password = db_password,
-  port = db_port
+  host = CONFIG$db_host,
+  dbname = CONFIG$db_name,
+  user = CONFIG$db_user,
+  password = CONFIG$db_password,
+  port = CONFIG$db_port
 )
 
 con_bt <- dbConnect(
   RPostgres::Postgres(),
-  host = db_host,
-  dbname = db_name_bt,
-  user = db_user,
-  password = db_password,
-  port = db_port
+  host = CONFIG$db_host,
+  dbname = CONFIG$db_name_bt,
+  user = CONFIG$db_user,
+  password = CONFIG$db_password,
+  port = CONFIG$db_port
 )
 
 # Check if the connection is valid
