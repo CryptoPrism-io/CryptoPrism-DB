@@ -6,7 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: python_sql_gemini_figma_gcp 
+    environment: testsecrets 
 
     steps:
       - name: Checkout code
@@ -20,16 +20,28 @@ jobs:
       # Install Python packages
       - name: Install Python packages
         run: |
-          pip install google-generativeai pandas numpy python-telegram-bot==13.15 seaborn mysql-connector-python sqlalchemy requests psycopg2-binary python-dotenv
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
           
       # Run QA Python scripts
       - name: Run all scripts
         env:
+          # Database configuration
           DB_HOST: ${{ secrets.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_URL: ${{ secrets.DB_URL }}
+          
+          # API Keys
+          CMC_API_KEY: ${{ secrets.CMC_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          DB_PORT: ${{ secrets.DB_PORT }}  # Include if port is a secret
+          
+          # Telegram configuration
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           #python gcp_postgres_sandbox/prod_qa_cp_ai.py
           python gcp_postgres_sandbox/prod_qa_dbcp.py

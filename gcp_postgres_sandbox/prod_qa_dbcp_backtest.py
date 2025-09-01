@@ -10,17 +10,14 @@ Original file is located at
 
 #@title .env
 # Create the .env file and write the variables to it
-env_content = """
-DB_HOST="34.55.195.199"
-DB_USER="yogass09"
-DB_PASSWORD="jaimaakamakhya"
-DB_PORT="5432"
-GEMINI_API_KEY="AIzaSyAuji6f62tQmNqmLRNOSt1pw5vg2AafzGY"
-"""
-
-# Write the content to a file called .env
-with open('.env', 'w') as f:
-    f.write(env_content)
+# .env file must be created manually and should never be committed to source control.
+# Example .env content:
+# DB_HOST=your_db_host
+# DB_USER=your_db_user
+# DB_PASSWORD=your_db_password
+# DB_PORT=5432
+# GEMINI_API_KEY=your_gemini_api_key
+# TELEGRAM_BOT_TOKEN=your_telegram_bot_token
 
 #@title .env [load]
 import os
@@ -48,6 +45,8 @@ DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_PORT = os.getenv("DB_PORT", "5432")  # Default to 5432 if not set
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 # Validate required environment variables
 missing_vars = [var for var in ["DB_HOST", "DB_USER", "DB_PASSWORD", "GEMINI_API_KEY"] if not globals()[var]]
@@ -83,7 +82,7 @@ def delete_duplicates(db_names):
 
     for db_name in db_names:
         try:
-            engine = create_engine(f'postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{db_name}',
+            engine = create_engine(f'postgresql+pg8000://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{db_name}',
                                    isolation_level="AUTOCOMMIT")
             logger.info(f"Processing database: {db_name}")
             results[db_name] = {}
@@ -211,7 +210,7 @@ def analyze_database(db_name):
     logger.info(f"Processing database: {db_name}")
 
     try:
-        engine = create_engine(f'postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{db_name}')
+        engine = create_engine(f'postgresql+pg8000://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{db_name}')
     except Exception as e:
         logger.error(f"Database connection failed for {db_name}: {e}")
         return {}
@@ -488,8 +487,8 @@ def send_telegram_message(bot_token, chat_id, message):
         print(f"Error sending message: {e}")
 
 # Example usage:
-bot_token = "7911188723:AAFB1_XTNd_1kDNhvqfhm6C0gL34HE8P8fU"  # Replace with your bot token
-chat_id = "-4708531708"  # Replace with your chat ID
+bot_token = TELEGRAM_BOT_TOKEN  # Loaded from .env
+chat_id = TELEGRAM_CHAT_ID  # Loaded from .env
 message = summary
 
 send_telegram_message(bot_token, chat_id, message)
