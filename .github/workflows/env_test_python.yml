@@ -53,16 +53,6 @@ jobs:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         
-        # Legacy variables (for completeness)
-        MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
-        MYSQL_USER: ${{ secrets.MYSQL_USER }}
-        MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-        MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
-        PG_HOST: ${{ secrets.PG_HOST }}
-        PG_DATABASE: ${{ secrets.PG_DATABASE }}
-        PG_USER: ${{ secrets.PG_USER }}
-        PG_PASSWORD: ${{ secrets.PG_PASSWORD }}
-        PG_PORT: ${{ secrets.PG_PORT }}
         
         # Runtime variables
         GITHUB_ACTIONS: true
