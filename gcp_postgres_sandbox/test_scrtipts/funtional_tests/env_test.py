@@ -45,7 +45,9 @@ logger.info(f"✅ Database Configuration Loaded: DB_HOST={DB_HOST}, DB_PORT={DB_
 
 def print_env_vars():
     """Print all environment variables for testing purposes."""
-    vars_to_check = [
+    
+    # Critical variables used in codebase
+    critical_vars = [
         ("DB_HOST", DB_HOST),
         ("DB_USER", DB_USER),
         ("DB_PASSWORD", DB_PASSWORD),
@@ -57,15 +59,97 @@ def print_env_vars():
         ("TELEGRAM_CHAT_ID", TELEGRAM_CHAT_ID)
     ]
     
-    logger.info("Environment Variables Status:")
-    for var_name, var_value in vars_to_check:
+    # Additional variables from .env analysis
+    additional_vars = [
+        ("CMC_API_KEY", os.getenv("CMC_API_KEY")),
+        ("DB_URL", os.getenv("DB_URL")),
+        ("DB_TABLE", os.getenv("DB_TABLE", "crypto_listings")),
+        ("GITHUB_ACTIONS", os.getenv("GITHUB_ACTIONS", "false"))
+    ]
+    
+    # Legacy variables (in .env but unused in code)
+    legacy_vars = [
+        ("MYSQL_HOST", os.getenv("MYSQL_HOST")),
+        ("MYSQL_USER", os.getenv("MYSQL_USER")),
+        ("MYSQL_PASSWORD", os.getenv("MYSQL_PASSWORD")),
+        ("MYSQL_DATABASE", os.getenv("MYSQL_DATABASE")),
+        ("PG_HOST", os.getenv("PG_HOST")),
+        ("PG_DATABASE", os.getenv("PG_DATABASE")),
+        ("PG_USER", os.getenv("PG_USER")),
+        ("PG_PASSWORD", os.getenv("PG_PASSWORD")),
+        ("PG_PORT", os.getenv("PG_PORT"))
+    ]
+    
+    logger.info("=" * 60)
+    logger.info("COMPREHENSIVE ENVIRONMENT VARIABLES STATUS")
+    logger.info("=" * 60)
+    
+    logger.info("\n🔹 CRITICAL VARIABLES (used in codebase):")
+    critical_set = 0
+    for var_name, var_value in critical_vars:
         if var_value:
+            critical_set += 1
             if var_name == "DB_PASSWORD":
-                logger.info(f"{var_name} = [HIDDEN FOR SECURITY]")
+                logger.info(f"✅ {var_name} = [HIDDEN FOR SECURITY]")
+            elif "TOKEN" in var_name or "KEY" in var_name:
+                # Mask sensitive values
+                if len(var_value) > 10:
+                    masked = f"{var_value[:8]}...{var_value[-4:]}"
+                else:
+                    masked = f"{var_value[:4]}..."
+                logger.info(f"✅ {var_name} = {masked}")
             else:
-                logger.info(f"{var_name} = {var_value}")
+                logger.info(f"✅ {var_name} = {var_value}")
         else:
-            logger.warning(f"{var_name} = None (Not Set)")
+            logger.warning(f"❌ {var_name} = None (Not Set)")
+    
+    logger.info(f"\n🔹 ADDITIONAL VARIABLES:")
+    additional_set = 0
+    for var_name, var_value in additional_vars:
+        if var_value:
+            additional_set += 1
+            if "KEY" in var_name:
+                if len(var_value) > 10:
+                    masked = f"{var_value[:8]}...{var_value[-4:]}"
+                else:
+                    masked = f"{var_value[:4]}..."
+                logger.info(f"✅ {var_name} = {masked}")
+            else:
+                logger.info(f"✅ {var_name} = {var_value}")
+        else:
+            logger.info(f"ℹ️  {var_name} = {var_value if var_value else 'None (using default)'}")
+    
+    logger.info(f"\n🔹 LEGACY VARIABLES (in .env but unused in code):")
+    legacy_set = 0
+    for var_name, var_value in legacy_vars:
+        if var_value:
+            legacy_set += 1
+            if "PASSWORD" in var_name:
+                logger.info(f"📝 {var_name} = [HIDDEN FOR SECURITY]")
+            else:
+                logger.info(f"📝 {var_name} = {var_value}")
+        else:
+            logger.info(f"⚪ {var_name} = None")
+    
+    total_critical = len(critical_vars)
+    total_additional = len(additional_vars)
+    total_legacy = len(legacy_vars)
+    total_all = total_critical + total_additional + total_legacy
+    total_all_set = critical_set + additional_set + legacy_set
+    
+    logger.info(f"\n📊 SUMMARY:")
+    logger.info(f"   Critical variables: {critical_set}/{total_critical}")
+    logger.info(f"   Additional variables: {additional_set}/{total_additional}")
+    logger.info(f"   Legacy variables: {legacy_set}/{total_legacy}")
+    logger.info(f"   Total variables: {total_all_set}/{total_all}")
+    
+    if critical_set == total_critical:
+        logger.info("   🎉 All critical environment variables are configured!")
+    else:
+        missing_critical = [name for name, value in critical_vars if not value]
+        logger.warning(f"   ⚠️  Missing critical: {', '.join(missing_critical)}")
+    
+    return critical_set == total_critical
 
 def test_database_connection():
     """Test database connection using environment variables."""
