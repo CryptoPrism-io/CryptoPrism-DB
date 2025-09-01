@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - dev_ai_code_branch
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 jobs:
   test-dev-environment:
