@@ -53,9 +53,6 @@ jobs:
         # Telegram configuration
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        
-        # Runtime variables
-        GITHUB_ACTIONS: true
       run: |
         echo "🧪 Starting R Environment Test..."
         Rscript gcp_postgres_sandbox/test_scrtipts/funtional_tests/env_test.R

@@ -43,7 +43,6 @@ jobs:
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         DB_PORT: ${{ secrets.DB_PORT }}
         DB_URL: ${{ secrets.DB_URL }}
-        DB_TABLE: ${{ secrets.DB_TABLE }}
         
         # API Keys
         CMC_API_KEY: ${{ secrets.CMC_API_KEY }}
@@ -52,10 +51,6 @@ jobs:
         # Telegram configuration
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        
-        
-        # Runtime variables
-        GITHUB_ACTIONS: true
       run: |
         echo "🧪 Starting Python Environment Test..."
         python gcp_postgres_sandbox/test_scrtipts/funtional_tests/env_test.py
