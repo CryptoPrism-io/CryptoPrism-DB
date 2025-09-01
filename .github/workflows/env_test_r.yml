@@ -1,0 +1,85 @@
+name: Environment Test - R
+
+on:
+  # Allow manual triggering for testing
+  workflow_dispatch:
+  
+  # Optional: Run on schedule (daily at 6:30 AM UTC)
+  schedule:
+    - cron: '30 6 * * *'
+  
+  # Optional: Run on push to main branches for CI validation
+  push:
+    branches:
+      - main
+      - dev_ai_code_branch
+
+jobs:
+  r-env-test:
+    runs-on: ubuntu-latest
+    environment: python_sql_gemini_figma_gcp
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up R
+      uses: r-lib/actions/setup-r@v2
+      with:
+        r-version: '4.5'
+        use-public-rspm: true
+        install-r: true
+    
+    - name: Install R dependencies
+      run: |
+        Rscript -e "options(repos = c(CRAN = 'https://cloud.r-project.org'))"
+        Rscript -e "install.packages(c('dotenv', 'DBI', 'RPostgres'), dependencies = TRUE)"
+    
+    - name: Run R environment test
+      env:
+        # Database configuration
+        DB_HOST: ${{ secrets.DB_HOST }}
+        DB_NAME: ${{ secrets.DB_NAME }}
+        DB_NAME_BT: ${{ secrets.DB_NAME_BT }}
+        DB_USER: ${{ secrets.DB_USER }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_PORT: ${{ secrets.DB_PORT }}
+        DB_URL: ${{ secrets.DB_URL }}
+        
+        # API Keys
+        CMC_API_KEY: ${{ secrets.CMC_API_KEY }}
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        
+        # Telegram configuration
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        
+        # Legacy variables (for completeness)
+        MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
+        MYSQL_USER: ${{ secrets.MYSQL_USER }}
+        MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+        MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+        PG_HOST: ${{ secrets.PG_HOST }}
+        PG_DATABASE: ${{ secrets.PG_DATABASE }}
+        PG_USER: ${{ secrets.PG_USER }}
+        PG_PASSWORD: ${{ secrets.PG_PASSWORD }}
+        PG_PORT: ${{ secrets.PG_PORT }}
+        
+        # Runtime variables
+        GITHUB_ACTIONS: true
+      run: |
+        echo "🧪 Starting R Environment Test..."
+        Rscript gcp_postgres_sandbox/test_scrtipts/funtional_tests/env_test.R
+    
+    - name: Log test completion
+      if: success()
+      run: |
+        echo "✅ R environment test completed successfully at $(date)"
+        echo "🎉 All R environment variables and database connections are working!"
+    
+    - name: Log test failure
+      if: failure()
+      run: |
+        echo "❌ R environment test failed at $(date)"
+        echo "⚠️ Check the logs above for missing environment variables or connection issues"
+        exit 1
