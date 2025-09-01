@@ -1,7 +1,10 @@
 name: TEST_DEV
 
 on:
-  workflow_dispatch:  # Manual execution only for testing
+  push:
+    branches:
+      - dev_ai_code_branch
+  workflow_dispatch:
 
 jobs:
   test-dev-environment:
