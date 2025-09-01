@@ -1,3 +1,5 @@
+Note: All sensitive configuration values are redacted in this document.
+
 # gcp_dmv_core.py - Central Signal Aggregation Hub
 
 ## Overview

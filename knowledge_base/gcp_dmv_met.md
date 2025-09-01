@@ -1,4 +1,8 @@
+````markdown
 # gcp_dmv_met.py - Cryptocurrency Metrics & Signal Generator
+
+## Disclaimer
+Note: All sensitive configuration values are redacted in this document.
 
 ## Overview
 This script is the **fundamental metrics calculation engine** of the CryptoPrism-DB system, responsible for computing critical cryptocurrency metrics including All-Time High/Low analysis, coin age calculations, market cap categorization, cumulative returns, and generating binary trading signals for the Durability and Valuation components of the DMV framework.
@@ -114,10 +118,6 @@ met_df1 = df.loc[df.groupby('slug')['timestamp'].idxmax()]
 # Inner join with rankings for metadata enrichment
 met_df1 = pd.merge(met_df1, top_1000_cmc_rank[['slug', 'date_added', 'last_updated']], on='slug', how='inner')
 ```
-- **Data Reduction**: From time series to latest snapshot
-- **Metadata Integration**: Adds launch dates and update timestamps
-- **Top 1000 Focus**: Ensures only ranked cryptocurrencies are processed
-
 #### **7. Coin Age Analysis**
 ```python
 df['date_added'] = pd.to_datetime(df['date_added'], errors='coerce').dt.tz_localize(None)

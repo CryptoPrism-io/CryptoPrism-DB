@@ -1,15 +1,21 @@
-name: LISTINGS
+name: Environment Test - Python
 
 on:
-  schedule:
-# Run every day at 5 AM UTC
-    - cron: '05 0 * * *'
-  
   # Allow manual triggering for testing
   workflow_dispatch:
+  
+  # Optional: Run on schedule (daily at 6 AM UTC)
+  schedule:
+    - cron: '0 6 * * *'
+  
+  # Optional: Run on push to main branches for CI validation
+  push:
+    branches:
+      - main
+      - dev_ai_code_branch
 
 jobs:
-  fetch-crypto-data:
+  python-env-test:
     runs-on: ubuntu-latest
     environment: testsecrets
     
@@ -22,12 +28,12 @@ jobs:
       with:
         python-version: '3.9'
     
-    - name: Install dependencies
+    - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     
-    - name: Run crypto data fetcher
+    - name: Run Python environment test
       env:
         # Database configuration
         DB_HOST: ${{ secrets.DB_HOST }}
@@ -45,7 +51,19 @@ jobs:
         # Telegram configuration
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-      run: python gcp_postgres_sandbox/cmc_listings.py
+      run: |
+        echo "🧪 Starting Python Environment Test..."
+        python gcp_postgres_sandbox/test_scrtipts/funtional_tests/env_test.py
     
-    - name: Log completion
-      run: echo "Crypto data fetch completed at $(date)"
+    - name: Log test completion
+      if: success()
+      run: |
+        echo "✅ Python environment test completed successfully at $(date)"
+        echo "🎉 All Python environment variables and database connections are working!"
+    
+    - name: Log test failure
+      if: failure()
+      run: |
+        echo "❌ Python environment test failed at $(date)"
+        echo "⚠️ Check the logs above for missing environment variables or connection issues"
+        exit 1

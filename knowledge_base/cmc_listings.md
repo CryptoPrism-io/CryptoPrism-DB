@@ -1,5 +1,8 @@
 # cmc_listings.py - CoinMarketCap Data Collection Engine
 
+## Disclaimer
+Note: All sensitive configuration values are redacted in this document.
+
 ## Overview
 This script is the **primary data collection module** of the CryptoPrism-DB system, responsible for fetching, processing, and standardizing cryptocurrency market data from CoinMarketCap's professional API. It serves as the foundational data source that feeds all downstream technical analysis and ranking systems.
 
@@ -197,7 +200,7 @@ data = resp.json()       # JSON parsing with error propagation
 ```bash
 # Required environment variables
 export CMC_API_KEY="your_coinmarketcap_pro_api_key"
-export DB_URL="postgresql://user:password@host:port/database"
+export DB_URL="postgresql://<Redacted>:<Redacted>@<Redacted>:port/database"
 export DB_TABLE="crypto_listings_latest_1000"  # Optional, defaults to "crypto_listings"
 ```
 

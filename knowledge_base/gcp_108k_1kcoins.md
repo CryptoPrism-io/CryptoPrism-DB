@@ -1,5 +1,8 @@
 # gcp_108k_1kcoins.R - OHLCV Data Collection & Database Provisioning Engine
 
+## Disclaimer
+Note: All sensitive configuration values are redacted in this document.
+
 ## Overview
 This R script is the **primary data acquisition and provisioning module** of the CryptoPrism-DB system, responsible for fetching comprehensive OHLCV (Open, High, Low, Close, Volume) data for the top 1000 cryptocurrencies and populating the database infrastructure that feeds all downstream technical analysis modules.
 
@@ -12,20 +15,20 @@ This R script is the **primary data acquisition and provisioning module** of the
 # Production database connection
 con <- dbConnect(
   RPostgres::Postgres(),
-  host = "34.55.195.199",
+  host = "<Redacted>",
   dbname = "dbcp",
-  user = "yogass09", 
-  password = "jaimaakamakhya",
+  user = "<Redacted>", 
+  password = "<Redacted>",
   port = 5432
 )
 
 # Backtesting database connection
 con_bt <- dbConnect(
   RPostgres::Postgres(),
-  host = "34.55.195.199",
+  host = "<Redacted>",
   dbname = "cp_backtest",
-  user = "yogass09",
-  password = "jaimaakamakhya", 
+  user = "<Redacted>",
+  password = "<Redacted>", 
   port = 5432
 )
 ```
