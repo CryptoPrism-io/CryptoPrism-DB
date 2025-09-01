@@ -12,7 +12,13 @@
       "Bash(pip install:*)",
       "Bash(pip uninstall:*)",
       "Bash(py:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(Rscript:*)",
+      "Bash(gh workflow:*)",
+      "Bash(gh auth:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)",
+      "Bash(git rm:*)"
     ],
     "deny": [],
     "ask": []
