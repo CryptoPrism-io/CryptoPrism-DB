@@ -49,4 +49,4 @@ jobs:
           # Telegram configuration
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: Rscript gcp_postgres_sandbox/gcp_108k_1kcoins.R
+        run: Rscript gcp_postgres_sandbox/data_ingestion/gcp_108k_1kcoins.R

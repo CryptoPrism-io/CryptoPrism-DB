@@ -106,7 +106,7 @@ jobs:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       run: |
         echo "🚀 Running CMC Listings script for testing..."
-        python gcp_postgres_sandbox/cmc_listings.py
+        python gcp_postgres_sandbox/data_ingestion/cmc_listings.py
         echo "✅ CMC Listings script completed successfully"
     
     - name: Verify data write
