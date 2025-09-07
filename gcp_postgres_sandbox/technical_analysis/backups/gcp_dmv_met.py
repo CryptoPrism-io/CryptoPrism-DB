@@ -192,28 +192,22 @@ metrics.info()
 
 # @title SQLalchemy to push data to aws db (mysql)
 
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine
 
 
 # Create a SQLAlchemy engine for PostgreSQL
 gcp_engine = create_engine(f'postgresql+pg8000://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}')
 
-# TRUNCATE and INSERT for FE_METRICS (dbcp)
-with gcp_engine.connect() as conn:
-    conn.execute(text('TRUNCATE TABLE "FE_METRICS"'))
-    conn.commit()
-metrics.to_sql('FE_METRICS', con=gcp_engine, if_exists='append', index=False)
+# Write the DataFrame to a new table in the database
+metrics.to_sql('FE_METRICS', con=gcp_engine, if_exists='replace', index=False)
 
 print("Metrics DataFrame uploaded to dbcp database successfully!")
 
 # Create a SQLAlchemy engine for PostgreSQL
 gcp_engine_bt = create_engine(f'postgresql+pg8000://{db_user}:{db_password}@{db_host}:{db_port}/{db_name_bt}')
 
-# TRUNCATE and INSERT for FE_METRICS (cp_backtest)
-with gcp_engine_bt.connect() as conn:
-    conn.execute(text('TRUNCATE TABLE "FE_METRICS"'))
-    conn.commit()
-metrics.to_sql('FE_METRICS', con=gcp_engine_bt, if_exists='append', index=False)
+# Write the DataFrame to a new table in the database
+metrics.to_sql('FE_METRICS', con=gcp_engine_bt, if_exists='replace', index=False)
 
 print("Metrics DataFrame uploaded to cp_backtest database successfully!")
 
@@ -261,22 +255,16 @@ from sqlalchemy import create_engine
 # Create a SQLAlchemy engine to connect to the MySQL database
 #engine = create_engine('mysql+mysqlconnector://yogass09:jaimaakamakhya@dbcp.cry66wamma47.ap-south-1.rds.amazonaws.com:3306/dbcp')
 
-# TRUNCATE and INSERT for FE_METRICS_SIGNAL (dbcp)
-with gcp_engine.connect() as conn:
-    conn.execute(text('TRUNCATE TABLE "FE_METRICS_SIGNAL"'))
-    conn.commit()
-metrics_signal.to_sql('FE_METRICS_SIGNAL', con=gcp_engine, if_exists='append', index=False)
+# Write the DataFrame to a new table in the database
+metrics_signal.to_sql('FE_METRICS_SIGNAL', con=gcp_engine, if_exists='replace', index=False)
 
 print("FE_METRICS_SIGNAL DataFrame uploaded to dbcp database successfully!")
 
 # Create a SQLAlchemy engine for PostgreSQL
 gcp_engine_bt = create_engine(f'postgresql+pg8000://{db_user}:{db_password}@{db_host}:{db_port}/{db_name_bt}')
 
-# TRUNCATE and INSERT for FE_METRICS_SIGNAL (cp_backtest)
-with gcp_engine_bt.connect() as conn:
-    conn.execute(text('TRUNCATE TABLE "FE_METRICS_SIGNAL"'))
-    conn.commit()
-metrics_signal.to_sql('FE_METRICS_SIGNAL', con=gcp_engine_bt, if_exists='append', index=False)
+# Write the DataFrame to a new table in the database
+metrics_signal.to_sql('FE_METRICS_SIGNAL', con=gcp_engine_bt, if_exists='replace', index=False)
 
 end_time = time.time()
 elapsed_time_seconds = end_time - start_time

@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import time
 import logging
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine
 import os
 from dotenv import load_dotenv
 
@@ -222,14 +222,10 @@ def ensure_signals_columns(df):
     return df[[col for col in REQUIRED_SIGNAL_COLUMNS if col in df.columns]]
 
 
-# 🔹 Push Data to Database with TRUNCATE + INSERT
+# 🔹 Push Data to Database
 def push_to_db(df, table_name):
     engine = create_db_engine()
-    # Use TRUNCATE + INSERT to preserve table structure
-    with engine.connect() as conn:
-        conn.execute(text(f'TRUNCATE TABLE "{table_name}"'))
-        conn.commit()
-    df.to_sql(table_name, con=engine, if_exists="append", index=False)
+    df.to_sql(table_name, con=engine, if_exists="replace", index=False)
     engine.dispose()
     logging.info(f"✅ {table_name} uploaded successfully!")
 
