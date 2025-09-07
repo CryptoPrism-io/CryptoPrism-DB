@@ -26,9 +26,18 @@
       "Bash(refreshenv)",
       "Bash(dot:*)",
       "Bash(\"C:\\Program Files\\Graphviz\\bin\\dot.exe\" -V)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Bash(echo $SHELL)",
+      "Bash(echo $0)",
+      "Bash(echo $HOME)",
+      "Bash(cat:*)",
+      "Bash(git stash show:*)",
+      "Bash(git log:*)",
+      "Bash(code .)",
+      "Read(//c/Users/44776/Pictures/Screenshots/**)"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "outputStyle": "default"
 }

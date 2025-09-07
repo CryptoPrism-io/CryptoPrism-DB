@@ -53,7 +53,7 @@ jobs:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       run: |
         echo "🧪 Starting Python Environment Test..."
-        python gcp_postgres_sandbox/test_scrtipts/funtional_tests/env_test.py
+        python gcp_postgres_sandbox/tests/functional_tests/env_test.py
     
     - name: Log test completion
       if: success()
