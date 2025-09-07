@@ -25,7 +25,9 @@
       "Bash(echo $HOME)",
       "Bash(cat:*)",
       "Bash(git stash show:*)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(code .)",
+      "Read(//c/Users/44776/Pictures/Screenshots/**)"
     ],
     "deny": [],
     "ask": []
