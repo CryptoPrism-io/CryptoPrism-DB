@@ -47,15 +47,20 @@ def clean_and_analyze_database(config, db_name='dbcp'):
     issues = []
     stats = {'tables_processed': 0, 'duplicates_removed': 0}
     
+    # Focus on key feature tables only
+    key_tables = ['FE_DMV_ALL', 'FE_DMV_SCORES', '1K_coins_ohlcv', 'crypto_listings_latest_1000']
+    
     with engine.connect() as conn:
-        # Get all tables with required columns
-        tables_query = text("""
+        # Get key tables with required columns
+        table_filter = "'" + "','".join(key_tables) + "'"
+        tables_query = text(f"""
             SELECT t.table_name,
                    array_agg(c.column_name) as columns
             FROM information_schema.tables t
             LEFT JOIN information_schema.columns c ON t.table_name = c.table_name 
             WHERE t.table_schema = 'public' 
               AND c.table_schema = 'public'
+              AND t.table_name IN ({table_filter})
             GROUP BY t.table_name
         """)
         
@@ -64,6 +69,7 @@ def clean_and_analyze_database(config, db_name='dbcp'):
             columns = row[1] if row[1] else []
             
             try:
+                print(f"Processing table: {table_name}")
                 stats['tables_processed'] += 1
                 
                 # Quick row count
@@ -71,26 +77,19 @@ def clean_and_analyze_database(config, db_name='dbcp'):
                 if count_result == 0:
                     continue
                 
-                # Clean duplicates if possible
+                # Check for duplicates (simplified)
                 if 'slug' in columns and 'timestamp' in columns:
-                    duplicate_query = text(f"""
-                        WITH duplicates AS (
-                            DELETE FROM public."{table_name}" 
-                            WHERE ctid NOT IN (
-                                SELECT ctid FROM (
-                                    SELECT ctid, ROW_NUMBER() OVER (PARTITION BY slug, timestamp ORDER BY ctid) as rn
-                                    FROM public."{table_name}"
-                                ) ranked WHERE rn = 1
-                            )
-                            RETURNING 1
-                        )
-                        SELECT COUNT(*) FROM duplicates
-                    """)
-                    duplicates_removed = conn.execute(duplicate_query).scalar() or 0
-                    stats['duplicates_removed'] += duplicates_removed
+                    print(f"  Checking duplicates in {table_name}")
+                    dup_count = conn.execute(text(f"""
+                        SELECT COUNT(*) - COUNT(DISTINCT (slug, timestamp)) as duplicates
+                        FROM public."{table_name}"
+                    """)).scalar()
                     
-                    if duplicates_removed > 0:
-                        conn.execute(text(f'VACUUM ANALYZE public."{table_name}"'))
+                    if dup_count > 0:
+                        issues.append(f"{table_name}: {dup_count} duplicate records found")
+                        print(f"  Found {dup_count} duplicates in {table_name}")
+                    else:
+                        print(f"  No duplicates in {table_name}")
                 
                 # Check for critical issues
                 timestamp_cols = [c for c in columns if 'timestamp' in c.lower()]
