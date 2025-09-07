@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import logging
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine
 import time
 import os
 from dotenv import load_dotenv
@@ -231,17 +231,10 @@ def generate_binary_signals_ratios(ratios_df):
 
     return ratios_df
 
-# 🔹 Push Data to Database with TRUNCATE + INSERT
+# 🔹 Push Data to Database
 def push_to_db(df, table_name, engine, if_exists="replace"):
     try:
-        if if_exists == "replace":
-            # Use TRUNCATE + INSERT to preserve table structure
-            with engine.connect() as conn:
-                conn.execute(text(f'TRUNCATE TABLE "{table_name}"'))
-                conn.commit()
-            df.to_sql(table_name, con=engine, if_exists="append", index=False)
-        else:
-            df.to_sql(table_name, con=engine, if_exists=if_exists, index=False)
+        df.to_sql(table_name, con=engine, if_exists=if_exists, index=False)
         logging.info(f"✅ {table_name} uploaded successfully!")
     except Exception as e:
         logging.error(f"Error pushing data to {table_name}: {e}")

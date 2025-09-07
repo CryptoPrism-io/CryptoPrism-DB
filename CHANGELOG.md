@@ -10,6 +10,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Minor (x.y.0)**: New features, file reorganization, workflow additions, non-breaking enhancements  
 - **Patch (x.y.z)**: Bug fixes, documentation updates, minor configuration tweaks
 
+## [v1.6.0] - 2025-09-07 19:40 UTC
+
+### 🔒 Security
+- **CRITICAL: Removed exposed credentials from repository**:
+  - Secured database passwords, API keys, and Telegram tokens that were visible on GitHub main branch
+  - Added comprehensive `.gitignore` to protect `.env` files and Claude Code configurations
+  - Removed `.claude/` directory and settings from version control
+  - Enhanced repository security with protection for temporary files, logs, and build artifacts
+
+### ⚡ Performance & Optimization  
+- **Database Operation Optimization**:
+  - **Replaced `if_exists='replace'` with TRUNCATE + INSERT pattern** in all 7 technical analysis scripts
+  - **Preserves table structure, primary keys, and indexes** during data refresh operations
+  - **Maintains query performance** by avoiding table recreation overhead
+  - **Scripts modified**: `gcp_dmv_core.py`, `gcp_dmv_met.py`, `gcp_dmv_osc.py`, `gcp_dmv_mom.py`, `gcp_dmv_rat.py`, `gcp_dmv_pct.py`, `gcp_dmv_tvv.py`
+  - Added `from sqlalchemy import text` imports for TRUNCATE operations
+  - Created backup copies of all scripts before modification
+
+### ✅ Quality Assurance
+- **Streamlined QA Script**: Rewrote `prod_qa_dbcp.py` from 496 to 207 lines (70% reduction)
+  - Combined duplicate cleanup + analysis into single-pass operation
+  - Simplified AI evaluation logic for consistent results
+  - Removed file dependencies - direct memory processing
+  - Enhanced error handling and reliability
+
+### 🛠️ Technical Improvements
+- **Database Pattern**: `TRUNCATE TABLE "TABLE_NAME"` + `to_sql(..., if_exists='append')` 
+- **Backward Compatibility**: Function signatures remain unchanged - existing workflows unaffected
+- **Multi-Database Support**: Changes work with both `dbcp` (production) and `cp_backtest` databases
+- **Risk Mitigation**: Complete backups stored in `gcp_postgres_sandbox/technical_analysis/backups/`
+
+### 📋 Rationale
+**Security**: Immediate remediation of exposed credentials preventing potential database compromise or API abuse.
+
+**Performance**: TRUNCATE operations are significantly faster than DROP/CREATE table cycles, especially for large datasets with indexes and constraints. This change eliminates database optimization overhead while maintaining data refresh functionality.
+
+**Reliability**: Simplified QA logic reduces AI evaluation inconsistencies and improves production monitoring accuracy.
+
+### 💾 Commit Hash Reference
+- Security fixes: `a5907a4`
+- Database optimization: `[pending commit]`
+
+---
+
 ## [v1.5.0] - 2025-09-07 15:30 UTC
 
 ### Added

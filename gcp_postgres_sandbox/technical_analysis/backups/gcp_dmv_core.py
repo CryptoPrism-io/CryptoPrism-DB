@@ -4,7 +4,7 @@ import time
 import logging
 import os
 from dotenv import load_dotenv
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
 
 BATCH_SIZE = 10000
@@ -84,11 +84,7 @@ for index, row in df.iloc[:, 4:].iterrows():
     df.at[index, 'bearish'] = (row == -1).sum()
     df.at[index, 'neutral'] = (row == 0).sum()
 
-# TRUNCATE and INSERT for FE_DMV_ALL
-with gcp_engine.connect() as conn:
-    conn.execute(text('TRUNCATE TABLE "FE_DMV_ALL"'))
-    conn.commit()
-df.to_sql('FE_DMV_ALL', con=gcp_engine, if_exists='append', index=False)
+df.to_sql('FE_DMV_ALL', con=gcp_engine, if_exists='replace', index=False)
 logger.info("FE_DMV_ALL uploaded.")
 
 Durability = df[['slug'] + [c for c in df.columns if c.startswith('d_')]]
@@ -118,11 +114,7 @@ else:
 logger.info(f"Remaining rows: {df.shape[0]}")
 
 try:
-    # TRUNCATE and INSERT for FE_DMV_SCORES
-    with gcp_engine.connect() as conn:
-        conn.execute(text('TRUNCATE TABLE "FE_DMV_SCORES"'))
-        conn.commit()
-    dmv_scores.to_sql('FE_DMV_SCORES', con=gcp_engine, if_exists='append', index=False, method='multi', chunksize=BATCH_SIZE)
+    dmv_scores.to_sql('FE_DMV_SCORES', con=gcp_engine, if_exists='replace', index=False, method='multi', chunksize=BATCH_SIZE)
     logger.info("FE_DMV_SCORES uploaded.")
 except SQLAlchemyError as e:
     logger.error(f"Error uploading scores: {e}")
