@@ -18,9 +18,17 @@
       "Bash(gh auth:*)",
       "Bash(gh run list:*)",
       "Bash(gh run view:*)",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "WebSearch",
+      "Bash(echo $SHELL)",
+      "Bash(echo $0)",
+      "Bash(echo $HOME)",
+      "Bash(cat:*)",
+      "Bash(git stash show:*)",
+      "Bash(git log:*)"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "outputStyle": "default"
 }
