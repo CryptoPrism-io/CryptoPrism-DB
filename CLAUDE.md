@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-CryptoPrism-DB is a cryptocurrency technical analysis system featuring a multi-database architecture for live trading, AI analysis, and backtesting. The system processes 1000+ cryptocurrencies using 100+ technical indicators across momentum, oscillators, ratios, metrics, and volume/value analysis.
+CryptoPrism-DB is a production-grade cryptocurrency technical analysis system featuring a multi-database architecture for live trading, AI analysis, and backtesting. The system processes 1000+ cryptocurrencies using 100+ technical indicators across momentum, oscillators, ratios, metrics, and volume/value analysis.
+
+**Note**: Database utilities (schema analysis, benchmarking, optimization tools) have been extracted to a separate repository: `CryptoPrism-DB-Utils`. This repository now focuses exclusively on production database management and technical analysis pipelines.
 
 ## Architecture
 

@@ -53,6 +53,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Preparation for Separate Repository**: Complete package structure ready for extraction to dedicated CryptoPrism-DB-Utils repository with proper versioning, documentation, and distribution capabilities.
 
+**Commit Hash**: `597dd2c`
+
+### Repository Cleanup
+- **Utilities Extraction**: All database utilities moved to separate `CryptoPrism-DB-Utils` repository
+- **Production Focus**: Main repository now exclusively focused on production database management
+- **Cleaner Codebase**: Removed 26+ utility scripts, analysis tools, and optimization scripts
+- **Clear Separation**: Production pipelines separated from development/analysis utilities
+
 ---
 
 ## [v1.4.0] - 2025-09-07 12:00 UTC
