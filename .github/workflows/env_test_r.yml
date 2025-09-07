@@ -55,7 +55,7 @@ jobs:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
       run: |
         echo "🧪 Starting R Environment Test..."
-        Rscript gcp_postgres_sandbox/test_scrtipts/funtional_tests/env_test.R
+        Rscript gcp_postgres_sandbox/tests/functional_tests/env_test.R
     
     - name: Log test completion
       if: success()

@@ -46,7 +46,7 @@ jobs:
           # Telegram configuration
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python gcp_postgres_sandbox/gcp_fear_greed_cmc.py
+        run: python gcp_postgres_sandbox/data_ingestion/gcp_fear_greed_cmc.py
         continue-on-error: false
 
       - name: Run gcp_metrics.py
@@ -67,7 +67,7 @@ jobs:
           # Telegram configuration
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python gcp_postgres_sandbox/gcp_dmv_met.py
+        run: python gcp_postgres_sandbox/technical_analysis/gcp_dmv_met.py
         continue-on-error: false
         
       - name: Run gcp_trend_volume.py
@@ -88,7 +88,7 @@ jobs:
           # Telegram configuration
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python gcp_postgres_sandbox/gcp_dmv_tvv.py
+        run: python gcp_postgres_sandbox/technical_analysis/gcp_dmv_tvv.py
         continue-on-error: false
       
       - name: Run gcp_volatility.py
@@ -109,7 +109,7 @@ jobs:
           # Telegram configuration
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python gcp_postgres_sandbox/gcp_dmv_pct.py
+        run: python gcp_postgres_sandbox/technical_analysis/gcp_dmv_pct.py
         continue-on-error: false
 
       - name: Run gcp_mom.py
@@ -130,7 +130,7 @@ jobs:
           # Telegram configuration
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python gcp_postgres_sandbox/gcp_dmv_mom.py
+        run: python gcp_postgres_sandbox/technical_analysis/gcp_dmv_mom.py
         continue-on-error: false
 
       - name: Run gcp_osc.py
@@ -151,7 +151,7 @@ jobs:
           # Telegram configuration
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python gcp_postgres_sandbox/gcp_dmv_osc.py
+        run: python gcp_postgres_sandbox/technical_analysis/gcp_dmv_osc.py
         continue-on-error: false
 
       - name: Run gcp_rat.py
@@ -172,7 +172,7 @@ jobs:
           # Telegram configuration
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python gcp_postgres_sandbox/gcp_dmv_rat.py
+        run: python gcp_postgres_sandbox/technical_analysis/gcp_dmv_rat.py
         continue-on-error: false
 
       - name: Run gcp_dmv_core.py
@@ -193,5 +193,5 @@ jobs:
           # Telegram configuration
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python gcp_postgres_sandbox/gcp_dmv_core.py
+        run: python gcp_postgres_sandbox/technical_analysis/gcp_dmv_core.py
         continue-on-error: false
