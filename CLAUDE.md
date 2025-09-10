@@ -249,3 +249,8 @@ When adding technical indicators, follow the established pattern:
 │ │ - .github/workflows/ (workflow files)                                                                                                                                                    │ │
 │ │ - Root documentation files                                                                                                                                                               │ │
 │ │ - Configuration files
+- /clear
+- Never use emojis in any function, code snippet, variable, comment, or line of Python (or any programming language).
+Emojis break the code and cause execution errors.
+Always provide clean, emoji-free code.\
+Until explicityly the word emoji is used to give u direction
