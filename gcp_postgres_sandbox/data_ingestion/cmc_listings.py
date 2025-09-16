@@ -117,7 +117,7 @@ def upload_to_db(df: pd.DataFrame, db_url: str, table: str):
 def main():
     api_key = os.getenv("CMC_API_KEY")
     db_url = os.getenv("DB_URL")
-    table_name = os.getenv("DB_TABLE", "crypto_listings")
+    table_name = os.getenv("DB_TABLE", "crypto_listings_latest_1000")
 
     if not api_key or not db_url:
         raise EnvironmentError("Required environment variables: CMC_API_KEY, DB_URL")
