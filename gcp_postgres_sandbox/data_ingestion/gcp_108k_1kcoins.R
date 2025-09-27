@@ -7,8 +7,8 @@ library(dotenv)
 # Load environment variables from .env file (only for local development)
 if (!Sys.getenv("GITHUB_ACTIONS") == "true") {
   # Find the project root by going up from the script's directory
-  script_dir <- dirname(normalizePath(sys.frame(1)$ofile))
-  project_root <- normalizePath(file.path(script_dir, '..'))
+  script_dir <- getwd()
+  project_root <- normalizePath(file.path(script_dir, '..', '..'))
   env_path <- file.path(project_root, '.env')
   
   if (file.exists(env_path)) {
@@ -140,15 +140,45 @@ print("Writing data to database...")
 dbWriteTable(con, "crypto_global_latest", crypto_global_quote, overwrite = TRUE, row.names = FALSE)
 print("✓ Written crypto_global_latest")
 
-# Write OHLCV data to multiple tables
-dbWriteTable(con, "108_1K_coins_ohlcv", all_coins, append = TRUE, row.names = FALSE)
-print("✓ Appended to 108_1K_coins_ohlcv")
+# Function to insert only new data (skip duplicates)
+insert_new_ohlcv_data <- function(connection, table_name, data, db_label) {
+  tryCatch({
+    # Get existing (slug, timestamp) combinations from database
+    existing_query <- paste0("SELECT DISTINCT slug, timestamp FROM ", table_name)
+    existing_data <- dbGetQuery(connection, existing_query)
 
-dbWriteTable(con, "1K_coins_ohlcv", all_coins, append = TRUE, row.names = FALSE)
-print("✓ Appended to 1K_coins_ohlcv")
+    if (nrow(existing_data) > 0) {
+      # Create a composite key for comparison
+      existing_data$key <- paste(existing_data$slug, existing_data$timestamp, sep = "_")
+      data$key <- paste(data$slug, data$timestamp, sep = "_")
 
-dbWriteTable(con_bt, "1K_coins_ohlcv", all_coins, append = TRUE, row.names = FALSE)
-print("✓ Appended to 1K_coins_ohlcv (backtest db)")
+      # Filter out rows that already exist
+      new_data <- data[!data$key %in% existing_data$key, ]
+      new_data$key <- NULL  # Remove the temporary key column
+
+      print(paste("Found", nrow(data) - nrow(new_data), "existing records, inserting", nrow(new_data), "new records"))
+    } else {
+      new_data <- data
+      print(paste("Table is empty, inserting all", nrow(new_data), "records"))
+    }
+
+    # Insert only new data
+    if (nrow(new_data) > 0) {
+      dbWriteTable(connection, table_name, new_data, append = TRUE, row.names = FALSE)
+      print(paste("✓ Inserted", nrow(new_data), "new records to", table_name, db_label))
+    } else {
+      print(paste("✓ No new data to insert for", table_name, db_label))
+    }
+
+  }, error = function(e) {
+    print(paste("❌ Error inserting to", table_name, ":", e$message))
+  })
+}
+
+# Insert new data to all OHLCV tables
+insert_new_ohlcv_data(con, "108_1K_coins_ohlcv", all_coins, "(main db)")
+insert_new_ohlcv_data(con, "1K_coins_ohlcv", all_coins, "(main db)")
+insert_new_ohlcv_data(con_bt, "1K_coins_ohlcv", all_coins, "(backtest db)")
 
 # Optional: Update the listings table if needed
 # dbWriteTable(con, "crypto_listings_latest_1000", crypto.listings.latest, overwrite = TRUE, row.names = FALSE)

@@ -6,7 +6,9 @@ required_packages <- c(
   "DBI",
   "RPostgres",
   "dotenv",
-  "jsonlite"
+  "jsonlite",
+  "crypto2",
+  "dplyr"
 )
 
 # Install missing packages
