@@ -144,7 +144,7 @@ print("✓ Written crypto_global_latest")
 insert_new_ohlcv_data <- function(connection, table_name, data, db_label) {
   tryCatch({
     # Get existing (slug, timestamp) combinations from database
-    existing_query <- paste0("SELECT DISTINCT slug, timestamp FROM ", table_name)
+    existing_query <- paste0("SELECT DISTINCT slug, timestamp FROM \"", table_name, "\"")
     existing_data <- dbGetQuery(connection, existing_query)
 
     if (nrow(existing_data) > 0) {
