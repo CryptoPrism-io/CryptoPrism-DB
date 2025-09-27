@@ -140,45 +140,81 @@ print("Writing data to database...")
 dbWriteTable(con, "crypto_global_latest", crypto_global_quote, overwrite = TRUE, row.names = FALSE)
 print("✓ Written crypto_global_latest")
 
-# Function to insert only new data (skip duplicates)
-insert_new_ohlcv_data <- function(connection, table_name, data, db_label) {
-  tryCatch({
-    # Get existing (slug, timestamp) combinations from database
-    existing_query <- paste0("SELECT DISTINCT slug, timestamp FROM \"", table_name, "\"")
-    existing_data <- dbGetQuery(connection, existing_query)
+# Remove duplicates from fetched data using timestamp-based approach
+print("Checking for existing data to prevent duplicates...")
 
-    if (nrow(existing_data) > 0) {
-      # Create a composite key for comparison
-      existing_data$key <- paste(existing_data$slug, existing_data$timestamp, sep = "_")
-      data$key <- paste(data$slug, data$timestamp, sep = "_")
+# Get unique timestamps from fetched data
+unique_timestamps <- unique(all_coins$timestamp)
+print(paste("Fetched data contains", length(unique_timestamps), "unique timestamps"))
 
-      # Filter out rows that already exist
-      new_data <- data[!data$key %in% existing_data$key, ]
-      new_data$key <- NULL  # Remove the temporary key column
+# Format timestamps for SQL IN clause
+timestamp_list <- paste0("'", unique_timestamps, "'", collapse = ",")
 
-      print(paste("Found", nrow(data) - nrow(new_data), "existing records, inserting", nrow(new_data), "new records"))
-    } else {
-      new_data <- data
-      print(paste("Table is empty, inserting all", nrow(new_data), "records"))
-    }
+# Query all tables for existing records with these timestamps
+existing_records <- data.frame()
 
-    # Insert only new data
-    if (nrow(new_data) > 0) {
-      dbWriteTable(connection, table_name, new_data, append = TRUE, row.names = FALSE)
-      print(paste("✓ Inserted", nrow(new_data), "new records to", table_name, db_label))
-    } else {
-      print(paste("✓ No new data to insert for", table_name, db_label))
-    }
+tryCatch({
+  # Check main db - 108_1K_coins_ohlcv table
+  existing_108k <- dbGetQuery(con, paste0("SELECT slug, timestamp FROM \"108_1K_coins_ohlcv\" WHERE timestamp IN (", timestamp_list, ")"))
+  if (nrow(existing_108k) > 0) {
+    existing_108k$source <- "108_1K_coins_ohlcv"
+    existing_records <- rbind(existing_records, existing_108k)
+  }
 
-  }, error = function(e) {
-    print(paste("❌ Error inserting to", table_name, ":", e$message))
-  })
+  # Check main db - 1K_coins_ohlcv table
+  existing_1k_main <- dbGetQuery(con, paste0("SELECT slug, timestamp FROM \"1K_coins_ohlcv\" WHERE timestamp IN (", timestamp_list, ")"))
+  if (nrow(existing_1k_main) > 0) {
+    existing_1k_main$source <- "1K_coins_ohlcv_main"
+    existing_records <- rbind(existing_records, existing_1k_main)
+  }
+
+  # Check backtest db - 1K_coins_ohlcv table
+  existing_1k_bt <- dbGetQuery(con_bt, paste0("SELECT slug, timestamp FROM \"1K_coins_ohlcv\" WHERE timestamp IN (", timestamp_list, ")"))
+  if (nrow(existing_1k_bt) > 0) {
+    existing_1k_bt$source <- "1K_coins_ohlcv_backtest"
+    existing_records <- rbind(existing_records, existing_1k_bt)
+  }
+
+  print(paste("Found", nrow(existing_records), "existing records across all tables"))
+
+}, error = function(e) {
+  print(paste("Warning: Error checking existing data:", e$message))
+  print("Proceeding with all data (may cause duplicates)")
+})
+
+# Remove duplicates from all_coins
+if (nrow(existing_records) > 0) {
+  # Create composite keys for comparison
+  existing_records$key <- paste(existing_records$slug, existing_records$timestamp, sep = "_")
+  all_coins$key <- paste(all_coins$slug, all_coins$timestamp, sep = "_")
+
+  # Filter out existing records
+  clean_coins <- all_coins[!all_coins$key %in% existing_records$key, ]
+  clean_coins$key <- NULL  # Remove temporary key column
+
+  print(paste("Removed", nrow(all_coins) - nrow(clean_coins), "duplicate records"))
+  print(paste("Will insert", nrow(clean_coins), "new records to all tables"))
+} else {
+  clean_coins <- all_coins
+  print("No existing records found, will insert all fetched data")
 }
 
-# Insert new data to all OHLCV tables
-insert_new_ohlcv_data(con, "108_1K_coins_ohlcv", all_coins, "(main db)")
-insert_new_ohlcv_data(con, "1K_coins_ohlcv", all_coins, "(main db)")
-insert_new_ohlcv_data(con_bt, "1K_coins_ohlcv", all_coins, "(backtest db)")
+# Insert clean data to all OHLCV tables using simple append
+if (nrow(clean_coins) > 0) {
+  # Insert to 108_1K_coins_ohlcv (main db)
+  dbWriteTable(con, "108_1K_coins_ohlcv", clean_coins, append = TRUE, row.names = FALSE)
+  print("✓ Inserted clean data to 108_1K_coins_ohlcv (main db)")
+
+  # Insert to 1K_coins_ohlcv (main db)
+  dbWriteTable(con, "1K_coins_ohlcv", clean_coins, append = TRUE, row.names = FALSE)
+  print("✓ Inserted clean data to 1K_coins_ohlcv (main db)")
+
+  # Insert to 1K_coins_ohlcv (backtest db)
+  dbWriteTable(con_bt, "1K_coins_ohlcv", clean_coins, append = TRUE, row.names = FALSE)
+  print("✓ Inserted clean data to 1K_coins_ohlcv (backtest db)")
+} else {
+  print("✓ No new data to insert - all records already exist")
+}
 
 # Optional: Update the listings table if needed
 # dbWriteTable(con, "crypto_listings_latest_1000", crypto.listings.latest, overwrite = TRUE, row.names = FALSE)
