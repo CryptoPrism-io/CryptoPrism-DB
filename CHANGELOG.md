@@ -5,6 +5,62 @@ All notable changes to the CryptoPrism-DB project will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.2] - 2025-01-27 15:45:00 UTC
+
+### Changed
+- **Duplicate Prevention Optimization**: Implemented timestamp-based duplicate filtering in `gcp_108k_1kcoins.R`
+  - Replaced complex per-table duplicate checking with efficient timestamp-based approach
+  - Added comprehensive duplicate detection across all OHLCV tables (main db and backtest db)
+  - Optimized SQL queries to check for existing timestamps before inserting new data
+  - **Rationale**: User feedback highlighted more efficient approach - check fetched timestamps against existing data rather than complex primary key constraint handling
+
+### Added
+- **Backup Script Creation**: Created `gcp_108k_1kcoins_timestamp_optimized.R` for future reference
+  - Preserved optimized version of R script with timestamp-based duplicate prevention
+  - Maintains development history and provides fallback option
+  - **Rationale**: User requested backup copy of optimized changes for future reference and version control
+
+### Technical Details
+- **Multi-table Timestamp Checking**: Enhanced duplicate prevention logic
+  ```r
+  # Get unique timestamps from fetched data and query all target tables
+  unique_timestamps <- unique(all_coins$timestamp)
+  timestamp_list <- paste0("'", unique_timestamps, "'", collapse = ",")
+
+  # Check across all databases and tables for existing records
+  existing_108k <- dbGetQuery(con, paste0("SELECT slug, timestamp FROM \"108_1K_coins_ohlcv\" WHERE timestamp IN (", timestamp_list, ")"))
+  existing_1k_main <- dbGetQuery(con, paste0("SELECT slug, timestamp FROM \"1K_coins_ohlcv\" WHERE timestamp IN (", timestamp_list, ")"))
+  existing_1k_bt <- dbGetQuery(con_bt, paste0("SELECT slug, timestamp FROM \"1K_coins_ohlcv\" WHERE timestamp IN (", timestamp_list, ")"))
+  ```
+- **Clean Data Filtering**: Implemented composite key filtering to remove duplicate records before insertion
+- **Performance Improvement**: Reduced database operations by pre-filtering data rather than handling constraint violations
+
+## [4.2.1] - 2025-01-27 14:30:00 UTC
+
+### Fixed
+- **R Script Dependencies**: Resolved missing R package errors in `gcp_108k_1kcoins.R`
+  - Added `crypto2` and `dplyr` packages to `requirements.R`
+  - Fixed path detection error by replacing `sys.frame(1)$ofile` with `getwd()` approach
+  - **Rationale**: Essential packages were missing from dependency list, causing script failures
+
+### Changed
+- **PostgreSQL Table Name Handling**: Fixed SQL syntax for numeric-prefixed table names
+  - Added double quotes around table names starting with numbers (e.g., `"108_1K_coins_ohlcv"`)
+  - Ensured proper PostgreSQL compliance for all database operations
+  - **Rationale**: Numeric table prefixes require quoted identifiers in PostgreSQL
+
+### Added
+- **Environment Configuration Recovery**: Restored `.env` file from backup location
+  - Located and copied environment variables from `CryptoPrism-DB-Utils` directory
+  - Verified database credentials and API keys for production environment
+  - **Rationale**: Critical configuration file was missing, blocking all database operations
+
+### Security
+- **Credential Management**: Ensured secure handling of database credentials
+  - Verified environment variable loading for both local and GitHub Actions environments
+  - Maintained separation of production credentials from codebase
+  - **Rationale**: Security best practices require proper credential isolation
+
 ## Version Numbering
 - **Major (x.0.0)**: Breaking changes, architecture modifications, database schema changes
 - **Minor (x.y.0)**: New features, file reorganization, workflow additions, non-breaking enhancements  
