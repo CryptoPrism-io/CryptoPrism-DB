@@ -1,363 +1,526 @@
-# CryptoPrism-DB: Advanced Cryptocurrency Technical Analysis System
+# CryptoPrism-DB
 
-A comprehensive cryptocurrency data pipeline featuring multi-layered technical analysis, automated quality assurance, and sophisticated backtesting capabilities for algorithmic trading research and development.
+<div align="center">
+
+**Production-Grade Cryptocurrency Technical Analysis System with Multi-Database Architecture**
+
+[![Version](https://img.shields.io/badge/version-4.3.0-blue.svg)](CHANGELOG.md)
+[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![R](https://img.shields.io/badge/R-4.0+-276DC3?logo=r&logoColor=white)](https://www.r-project.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-12+-316192?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![License](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
+[![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-Automated-2088FF?logo=github-actions&logoColor=white)](https://github.com/features/actions)
+
+### Technology Stack
+
+![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
+![R](https://img.shields.io/badge/R-276DC3?logo=r&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?logo=postgresql&logoColor=white)
+![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-D71F00?logo=sqlalchemy&logoColor=white)
+![Pandas](https://img.shields.io/badge/Pandas-150458?logo=pandas&logoColor=white)
+![NumPy](https://img.shields.io/badge/NumPy-013243?logo=numpy&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?logo=github-actions&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker_Ready-2496ED?logo=docker&logoColor=white)
+![Google AI](https://img.shields.io/badge/Google_AI-4285F4?logo=google&logoColor=white)
+![Telegram](https://img.shields.io/badge/Telegram-26A5E4?logo=telegram&logoColor=white)
+
+*A comprehensive cryptocurrency data pipeline featuring multi-layered technical analysis, automated quality assurance, and sophisticated backtesting capabilities for 1000+ cryptocurrencies using 100+ technical indicators*
+
+[Features](#-key-features) • [Quick Start](#-quick-start) • [Architecture](#-architecture) • [Pipeline](#-automated-pipeline) • [Documentation](#-documentation)
+
+</div>
 
 ---
 
-## 🔍 WHAT - System Overview
+## What's New
 
-### Architecture
-CryptoPrism-DB operates on a **3-database architecture** designed for separation of concerns:
+### v4.3.0 (Current) - README Revamp
+- **Modern Documentation** - Completely redesigned README with professional badges and structure
+- **Technology Stack Badges** - 16 badges with official brand colors and logos
+- **Quick Start Guide** - Streamlined 5-step installation process
+- **Enhanced Navigation** - Better organization with emoji headers and internal links
 
-- **`dbcp`** - Primary production database containing live market data
-- **`cp_ai`** - AI-enhanced analysis database with processed indicators  
+### v4.2.2 - R Script Optimization
+- **Timestamp-Based Duplicate Prevention** - Replaced complex per-table checking with efficient timestamp filtering
+- **Performance Improvement** - Pre-filtering data reduces database operations significantly
+- **Multi-table Validation** - Comprehensive duplicate detection across all OHLCV tables
+- **Optimized SQL Queries** - Check fetched timestamps against existing data before insertion
+
+### v4.2.1 - PostgreSQL Compatibility & Dependencies
+- **Fixed R Script Dependencies** - Added missing `crypto2` and `dplyr` packages
+- **PostgreSQL Table Name Handling** - Fixed SQL syntax for numeric-prefixed table names
+- **Environment Configuration Recovery** - Restored critical `.env` file from backup
+
+[View Full Changelog](CHANGELOG.md)
+
+---
+
+## Key Features
+
+### Multi-Database Architecture
+- **`dbcp`** - Primary production database for live market data
+- **`cp_ai`** - AI-enhanced analysis database with processed indicators
 - **`cp_backtest` / `cp_backtest_h`** - Historical data for backtesting and strategy validation
+- **Separation of Concerns** - Optimized for different use cases (live/backtest/AI)
 
-### Core Modules (16 Specialized Components)
+### Comprehensive Technical Analysis (100+ Indicators)
+- **Momentum Indicators (21)** - RSI (5 periods), ROC, Williams %R, SMI, CMO, TSI
+- **Oscillators (33)** - MACD, CCI, ADX System, Ultimate, Awesome, TRIX
+- **Financial Ratios (23)** - Alpha/Beta vs Bitcoin, Sharpe, Sortino, Treynor, Information Ratio
+- **Fundamental Metrics (15+)** - ATH/ATL tracking, Market cap categories, Coin age analysis
+- **Volume/Value Analysis (33)** - OBV, VWAP, Keltner/Donchian Channels, CMF
+- **Risk Metrics (5)** - VaR, CVaR, Daily returns, Volume changes
 
-#### 📊 **Data Ingestion & Processing**
-- **`cmc_listings.py`** - CoinMarketCap API integration for top 1000 cryptocurrencies
-- **`gcp_cc_info.py`** - Cryptocurrency metadata and URL information fetcher
-- **`gcp_fear_greed_cmc.py`** - Market sentiment data via Fear & Greed Index
-
-#### 🔧 **Technical Analysis Engine** 
-- **`gcp_dmv_core.py`** - Central aggregation hub merging all signal types
-- **`gcp_dmv_mom.py`** - Momentum indicators (RSI, ROC, Williams %R, SMI, CMO, TSI)
-- **`gcp_dmv_osc.py`** - Oscillators (MACD, CCI, ADX, Ultimate, Awesome, TRIX)  
-- **`gcp_dmv_rat.py`** - Financial ratios (Alpha/Beta, Sharpe, Sortino, Information Ratio)
-- **`gcp_dmv_met.py`** - Fundamental metrics (ATH/ATL, market cap categories, coin age)
-- **`gcp_dmv_tvv.py`** - Technical volume/value (OBV, VWAP, Keltner/Donchian channels)
-- **`gcp_dmv_pct.py`** - Risk metrics (VaR, CVaR, percentage returns)
-
-#### 🔄 **Backtesting Infrastructure**
-- **`gcp_dmv_mom_backtest.py`** - Historical momentum analysis for strategy testing
-- **`test_backtest_mom_data.py`** - Comprehensive data validation test suite
-
-#### 🛡️ **Quality Assurance System**
-- **`prod_qa_cp_ai.py`** - AI-powered QA for analysis database
-- **`prod_qa_cp_ai_backtest.py`** - Backtest data quality monitoring  
-- **`prod_qa_dbcp.py`** - Production database health monitoring
-- **`prod_qa_dbcp_backtest.py`** - Backtest database validation
-
-### Technical Indicators Coverage (100+ Indicators)
-
-| Category | Count | Key Indicators |
-|----------|-------|----------------|
-| **Momentum** | 21 | RSI (5 periods), ROC, Williams %R, SMI, CMO, TSI |
-| **Oscillators** | 33 | MACD, CCI, ADX System, Ultimate, Awesome, TRIX |
-| **Ratios** | 23 | Alpha/Beta vs Bitcoin, Sharpe, Sortino, Treynor, Information Ratio |
-| **Metrics** | 15+ | ATH/ATL tracking, Market cap categories, Coin age analysis |
-| **Volume/Value** | 33 | OBV, VWAP, Keltner/Donchian Channels, CMF |
-| **Risk** | 5 | VaR, CVaR, Daily returns, Volume changes |
-
-### Database Schema
-
-#### Primary Tables Structure
-```
-FE_OSCILLATORS_SIGNALS    # Technical oscillator signals
-FE_MOMENTUM_SIGNALS       # Momentum-based trading signals  
-FE_METRICS_SIGNAL         # Fundamental analysis signals
-FE_TVV_SIGNALS           # Volume/value technical signals
-FE_RATIOS_SIGNALS        # Financial ratio signals
-FE_DMV_ALL               # Aggregated signal matrix
-FE_DMV_SCORES            # Durability/Momentum/Valuation scores
-```
-
-### 🔄 Automated Pipeline System
-
-#### **GitHub Actions Pipeline Chain**
-CryptoPrism-DB features a sophisticated **4-stage automated pipeline** that runs daily:
-
-```
-LISTINGS → OHLCV → DMV → QA
-```
-
-#### **Stage 1: LISTINGS** (Daily 5:00 AM UTC)
-- **Trigger**: `cron: '05 0 * * *'`
-- **Purpose**: Fetch latest cryptocurrency listings from CoinMarketCap API
-- **Module**: `cmc_listings.py` 
-- **Output**: Top 1000 cryptocurrencies with market data
-
-#### **Stage 2: OHLCV** (Sequential after LISTINGS)
-- **Trigger**: `workflow_run: ["LISTINGS"]`
-- **Purpose**: Collect OHLCV (Open, High, Low, Close, Volume) historical data
-- **Module**: `gcp_108k_1kcoins.R` (R Script)
-- **Technology**: R with crypto2 package integration
-
-#### **Stage 3: DMV** (Sequential after OHLCV)
-- **Trigger**: `workflow_run: ["OHLCV"]`
-- **Purpose**: Execute complete technical analysis pipeline
-- **Execution Order**:
-  1. `gcp_fear_greed_cmc.py` - Market sentiment analysis
-  2. `gcp_dmv_met.py` - Fundamental metrics calculation
-  3. `gcp_dmv_tvv.py` - Volume/trend analysis
-  4. `gcp_dmv_pct.py` - Risk/volatility metrics  
-  5. `gcp_dmv_mom.py` - Momentum indicators
-  6. `gcp_dmv_osc.py` - Technical oscillators
-  7. `gcp_dmv_rat.py` - Financial ratios
-  8. **`gcp_dmv_core.py`** - Final signal aggregation
-
-#### **Stage 4: QA** (Manual/On-demand)
-- **Trigger**: Manual execution via `workflow_dispatch`
-- **Purpose**: AI-powered quality assurance with Telegram alerts
-- **Module**: `prod_qa_dbcp.py`
-- **Features**: Google Gemini AI analysis, automated duplicate cleanup
-
-#### **Independent Workflows**
-
-##### **Weekly Backtest Pipeline** (Sunday 2:00 AM UTC)
-- **Purpose**: Historical data processing for strategy validation
-- **Modules**:
-  1. `gcp_dmv_mom_backtest.py` - Historical momentum analysis
-  2. `test_backtest_mom_data.py` - Data validation tests
-- **Output**: Validation reports uploaded as GitHub artifacts
-
-##### **Pipeline Features**
-- **Sequential Dependencies** - Each stage waits for previous completion
-- **Error Handling** - Pipeline stops on any module failure
-- **Multi-language** - Python + R integration
+### Automated Pipeline System
+- **4-Stage Sequential Pipeline** - LISTINGS → OHLCV → DMV → QA
+- **Daily Automation** - Runs at 5:00 AM UTC via GitHub Actions
+- **Multi-Language Integration** - Python + R script orchestration
+- **Error Handling** - Pipeline stops on failure with detailed logging
 - **Quality Assurance** - AI-powered monitoring with real-time alerts
-- **Artifact Management** - Automated report generation and storage
 
----
+### AI-Powered Quality Assurance
+- **Google Gemini Integration** - Intelligent analysis and issue summarization
+- **Telegram Notifications** - Real-time alerts for critical issues
+- **Risk Classification** - LOW/MEDIUM/HIGH/CRITICAL issue prioritization
+- **Automated Cleanup** - Duplicate removal and database optimization
+- **Comprehensive Monitoring** - Data freshness, schema integrity, performance metrics
 
-## 🎯 WHY - Business Rationale
-
-### Cryptocurrency Trading Challenges
-
-#### **Market Complexity**
-- 1000+ actively traded cryptocurrencies with varying volatility profiles
-- 24/7 global markets requiring continuous monitoring
-- High-frequency price movements demanding real-time analysis
-- Complex correlations between different crypto assets
-
-#### **Risk Management Needs**  
-- **Quantitative Risk Assessment** - VaR/CVaR calculations for portfolio protection
-- **Multi-timeframe Analysis** - Indicators across different time horizons
-- **Benchmark Comparison** - Bitcoin-relative performance metrics
-- **Drawdown Protection** - Advanced risk metrics (Risk of Ruin, Gain-to-Pain ratios)
-
-#### **Algorithmic Trading Requirements**
-- **Signal Generation** - Binary buy/sell signals from 100+ technical indicators
-- **Backtesting Infrastructure** - Historical validation of trading strategies  
-- **Data Quality Assurance** - AI-powered monitoring for reliable decision-making
-- **Scalable Architecture** - Handle high-volume real-time data processing
-
-### Competitive Advantages
-
-#### **Comprehensive Coverage**
-- **Complete Technical Analysis Suite** - Most extensive indicator coverage available
-- **Multi-Database Architecture** - Optimized for different use cases (live/backtest/AI)
-- **Quality-First Approach** - AI-powered data validation with Telegram alerting
-- **Bitcoin Benchmark Analysis** - Crypto-native relative performance metrics
-
-#### **Research & Development Focus**  
+### Backtesting Infrastructure
 - **Historical Data Preservation** - Complete backtesting capabilities
-- **Modular Design** - Easy to extend with new indicators or data sources
-- **Production-Ready** - Battle-tested QA systems with automated monitoring
-- **Cost-Effective** - Open-source alternative to expensive trading platforms
+- **Strategy Validation** - Test trading strategies with historical data
+- **Weekly Automation** - Backtest pipeline runs every Sunday at 2:00 AM UTC
+- **Automated Reporting** - Validation reports uploaded as GitHub artifacts
 
 ---
 
-## ⚙️ HOW - Implementation Guide
+## Quick Start
 
-### Prerequisites
+### 1. Clone and Install
+```bash
+# Clone the repository
+git clone https://github.com/CryptoPrism-io/CryptoPrism-DB.git
+cd CryptoPrism-DB
 
-#### **System Requirements**
-- Python 3.8+ 
-- PostgreSQL 12+ databases (3 instances recommended)
-- 4GB+ RAM (for processing 1000+ cryptocurrencies)
-- CoinMarketCap Pro API key
+# Install Python dependencies
+pip install -r requirements.txt
 
-#### **Database Setup**
+# Install R dependencies (if using R scripts)
+Rscript requirements.R
+```
+
+### 2. Configure Environment
+```bash
+# Create .env file with your credentials
+cat > .env << EOF
+# Database Configuration
+DB_HOST=your_postgresql_host
+DB_NAME=dbcp
+DB_USER=your_username
+DB_PASSWORD=your_password
+DB_PORT=5432
+
+# CoinMarketCap API
+CMC_API_KEY=your_cmc_api_key
+
+# Optional: Telegram Notifications
+TELEGRAM_BOT_TOKEN=your_bot_token
+TELEGRAM_CHAT_ID=your_chat_id
+
+# Optional: Google AI for QA
+GEMINI_API_KEY=your_gemini_api_key
+EOF
+```
+
+### 3. Create Databases
 ```sql
--- Create three databases
-CREATE DATABASE dbcp;           -- Primary production  
+CREATE DATABASE dbcp;           -- Primary production
 CREATE DATABASE cp_ai;          -- AI analysis
 CREATE DATABASE cp_backtest;    -- Historical backtesting
 ```
 
-### Installation
-
-#### **1. Clone Repository**
+### 4. Run Data Collection
 ```bash
-git clone https://github.com/your-repo/CryptoPrism-DB.git
-cd CryptoPrism-DB
+# Fetch cryptocurrency listings
+python gcp_postgres_sandbox/data_ingestion/cmc_listings.py
+
+# Collect historical OHLCV data
+Rscript gcp_postgres_sandbox/data_ingestion/gcp_108k_1kcoins.R
+
+# Generate technical indicators
+python gcp_postgres_sandbox/technical_analysis/gcp_dmv_mom.py
+python gcp_postgres_sandbox/technical_analysis/gcp_dmv_core.py
 ```
 
-#### **2. Install Dependencies**
+### 5. Verify Installation
 ```bash
-pip install -r requirements.txt
+# Run quality assurance check
+python gcp_postgres_sandbox/quality_assurance/prod_qa_dbcp.py
 ```
 
-#### **3. Environment Configuration**
-Create `.env` file with required variables:
-```env
-# CoinMarketCap API
-CMC_API_KEY=your_cmc_api_key_here
-DB_URL=postgresql+psycopg2://user:pass@host:5432/dbcp
+---
 
-# Database Connections  
-DB_HOST=your_postgresql_host
-DB_NAME=dbcp
-DB_USER=your_username  
-DB_PASSWORD=your_password
-DB_PORT=5432
+## Architecture
 
-# Telegram Notifications (Optional)
-TELEGRAM_BOT_TOKEN=your_telegram_bot_token
-TELEGRAM_CHAT_ID=your_telegram_chat_id
+### System Overview
 
-# Google AI (for QA system)
-GOOGLE_API_KEY=your_google_gemini_api_key
+CryptoPrism-DB processes **1000+ cryptocurrencies** using a **3-database architecture** with **16 specialized modules** running in a **sequential pipeline**.
+
+### Core Module Structure
+
+#### Data Ingestion & Processing
+- [cmc_listings.py](gcp_postgres_sandbox/data_ingestion/cmc_listings.py) - CoinMarketCap API integration
+- [gcp_cc_info.py](gcp_postgres_sandbox/data_ingestion/gcp_cc_info.py) - Cryptocurrency metadata fetcher
+- [gcp_fear_greed_cmc.py](gcp_postgres_sandbox/data_ingestion/gcp_fear_greed_cmc.py) - Market sentiment via Fear & Greed Index
+- [gcp_108k_1kcoins.R](gcp_postgres_sandbox/data_ingestion/gcp_108k_1kcoins.R) - OHLCV historical data collection
+
+#### Technical Analysis Pipeline (Run in Sequence)
+1. [gcp_dmv_met.py](gcp_postgres_sandbox/technical_analysis/gcp_dmv_met.py) - Fundamental metrics
+2. [gcp_dmv_tvv.py](gcp_postgres_sandbox/technical_analysis/gcp_dmv_tvv.py) - Volume/value analysis
+3. [gcp_dmv_pct.py](gcp_postgres_sandbox/technical_analysis/gcp_dmv_pct.py) - Risk metrics
+4. [gcp_dmv_mom.py](gcp_postgres_sandbox/technical_analysis/gcp_dmv_mom.py) - Momentum indicators
+5. [gcp_dmv_osc.py](gcp_postgres_sandbox/technical_analysis/gcp_dmv_osc.py) - Oscillators
+6. [gcp_dmv_rat.py](gcp_postgres_sandbox/technical_analysis/gcp_dmv_rat.py) - Financial ratios
+7. **[gcp_dmv_core.py](gcp_postgres_sandbox/technical_analysis/gcp_dmv_core.py)** - Final signal aggregation (always run last)
+
+#### Quality Assurance System
+- [prod_qa_dbcp.py](gcp_postgres_sandbox/quality_assurance/prod_qa_dbcp.py) - Production database monitoring
+- [prod_qa_cp_ai.py](gcp_postgres_sandbox/quality_assurance/prod_qa_cp_ai.py) - AI database QA with alerts
+- [prod_qa_cp_ai_backtest.py](gcp_postgres_sandbox/quality_assurance/prod_qa_cp_ai_backtest.py) - AI backtest validation
+- [prod_qa_dbcp_backtest.py](gcp_postgres_sandbox/quality_assurance/prod_qa_dbcp_backtest.py) - Backtest database validation
+
+#### Backtesting Infrastructure
+- [gcp_dmv_mom_backtest.py](gcp_postgres_sandbox/backtesting/gcp_dmv_mom_backtest.py) - Historical momentum analysis
+- [test_backtest_mom_data.py](gcp_postgres_sandbox/backtesting/test_backtest_mom_data.py) - Backtest data validation
+
+### Database Schema
+
+#### Primary Signal Tables
+```
+FE_MOMENTUM_SIGNALS       # Momentum-based trading signals
+FE_OSCILLATORS_SIGNALS    # Technical oscillator signals
+FE_RATIOS_SIGNALS        # Financial ratio signals
+FE_METRICS_SIGNAL        # Fundamental analysis signals
+FE_TVV_SIGNALS           # Volume/value technical signals
+FE_DMV_ALL               # Aggregated signal matrix (primary output)
+FE_DMV_SCORES            # Durability/Momentum/Valuation scores
 ```
 
-### Execution Workflows
-
-#### **Data Collection Pipeline**
-```bash
-# Step 1: Fetch latest cryptocurrency listings
-python gcp_postgres_sandbox/cmc_listings.py
-
-# Step 2: Get cryptocurrency metadata  
-python gcp_postgres_sandbox/gcp_cc_info.py
-
-# Step 3: Collect sentiment data
-python gcp_postgres_sandbox/gcp_fear_greed_cmc.py
+#### Input Tables
+```
+crypto_listings_latest_1000   # CoinMarketCap listings data
+1K_coins_ohlcv               # OHLCV historical price data
+108_1K_coins_ohlcv           # Extended historical data
 ```
 
-#### **Technical Analysis Pipeline**
-```bash
-# Generate all technical indicators (run in sequence)
-python gcp_postgres_sandbox/gcp_dmv_mom.py      # Momentum indicators
-python gcp_postgres_sandbox/gcp_dmv_osc.py      # Oscillators  
-python gcp_postgres_sandbox/gcp_dmv_rat.py      # Financial ratios
-python gcp_postgres_sandbox/gcp_dmv_met.py      # Fundamental metrics
-python gcp_postgres_sandbox/gcp_dmv_tvv.py      # Volume/value analysis
-python gcp_postgres_sandbox/gcp_dmv_pct.py      # Risk metrics
+---
 
-# Final aggregation step
-python gcp_postgres_sandbox/gcp_dmv_core.py     # Merge all signals
+## Automated Pipeline
+
+### GitHub Actions 4-Stage Pipeline
+
+```
+Stage 1: LISTINGS (Daily 5:00 AM UTC)
+   ↓
+Stage 2: OHLCV (Sequential after LISTINGS)
+   ↓
+Stage 3: DMV (Sequential after OHLCV)
+   ↓
+Stage 4: QA (Manual/On-demand)
 ```
 
-#### **Backtesting Mode**
-```bash
-# Generate historical data for backtesting
-python gcp_postgres_sandbox/gcp_dmv_mom_backtest.py
+### Stage Details
 
-# Validate backtest data quality
-python gcp_postgres_sandbox/test_backtest_mom_data.py
+#### Stage 1: LISTINGS
+- **Trigger**: `cron: '05 0 * * *'` (Daily 5:00 AM UTC)
+- **Module**: [cmc_listings.py](gcp_postgres_sandbox/data_ingestion/cmc_listings.py)
+- **Purpose**: Fetch top 1000 cryptocurrencies from CoinMarketCap API
+- **Output**: Updated `crypto_listings_latest_1000` table
+
+#### Stage 2: OHLCV
+- **Trigger**: Sequential after LISTINGS completion
+- **Module**: [gcp_108k_1kcoins.R](gcp_postgres_sandbox/data_ingestion/gcp_108k_1kcoins.R)
+- **Purpose**: Collect OHLCV (Open, High, Low, Close, Volume) data
+- **Technology**: R with crypto2 package integration
+
+#### Stage 3: DMV (Durability, Momentum, Valuation)
+- **Trigger**: Sequential after OHLCV completion
+- **Modules**: 8 scripts run in sequence
+  1. [gcp_fear_greed_cmc.py](gcp_postgres_sandbox/data_ingestion/gcp_fear_greed_cmc.py) - Market sentiment
+  2. [gcp_dmv_met.py](gcp_postgres_sandbox/technical_analysis/gcp_dmv_met.py) - Fundamental metrics
+  3. [gcp_dmv_tvv.py](gcp_postgres_sandbox/technical_analysis/gcp_dmv_tvv.py) - Volume/trend analysis
+  4. [gcp_dmv_pct.py](gcp_postgres_sandbox/technical_analysis/gcp_dmv_pct.py) - Risk metrics
+  5. [gcp_dmv_mom.py](gcp_postgres_sandbox/technical_analysis/gcp_dmv_mom.py) - Momentum indicators
+  6. [gcp_dmv_osc.py](gcp_postgres_sandbox/technical_analysis/gcp_dmv_osc.py) - Technical oscillators
+  7. [gcp_dmv_rat.py](gcp_postgres_sandbox/technical_analysis/gcp_dmv_rat.py) - Financial ratios
+  8. **[gcp_dmv_core.py](gcp_postgres_sandbox/technical_analysis/gcp_dmv_core.py)** - Final aggregation
+
+#### Stage 4: QA
+- **Trigger**: Manual execution via `workflow_dispatch`
+- **Module**: [prod_qa_dbcp.py](gcp_postgres_sandbox/quality_assurance/prod_qa_dbcp.py)
+- **Features**: AI-powered analysis, Telegram alerts, automated cleanup
+
+### Independent Workflows
+
+#### Weekly Backtest Pipeline
+- **Schedule**: Sunday 2:00 AM UTC
+- **Purpose**: Historical data processing for strategy validation
+- **Modules**:
+  - [gcp_dmv_mom_backtest.py](gcp_postgres_sandbox/backtesting/gcp_dmv_mom_backtest.py)
+  - [test_backtest_mom_data.py](gcp_postgres_sandbox/backtesting/test_backtest_mom_data.py)
+
+---
+
+## Project Structure
+
+```
+CryptoPrism-DB/
+├── gcp_postgres_sandbox/              # Main processing modules
+│   ├── data_ingestion/                # Data collection scripts
+│   │   ├── cmc_listings.py           # CoinMarketCap API integration
+│   │   ├── gcp_cc_info.py            # Crypto metadata fetcher
+│   │   ├── gcp_fear_greed_cmc.py     # Market sentiment data
+│   │   └── gcp_108k_1kcoins.R        # OHLCV data collection (R)
+│   │
+│   ├── technical_analysis/            # TA pipeline (run in order)
+│   │   ├── gcp_dmv_met.py            # Fundamental metrics
+│   │   ├── gcp_dmv_tvv.py            # Volume/value analysis
+│   │   ├── gcp_dmv_pct.py            # Risk metrics
+│   │   ├── gcp_dmv_mom.py            # Momentum indicators
+│   │   ├── gcp_dmv_osc.py            # Oscillators
+│   │   ├── gcp_dmv_rat.py            # Financial ratios
+│   │   └── gcp_dmv_core.py           # Signal aggregation (run last)
+│   │
+│   ├── quality_assurance/             # QA and monitoring
+│   │   ├── prod_qa_dbcp.py           # Production DB monitoring
+│   │   ├── prod_qa_cp_ai.py          # AI DB QA with alerts
+│   │   ├── prod_qa_cp_ai_backtest.py # AI backtest validation
+│   │   └── prod_qa_dbcp_backtest.py  # Backtest DB validation
+│   │
+│   └── backtesting/                   # Historical analysis
+│       ├── gcp_dmv_mom_backtest.py   # Historical momentum
+│       └── test_backtest_mom_data.py # Data validation tests
+│
+├── .github/workflows/                 # GitHub Actions pipelines
+│   ├── LISTINGS.yml                  # Stage 1: Data collection
+│   ├── OHLCV.yml                     # Stage 2: OHLCV fetching
+│   ├── DMV.yml                       # Stage 3: TA pipeline
+│   └── QA.yml                        # Stage 4: Quality checks
+│
+├── CHANGELOG.md                       # Version history
+├── CLAUDE.md                          # Project instructions
+├── CRON_SCHEDULE_README.md           # Pipeline scheduling docs
+├── README.md                          # This file
+├── requirements.txt                   # Python dependencies
+└── requirements.R                     # R dependencies
 ```
 
-#### **Quality Assurance**
-```bash
-# Production database monitoring
-python gcp_postgres_sandbox/prod_qa_dbcp.py
+---
 
-# AI database quality checks  
-python gcp_postgres_sandbox/prod_qa_cp_ai.py
+## Technology Stack
 
-# Backtest data validation
-python gcp_postgres_sandbox/prod_qa_cp_ai_backtest.py
-python gcp_postgres_sandbox/prod_qa_dbcp_backtest.py
-```
+| Component | Technology | Purpose |
+|-----------|------------|---------|
+| **Primary Language** | Python 3.8+ | Data processing and technical analysis |
+| **Secondary Language** | R 4.0+ | OHLCV data collection via crypto2 package |
+| **Database** | PostgreSQL 12+ | Multi-database architecture (3 instances) |
+| **ORM** | SQLAlchemy 2.0+ | Database connectivity and operations |
+| **Data Processing** | Pandas, NumPy | DataFrame operations and calculations |
+| **API Integration** | Requests | CoinMarketCap API calls |
+| **AI Analysis** | Google Gemini | Quality assurance and issue analysis |
+| **Notifications** | Telegram Bot | Real-time alerts and monitoring |
+| **CI/CD** | GitHub Actions | Automated pipeline orchestration |
+| **Environment** | python-dotenv | Secure credential management |
 
-### Automation Setup
+---
 
-#### **Cron Jobs for Live Trading** (Linux/macOS)
-```bash
-# Add to crontab (crontab -e)
+## Usage Examples
 
-# Data collection every 6 hours
-0 */6 * * * /path/to/python /path/to/cmc_listings.py
-30 */6 * * * /path/to/python /path/to/gcp_cc_info.py
-
-# Technical analysis every hour  
-0 * * * * /path/to/python /path/to/gcp_dmv_mom.py
-5 * * * * /path/to/python /path/to/gcp_dmv_osc.py
-10 * * * * /path/to/python /path/to/gcp_dmv_rat.py
-15 * * * * /path/to/python /path/to/gcp_dmv_core.py
-
-# Quality checks every 4 hours
-0 */4 * * * /path/to/python /path/to/prod_qa_cp_ai.py
-```
-
-#### **Windows Task Scheduler**
-Create scheduled tasks for each script with appropriate intervals.
-
-### Usage Examples
-
-#### **Query Latest Signals**
+### Query Latest Bullish Signals
 ```sql
--- Get latest bullish signals for top market cap coins
-SELECT slug, timestamp, bullish, bearish, neutral,
-       Durability_Score, Momentum_Score, Valuation_Score
-FROM FE_DMV_ALL 
-WHERE bullish > bearish 
+-- Get top 20 bullish cryptocurrencies
+SELECT
+    slug,
+    timestamp,
+    bullish,
+    bearish,
+    neutral,
+    Durability_Score,
+    Momentum_Score,
+    Valuation_Score
+FROM FE_DMV_ALL
+WHERE bullish > bearish
   AND timestamp = (SELECT MAX(timestamp) FROM FE_DMV_ALL)
 ORDER BY bullish DESC, Momentum_Score DESC
 LIMIT 20;
 ```
 
-#### **Risk Analysis Query**  
+### Risk Analysis Query
 ```sql
--- Identify high-risk assets with poor ratios
-SELECT f.slug, f.sharpe_ratio, f.sortino_ratio, f.max_drawdown,
-       m.rsi_9, m.williams_r_14
-FROM FE_RATIOS f
-JOIN FE_MOMENTUM m ON f.slug = m.slug AND f.timestamp = m.timestamp  
-WHERE f.sharpe_ratio < 0 OR f.max_drawdown < -50
+-- Identify high-risk assets
+SELECT
+    f.slug,
+    f.sharpe_ratio,
+    f.sortino_ratio,
+    f.max_drawdown,
+    m.rsi_9,
+    m.williams_r_14
+FROM FE_RATIOS_SIGNALS f
+JOIN FE_MOMENTUM_SIGNALS m
+    ON f.slug = m.slug
+    AND f.timestamp = m.timestamp
+WHERE f.sharpe_ratio < 0
+   OR f.max_drawdown < -50
 ORDER BY f.sharpe_ratio ASC;
 ```
 
-### Monitoring & Alerts
-
-#### **AI-Powered Quality Assurance**
-The system includes automated monitoring with:
-- **Telegram Integration** - Real-time alerts for critical issues
-- **Google Gemini AI** - Intelligent analysis and summarization
-- **Risk Classification** - LOW/MEDIUM/HIGH/CRITICAL issue prioritization
-- **Automated Cleanup** - Duplicate removal and database optimization
-
-#### **Key Metrics Monitored**
-- Data freshness and completeness
-- Schema integrity validation  
-- Technical indicator value ranges
-- Database performance metrics
-- API connectivity and rate limits
-
-### Troubleshooting
-
-#### **Common Issues**
-1. **API Rate Limits** - CoinMarketCap has request limits; adjust timing in scripts
-2. **Database Connections** - Ensure PostgreSQL allows multiple concurrent connections
-3. **Memory Usage** - Processing 1000+ coins requires sufficient RAM
-4. **Timezone Handling** - All timestamps stored in UTC
-
-#### **Performance Optimization**  
-- Use connection pooling for high-frequency operations
-- Implement database indexing on slug+timestamp columns
-- Consider partitioning large historical tables
-- Monitor and tune PostgreSQL configuration
+### Technical Analysis Pipeline
+```bash
+# Complete pipeline execution
+python gcp_postgres_sandbox/technical_analysis/gcp_dmv_met.py
+python gcp_postgres_sandbox/technical_analysis/gcp_dmv_tvv.py
+python gcp_postgres_sandbox/technical_analysis/gcp_dmv_pct.py
+python gcp_postgres_sandbox/technical_analysis/gcp_dmv_mom.py
+python gcp_postgres_sandbox/technical_analysis/gcp_dmv_osc.py
+python gcp_postgres_sandbox/technical_analysis/gcp_dmv_rat.py
+python gcp_postgres_sandbox/technical_analysis/gcp_dmv_core.py  # Always run last
+```
 
 ---
 
-## 📈 Getting Started
+## Troubleshooting
 
-1. **Start Small** - Begin with `cmc_listings.py` to understand data flow
-2. **Add Indicators** - Run momentum analysis with `gcp_dmv_mom.py`  
-3. **Quality Check** - Use QA scripts to validate data integrity
-4. **Scale Up** - Add more indicator categories as needed
-5. **Automate** - Set up cron jobs for continuous operation
+### Common Issues
 
-## 🤝 Contributing
+| Issue | Solution |
+|-------|----------|
+| **API Rate Limits** | CoinMarketCap has request limits; adjust timing in scripts or upgrade API plan |
+| **Database Connections** | Ensure PostgreSQL allows multiple concurrent connections (check `max_connections`) |
+| **Memory Usage** | Processing 1000+ coins requires 4GB+ RAM; consider batch processing |
+| **Timezone Issues** | All timestamps stored in UTC; ensure proper timezone handling in queries |
+| **R Script Errors** | Verify crypto2 and dplyr packages installed: `install.packages(c("crypto2", "dplyr"))` |
+| **Duplicate Key Errors** | Run QA scripts to clean duplicates or check timestamp-based filtering |
 
-This project is designed for cryptocurrency trading research and development. Contributions welcome for:
+### Performance Optimization
+- Use connection pooling for high-frequency operations
+- Implement database indexing on `(slug, timestamp)` columns
+- Consider partitioning large historical tables by date
+- Monitor and tune PostgreSQL configuration for your workload
+- Review query execution plans with `EXPLAIN ANALYZE`
+
+### Monitoring & Alerts
+- **AI-Powered QA**: Run [prod_qa_cp_ai.py](gcp_postgres_sandbox/quality_assurance/prod_qa_cp_ai.py) for intelligent analysis
+- **Telegram Notifications**: Configure bot token in `.env` for real-time alerts
+- **Database Health**: Monitor key metrics via QA scripts
+  - Data freshness and completeness
+  - Schema integrity validation
+  - Technical indicator value ranges
+  - Database performance metrics
+
+---
+
+## Documentation
+
+### Core Documentation
+- [CHANGELOG.md](CHANGELOG.md) - Complete version history with commit references
+- [CLAUDE.md](CLAUDE.md) - Project instructions and development patterns
+- [CRON_SCHEDULE_README.md](CRON_SCHEDULE_README.md) - Pipeline scheduling documentation
+- [EMERGENCY_ROLLBACK_STRATEGY.txt](EMERGENCY_ROLLBACK_STRATEGY.txt) - Production safety procedures
+
+### External Resources
+- [CoinMarketCap API Documentation](https://coinmarketcap.com/api/documentation/v1/)
+- [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)
+- [crypto2 R Package](https://github.com/sstoeckl/crypto2)
+- [PostgreSQL Documentation](https://www.postgresql.org/docs/)
+
+---
+
+## Development Patterns
+
+### Database Connections
+All scripts use SQLAlchemy with PostgreSQL:
+```python
+from sqlalchemy import create_engine
+import os
+
+engine = create_engine(
+    f'postgresql+pg8000://{os.getenv("DB_USER")}:{os.getenv("DB_PASSWORD")}'
+    f'@{os.getenv("DB_HOST")}:{os.getenv("DB_PORT")}/{os.getenv("DB_NAME")}'
+)
+```
+
+### Error Handling & Logging
+```python
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+```
+
+### Signal Generation Pattern
+- Binary signals: bullish/bearish/neutral counts per cryptocurrency
+- Multi-timeframe analysis (5, 9, 14, 21, 50, 200 periods)
+- Bitcoin-relative performance metrics (Alpha/Beta vs BTC)
+- Risk-adjusted ratios (Sharpe, Sortino, Information ratios)
+
+---
+
+## Contributing
+
+Contributions welcome for:
 - Additional technical indicators
-- Performance optimizations  
+- Performance optimizations
 - New data sources integration
 - Enhanced visualization capabilities
+- Documentation improvements
+
+### Development Setup
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run quality assurance checks
+5. Submit a pull request
 
 ---
 
-**⚠️ Disclaimer**: This system is for research and educational purposes. Cryptocurrency trading involves significant risks. Always perform your own analysis and risk assessment before making trading decisions.
+## Roadmap
+
+### Planned Features
+- Real-time streaming data support
+- Machine learning model integration
+- Advanced portfolio optimization
+- Multi-exchange data aggregation
+- Enhanced visualization dashboard
+- API endpoint for external access
+
+### Performance Goals
+- Sub-second query performance for all signal tables
+- Support for 2000+ cryptocurrencies
+- Real-time indicator calculation
+- Distributed processing capabilities
+
+---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## Disclaimer
+
+**This system is for research and educational purposes only.** Cryptocurrency trading involves significant financial risks. Always perform your own analysis and risk assessment before making trading decisions. Past performance does not guarantee future results.
+
+---
+
+<div align="center">
+
+**Built for Cryptocurrency Traders and Researchers**
+
+[Documentation](CLAUDE.md) • [Changelog](CHANGELOG.md) • [Issues](https://github.com/CryptoPrism-io/CryptoPrism-DB/issues)
+
+[Back to Top](#cryptoprism-db)
+
+</div>
